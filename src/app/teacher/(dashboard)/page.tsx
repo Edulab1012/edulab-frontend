@@ -14,20 +14,13 @@ export default function TeacherMainPage() {
         </div>
       </div>
 
-      {/* Tabs for filter */}
-      <Tabs defaultValue="today" className="w-full">
-        <TabsList className="gap-3">
-          <TabsTrigger value="today">Өнөөдөр</TabsTrigger>
-          <TabsTrigger value="week">Долоо хоног</TabsTrigger>
-          <TabsTrigger value="month">Сар</TabsTrigger>
-        </TabsList>
-      </Tabs>
+
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card>
           <CardHeader className="flex justify-between items-center">
-            <CardTitle className="text-sm">Дараагийн хичээл</CardTitle>
-            <Timer className="w-4 h-4 text-blue-500" />
+            <CardTitle className="text-xl">Дараагийн хичээл</CardTitle>
+            <Timer className="w-10 h-10 text-blue-500" />
           </CardHeader>
           <CardContent className="text-gray-600 text-sm">
             10:00 - 11А <br /> Геометр
