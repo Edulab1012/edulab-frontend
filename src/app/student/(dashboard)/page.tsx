@@ -1,14 +1,16 @@
-import Image from "next/image";
+
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import BigCalendar from "@/components/BigCalender";
 import EventCalendar from "@/components/EventCalender";
 import Announcements from "@/components/Announcements";
+import { ToastContainer } from "react-toastify";
 
 
 
 export default function StudentPage() {
   return (
     <div className="pt-30 pb-10 px-10 flex flex-col gap-10 bg-gray-200">
+      <ToastContainer/>
       <div className="p-4 flex gap-10 flex-col xl:flex-row">
         <div className="flex flex-col gap-10 w-2/3">
           <Card>

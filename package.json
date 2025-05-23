@@ -58,6 +58,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/bootstrap": "^5.2.10",
     "@types/firebase": "^2.4.32",
     "@types/node": "^20",
     "@types/react": "^19",

@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, isSupported, Messaging, onMessage } from "firebase/messaging";
 
+
 const firebaseConfig = {
   apiKey: "AIzaSyDXr5qpKqQMk_Z9KNdZJoQbAroHlo2zVOw",
   authDomain: "fir-push-notfication-84d1e.firebaseapp.com",
@@ -14,8 +15,6 @@ const firebaseConfig = {
 const vapidKey = "BFhIjMLJNpvPClsY2NmI0xt57wa-5Kt_DPZK8OlRyesABz5aE1sS0jsJ_ZO_VHoxhTsoJVjJys1VLm2wFJGjBrg";
 
 const app = initializeApp(firebaseConfig);
-
-// Wrap messaging in a browser check
 let messaging: Messaging;
 
 if (typeof window !== "undefined" && typeof navigator !== "undefined") {
@@ -44,10 +43,9 @@ export const requestFCMToken = async () => {
   }
 };
 
-export const onMessageListener = () => {
-  return new Promise((resolve) => {
+export const onMessageListener = () =>
+  new Promise((resolve) => {
     onMessage(messaging, (payload) => {
       resolve(payload);
     });
   });
-}

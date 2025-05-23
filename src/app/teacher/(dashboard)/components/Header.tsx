@@ -23,10 +23,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { any, string, z } from "zod";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Bell, Menu, MessageCircle } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import {
   AlertDialog,
@@ -38,12 +38,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { requestFCMToken, onMessageListener } from "@/utils/firebaseUtils";
-import { ToastContainer } from 'react-toastify';
-
-
+import axios from "axios";
+import { ToastContainer } from 'react-toastify'
 
 const FormSchema = z.object({
   teacher_attendance: z.boolean(),
@@ -51,8 +50,45 @@ const FormSchema = z.object({
 
 export const Header = () => {
   const pathname = usePathname();
-  const [hasToken, setHasToken] = useState(true);
-  const [fcmToken, setFcmToken] = useState("")
+  const [hasToken, setHasToken] = useState<boolean>(true);
+  const [fcmToken, setFcmToken] = useState<string | null>(null);
+  const [title, setTitle] = useState<string | null>(null);
+  const [body, setBody] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handlePushNotification = async (e: FormEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      var data = {
+        title: title,
+        body: body,
+        deviceToken: fcmToken
+      };
+      const result = await axios.post("http://localhost:8000/api/firebase/send-notification", data)
+      console.log(result);
+      if (result.status === 200) {
+        toast.success(
+          <div>
+            <div>Notification sent successfully</div>
+          </div>,
+          { position: "top-left" }
+        );
+      } else {
+        toast.error(
+          <div>
+            <div>Failed to send notif</div>
+          </div>,
+          { position: "top-left" }
+        );
+      }
+
+    } catch (error) {
+      console.error("Error: ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const fetchFCMToken = async () => {
@@ -60,30 +96,12 @@ export const Header = () => {
         const token = await requestFCMToken();
         setFcmToken(token);
         console.log(token);
-
       } catch (err) {
-        console.error("Error getting FCM token: ", err)
+        console.error("Error getting FCM token: ", err);
       }
-    }
-    fetchFCMToken()
-  })
-
-  onMessageListener()
-    .then((payload: any) => {
-      toast(
-        <div>
-          <strong>{payload.notification.title}</strong>
-          <div>{payload.notification.body}</div>
-        </div>
-      )
-      console.log("received foreground message", payload);
-    })
-    .catch((err: any) => console.error("error: ", err));
-
-  // useEffect(() => {
-  //   const token = localStorage.getItem("teacher_token");
-  //   setHasToken(!!token);
-  // }, []);
+    };
+    fetchFCMToken();
+  }, []);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -108,7 +126,6 @@ export const Header = () => {
   return (
     <div className="fixed bg-blue-100 w-full h-20 py-5 px-10 z-10">
       <div className="flex items-center justify-end">
-        {/* <SidebarTrigger  className="flex justify-self-center"/> */}
         <div className="flex gap-6 items-center">
           {hasToken && pathname === "/teacher" && (
             <Form {...form}>
@@ -136,13 +153,11 @@ export const Header = () => {
               </form>
             </Form>
           )}
-
-          <ToastContainer></ToastContainer>
-          {fcmToken && (
+          {/* {fcmToken && (
             <div>
               <strong>Token: </strong> {fcmToken}
             </div>
-          )}
+          )} */}
 
           <Link href={"/teacher/chat"}>
             <button className="px-5 py-3 cursor-pointer hover:bg-white rounded-3xl bg-transparent border-0">
@@ -150,37 +165,56 @@ export const Header = () => {
             </button>
           </Link>
 
-
           {/* notification section */}
+
           <DropdownMenu>
             <DropdownMenuTrigger className="px-5 py-3 cursor-pointer hover:bg-white rounded-3xl">
               <Bell className="hover:text-black" />
             </DropdownMenuTrigger>
+
             <DropdownMenuContent>
               <DropdownMenuLabel className="flex gap-5 items-center">
-                <div className="text-2xl font-bold">
-                  Шинэ мэдээлэл
-                </div>
-
+                <div className="text-2xl font-bold">Шинэ мэдээлэл</div>
                 <AlertDialog>
-                  <AlertDialogTrigger className="p-2 border-1 rounded-[12px] bg-black text-white cursor-pointer">мэдэгдэл илгээх</AlertDialogTrigger>
+                  <AlertDialogTrigger className="p-2 border-1 rounded-[12px] bg-black text-white cursor-pointer">
+                    мэдэгдэл илгээх
+                  </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
-                      <AlertDialogTitle className="text-2xl">Мэдэгдэл үүсгэх</AlertDialogTitle>
+                      <AlertDialogTitle className="text-2xl">
+                        Мэдэгдэл үүсгэх
+                      </AlertDialogTitle>
                       <AlertDialogDescription className="text-xl flex flex-col gap-3">
                         <span>Гарчиг</span>
-                        <Input placeholder="Гарчиг"></Input>
+                        <Input
+                          placeholder="Гарчиг"
+                          value={title ?? ""}
+                          onChange={(e) => setTitle(e.target.value)}
+                        />
                         <span>Мэдээлэл</span>
-                        <Input placeholder="Мэдээлэл"></Input>
+                        <Input
+                          placeholder="Мэдээлэл"
+                          value={body ?? ""}
+                          onChange={(e) => setBody(e.target.value)}
+                        />
+                        {/* <Input
+                          placeholder="token"
+                          value={fcmToken ?? ""}
+                          onChange={(e) => setFcmToken(e.target.value)}
+                        /> */}
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Цуцлах</AlertDialogCancel>
-                      <AlertDialogAction>Илгээх</AlertDialogAction>
+                      <AlertDialogAction
+                        onClick={handlePushNotification}
+                        disabled={loading}
+                      >
+                        {loading ? "sending" : "Илгээх"}
+                      </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>
-
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <div className="flex flex-col gap-3">
@@ -211,11 +245,9 @@ export const Header = () => {
                   <DropdownMenuItem>Profile</DropdownMenuItem>
                 </Link>
                 <Link href={"/teacher/password"}>
-                  {" "}
                   <DropdownMenuItem>Password change</DropdownMenuItem>
                 </Link>
                 <Link href={"/"}>
-                  {" "}
                   <DropdownMenuItem className="text-red-500 font-semibold">
                     Log out
                   </DropdownMenuItem>

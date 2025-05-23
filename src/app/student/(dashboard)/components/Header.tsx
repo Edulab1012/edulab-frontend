@@ -1,3 +1,5 @@
+'use client'
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,8 +14,28 @@ import { Badge } from "@/components/ui/badge";
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useEffect } from "react";
+import { onMessageListener } from "@/utils/firebaseUtils";
+import { toast } from "sonner";
 
 export const Header = () => {
+
+  useEffect(() => {
+    onMessageListener()
+      .then((payload: any) => {
+        toast(
+          <div>
+            <strong className="text-bold text-xl">
+              {payload.notification?.title}
+            </strong>
+            <div>{payload.notification?.body}</div>
+          </div>,
+          { position: "top-right" }
+        );
+      })
+      .catch((err: any) => console.error("error: ", err));
+  }, []);
+
   return (
     // <div className="fixed bg-blue-100 w-[calc(100%-255px)] h-20 py-5 px-10  ">
     <div className="fixed bg-blue-100 w-full h-20 py-5 px-10 z-20 ">
@@ -62,7 +84,7 @@ export const Header = () => {
                 {" "}
                 <DropdownMenuItem>Password change</DropdownMenuItem>
               </Link>
-             <Link href={"/"}> <DropdownMenuItem className="text-red-500 font-semibold">
+              <Link href={"/"}> <DropdownMenuItem className="text-red-500 font-semibold">
                 Log out
               </DropdownMenuItem></Link>
             </DropdownMenuContent>
