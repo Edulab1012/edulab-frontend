@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Phone } from "lucide-react";
+import Image from "next/image";
 import { BASE_URL } from "@/constants/baseurl";
 interface Student {
   id: string;
@@ -34,6 +36,7 @@ export default function StudentList() {
     const fetchStudents = async () => {
       try {
         const token = localStorage.getItem("token");
+        console.log("GET HESEGIIN TOKEN");
         if (!token) throw new Error("No token found");
 
         const res = await fetch(
@@ -91,21 +94,57 @@ export default function StudentList() {
         </Card>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
-          {students.map((student) => (
+          {students.map((student, index) => (
             <Card
-              key={student.id}
-              className="hover:shadow-lg transition-shadow"
+              key={index}
+              className="hover:shadow-xl transition-shadow duration-300 rounded-2xl border border-gray-200 bg-white"
             >
-              <CardContent className="p-4">
-                <div className="flex flex-col gap-2">
-                  <h3 className="text-lg font-semibold">
-                    {student.firstName} {student.lastName}
-                  </h3>
-                  <p>И-мэйл: {student.email}</p>
-                  <p>Утас: {student.phoneNumber}</p>
-                  <p>Яаралтай холбоо: {student.emergencyNumber}</p>
-                  {student.group && <p>Бүлэг: {student.group.name}</p>}
-                  {student.grade && <p>Анги: {student.grade.name}</p>}
+              <CardContent className="flex flex-col items-center p-5 text-center space-y-4">
+                {/* Avatar */}
+                <div className="w-28 h-28 relative">
+                  <Image
+                    src={"/em.jpg"}
+                    alt={`${student.firstName}-profile`}
+                    width={112}
+                    height={112}
+                    className="object-cover rounded-full border-4 border-white shadow"
+                  />
+                </div>
+
+                {/* Student Info */}
+                <div>
+                  <div className="text-lg font-semibold text-gray-800">
+                    {student.firstName}
+                  </div>
+                  <div className="text-sm text-gray-500">
+                    Утас: {student.phoneNumber}
+                  </div>
+                  <div className="text-sm text-gray-500">
+                    Имэйл: {student.email}
+                  </div>
+                </div>
+
+                {/* Parent Info */}
+                {/* <div className="w-full text-left border-t pt-3 text-sm text-gray-600">
+                  <div className="font-medium text-gray-700 mb-1">
+                    👨‍👩‍👧 Эцэг эхийн мэдээлэл:
+                  </div>
+                  <p>Нэр: {student}</p>
+                  <p>Утас: {student.parent.phone}</p>
+                  <p>Имэйл: {student.parent.email}</p>
+                </div> */}
+
+                {/* Emergency Button */}
+                <div className="mt-4 w-full">
+                  <button
+                    onClick={() =>
+                      (window.location.href = `tel:${student.emergencyNumber}`)
+                    }
+                    className="w-full flex items-center justify-center gap-2 h-11 rounded-xl border-2 border-green-500 text-green-600 font-semibold hover:bg-green-500 hover:text-white transition"
+                  >
+                    <Phone className="w-5 h-5" />
+                    Яаралтай залгах
+                  </button>
                 </div>
               </CardContent>
             </Card>
