@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Phone } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Phone } from "lucide-react";
 import Image from "next/image";
+import { BASE_URL } from "@/constants/baseurl";
 interface Student {
   id: string;
   firstName: string;
@@ -11,57 +12,83 @@ interface Student {
   email: string;
   phoneNumber: string;
   emergencyNumber: string;
-  img?: string;
-  parent?: {
-    name: string;
-    phone: string;
-    email: string;
+  gender: string;
+  teacher?: {
+    firstName: string;
+    lastName: string;
   };
+  group?: {
+    name: string;
+  };
+  grade?: {
+    name: string;
+  };
+  img?: string;
 }
+
 export default function StudentList() {
   const [students, setStudents] = useState<Student[]>([]);
-  const [loading, setIsLoading] = useState(true);
   console.log(students);
+  const [loading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
     const fetchStudents = async () => {
       try {
         const token = localStorage.getItem("token");
-        console.log("Suragch harah hesegiin token", token);
+        console.log("GET HESEGIIN TOKEN");
         if (!token) throw new Error("No token found");
-        console.log("yes1");
+
         const res = await fetch(
           "http://localhost:8000/api/v1/student/withStudents",
           {
             headers: {
               Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
             },
           }
         );
 
-        console.log("yes2");
-        console.log(res);
         if (!res.ok) {
-          throw new Error("Failed to fetch students");
+          // Try to parse error as JSON, fallback to text if it fails
+          const errorData = await res.json().catch(() => res.text());
+          throw new Error(
+            typeof errorData === "object"
+              ? errorData.message || JSON.stringify(errorData)
+              : errorData
+          );
         }
-        console.log("yes3");
+
         const data = await res.json();
-        setStudents(data || []);
+        setStudents(data);
       } catch (err) {
-        console.log(err);
+        console.error("Fetch error:", err);
+        setError(
+          err instanceof Error
+            ? err.message
+            : typeof err === "string"
+            ? err
+            : "An unknown error occurred"
+        );
       } finally {
         setIsLoading(false);
       }
     };
+
     fetchStudents();
   }, []);
+
   if (loading) return <p className="p-10 text-center">⏳ Уншиж байна...</p>;
+  if (error)
+    return <p className="p-10 text-center text-red-500">❗ Алдаа: {error}</p>;
+
   return (
     <div className="px-10 py-10 w-full bg-gray-100">
       <div className="flex flex-col gap-10">
         <Card>
           <CardContent>
             <CardHeader className="text-2xl font-bold leading-7 text-center">
-              11А ангийн сурагчдын жагсаалт
+              Миний ангийн сурагчдын жагсаалт
             </CardHeader>
           </CardContent>
         </Card>
@@ -76,7 +103,7 @@ export default function StudentList() {
                 {/* Avatar */}
                 <div className="w-28 h-28 relative">
                   <Image
-                    src={"/er.jpg"}
+                    src={"/em.jpg"}
                     alt={`${student.firstName}-profile`}
                     width={112}
                     height={112}
@@ -102,7 +129,7 @@ export default function StudentList() {
                   <div className="font-medium text-gray-700 mb-1">
                     👨‍👩‍👧 Эцэг эхийн мэдээлэл:
                   </div>
-                  <p>Нэр: {student.parent.name}</p>
+                  <p>Нэр: {student}</p>
                   <p>Утас: {student.parent.phone}</p>
                   <p>Имэйл: {student.parent.email}</p>
                 </div> */}

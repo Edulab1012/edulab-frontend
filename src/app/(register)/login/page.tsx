@@ -52,7 +52,7 @@ export default function LoginPage() {
       if (response.status === 200) {
         toast("✅ Login successful! 🎉");
         localStorage.setItem("token", response.data.token);
-        console.log(response.data, "newtreh hesegiin token");
+        console.log(response.data, "LOGIN HESEGIIN TOKEN!!!");
       }
 
       if (response.data.message === "admin") {
