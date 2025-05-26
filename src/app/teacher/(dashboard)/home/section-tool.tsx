@@ -68,8 +68,15 @@ export default function SectionTool() {
           dragConstraints={constraintsRef}
           dragElastic={1}
           key={index}
-          className="w-[200px] h-[200px] rounded-full bg-white hover:transform hover:-translate-y-1  shadow-sm transition-all cursor-pointer flex flex-col justify-center items-center gap-3 active:bg-teal-400 active:border-4 active:border-white
-          "
+          initial={{ y: 0 }}
+          animate={{ y: [0, -20, 0] }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: index * 0.2,
+          }}
+          className="w-[200px] h-[200px] rounded-full bg-white hover:transform hover:-translate-y-1 shadow-sm transition-all cursor-pointer flex flex-col justify-center items-center gap-3 active:bg-teal-400 active:border-4 active:border-white"
         >
           <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100">
             {tool.icon}
