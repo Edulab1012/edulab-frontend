@@ -126,10 +126,12 @@ export default function AddStudent({ className }: AddStudentProps) {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold">
+            <DialogTitle className="text-3xl text-white font-bold">
               Шинэ сурагч нэмэх
             </DialogTitle>
-            <DialogDescription>Мэдээллийг бүрэн бөглөнө үү.</DialogDescription>
+            <DialogDescription className="text-white">
+              Мэдээллийг бүрэн бөглөнө үү.
+            </DialogDescription>
           </DialogHeader>
 
           <Form {...form}>
@@ -143,7 +145,11 @@ export default function AddStudent({ className }: AddStudentProps) {
                       <FormItem>
                         <FormLabel>Овог</FormLabel>
                         <FormControl>
-                          <Input placeholder="Овог" {...field} />
+                          <Input
+                            placeholder="Овог"
+                            {...field}
+                            className="h-[55px] bg-white focus-visible:ring-0"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -156,7 +162,11 @@ export default function AddStudent({ className }: AddStudentProps) {
                       <FormItem>
                         <FormLabel>Нэр</FormLabel>
                         <FormControl>
-                          <Input placeholder="Нэр" {...field} />
+                          <Input
+                            placeholder="Нэр"
+                            {...field}
+                            className="h-[55px] bg-white focus-visible:ring-0"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -169,7 +179,11 @@ export default function AddStudent({ className }: AddStudentProps) {
                       <FormItem>
                         <FormLabel>Email хаяг</FormLabel>
                         <FormControl>
-                          <Input placeholder="Email хаяг" {...field} />
+                          <Input
+                            placeholder="Email хаяг"
+                            {...field}
+                            className="h-[55px] bg-white focus-visible:ring-0"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -182,7 +196,11 @@ export default function AddStudent({ className }: AddStudentProps) {
                       <FormItem>
                         <FormLabel>Утасны дугаар</FormLabel>
                         <FormControl>
-                          <Input placeholder="Утасны дугаар" {...field} />
+                          <Input
+                            placeholder="Утасны дугаар"
+                            {...field}
+                            className="h-[55px] bg-white focus-visible:ring-0"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -205,12 +223,15 @@ export default function AddStudent({ className }: AddStudentProps) {
                           }}
                         >
                           <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger className="h-[55px] w-[440px] bg-white focus-visible:ring-0">
                               <SelectValue placeholder="Хүйсээ сонгоно уу" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="male">Эрэгтэй</SelectItem>
+                            <SelectItem value="male" className="hover">
+                              Эрэгтэй
+                            </SelectItem>
+                            <hr />
                             <SelectItem value="female">Эмэгтэй</SelectItem>
                           </SelectContent>
                         </Select>
