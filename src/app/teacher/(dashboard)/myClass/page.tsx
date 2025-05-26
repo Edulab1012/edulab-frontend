@@ -48,64 +48,54 @@ export default function MyClassOverview() {
   // }, []);
 
   return (
-    <div className="p-10 bg-white space-y-8 min-h-screen">
-      <h2 className="text-2xl font-bold text-gray-800">
-        👩‍🏫 11А ангийн хяналтын самбар
-      </h2>
-
+    <div className="p-10  space-y-8 min-h-screen w-[1000px] ml-[100px] flex flex-col items-center justify-center gap-4 bg-teal-400">
       <div>
         {" "}
-        {/* Key stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 bg-amber-100 p-2 rounded-2xl">
-          <Card className="">
-            <CardHeader>
-              <CardTitle>Сурагчдын тоо</CardTitle>
-            </CardHeader>
-            <CardContent className="text-xl font-bold text-blue-600">
-              30
-            </CardContent>
-          </Card>
+        <h2 className="text-2xl font-bold text-black mb-8">
+          👩‍🏫 11А ангийн хяналтын самбар
+        </h2>
+        <div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6  p-2 rounded-2xl">
+            <Card className="">
+              <CardHeader>
+                <CardTitle>Сурагчдын тоо</CardTitle>
+              </CardHeader>
+              <CardContent className="text-xl font-bold text-blue-600">
+                30
+              </CardContent>
+            </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Дундаж ирц</CardTitle>
-            </CardHeader>
-            <CardContent className="text-xl font-bold text-green-600">
-              91%
-            </CardContent>
-          </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Дундаж ирц</CardTitle>
+              </CardHeader>
+              <CardContent className="text-xl font-bold text-green-600">
+                91%
+              </CardContent>
+            </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Сурагчийн асуудал</CardTitle>
-            </CardHeader>
-            <CardContent className="flex items-center gap-2 text-red-500 text-sm">
-              <AlertTriangle className="w-4 h-4" />2 сурагчийн хичээл тасалсан
-            </CardContent>
-          </Card>
-        </div>
-        {/* Feed */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-blue-100 mt-5 p-2 rounded-2xl">
-          <Card>
-            <CardHeader className="flex items-center gap-2">
-              <User className="text-blue-400 w-5 h-5" />
-              <CardTitle className="text-sm">Шинээр элссэн сурагч</CardTitle>
-            </CardHeader>
-            <CardContent className="text-gray-600 text-xl font-bold">
-              Ган-Эрдэнэ (2025/05/19)
-              <AddStudent className="m-5"></AddStudent>
-            </CardContent>
-          </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Сурагчийн асуудал</CardTitle>
+              </CardHeader>
+              <CardContent className="flex items-center gap-2 text-red-500 text-sm">
+                <AlertTriangle className="w-4 h-4" />2 сурагчийн хичээл тасалсан
+              </CardContent>
+            </Card>
+          </div>
 
-          <Card>
-            <CardHeader className="flex items-center gap-2">
-              <NotebookPen className="text-purple-400 w-5 h-5" />
-              <CardTitle className="text-sm">Шалгалт авсан</CardTitle>
-            </CardHeader>
-            <CardContent className="text-gray-600 text-sm">
-              Математик — 25 сурагч оролцсон
-            </CardContent>
-          </Card>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-5 p-2 rounded-2xl">
+            <Card>
+              <CardHeader className="flex items-center gap-2">
+                <User className="text-blue-400 w-5 h-5" />
+                <CardTitle className="text-sm">Шинээр элссэн сурагч</CardTitle>
+              </CardHeader>
+              <CardContent className="text-gray-600 text-xl font-bold">
+                Ган-Эрдэнэ (2025/05/19)
+                <AddStudent className="m-5"></AddStudent>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </div>

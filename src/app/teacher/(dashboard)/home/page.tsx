@@ -1,13 +1,11 @@
 import SectionHeader from "./section-header";
-import SectionInfo from "./section-info";
+
 import SectionTool from "./section-tool";
 
 export default function TeacherHome() {
-    return (
-        <div>    
-             <SectionHeader></SectionHeader>
-            <SectionInfo></SectionInfo>
-            <SectionTool></SectionTool>
-        </div>
-    )
+  return (
+    <div className="w-[1000px] ml-[100px] flex flex-col gap-4 bg-teal-400">
+      <SectionTool></SectionTool>
+    </div>
+  );
 }

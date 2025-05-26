@@ -35,11 +35,11 @@ export const Header = () => {
         <Image src={"/logo-back.svg"} alt="logo" width={200} height={200} />
       </Link>
       <div className="flex gap-5">
-        <Button className=" px-15 py-5 rounded-full bg-teal-400 border-2 hover:bg-teal-200  hover:text-black">
+        <Button className=" px-15 py-5 rounded-full bg-teal-400 hover:text-white hover:bg-teal-500 border-2">
           <PhoneCall /> Холбоо барих
         </Button>
         <Link href={"/login"}>
-          <Button className=" px-15 py-5 rounded-full bg-blue-400 border-2 hover:bg-teal-200  hover:text-black">
+          <Button className=" px-15 py-5 rounded-full bg-blue-400 hover:bg-blue-500 border-2">
             <LogIn />
             Нэвтрэх
           </Button>

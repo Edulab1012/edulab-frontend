@@ -30,11 +30,7 @@ export default function LoginPage() {
   const router = useRouter();
 
   const formSchema = z.object({
-    email: z
-      .string()
-      .email("Please enter a valid email address")
-      .min(5)
-      .max(50),
+    email: z.string().email("И-майл хаягаа оруулна уу.").min(5).max(50),
     password: z.string(),
   });
 
@@ -79,7 +75,7 @@ export default function LoginPage() {
     }
   };
   return (
-    <div className="w-full bg-yellow-300 flex h-screen">
+    <div className="w-full bg-teal-400 flex h-screen">
       <div className="w-1/2">
         <div className="flex items-center gap-3 p-2 absolute">
           <Link href={"/"}>
@@ -113,10 +109,12 @@ export default function LoginPage() {
         </div>
       </div>
 
-      <div className="bg-white w-4/4 rounded-l-4xl">
-        <Card className="flex justify-center self-center h-full bg-blue-100">
+      <div className="w-4/4 rounded-l-4xl">
+        <Card className="flex justify-center self-center h-full bg-blue-400">
           <div className="flex flex-col self-center justify-center">
-            <p className="font-semi text-3xl pb-8 leading-8">Welcome back</p>
+            <p className="font-semi text-white text-3xl pb-8 leading-8">
+              Тавтай морилно уу...
+            </p>
 
             <Form {...form}>
               <form
@@ -127,12 +125,16 @@ export default function LoginPage() {
                   name="email"
                   render={({ field }) => (
                     <FormItem className="mb-5">
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel className="text-[14px] text-white">
+                        И-майл
+                      </FormLabel>
+
                       <FormControl>
                         <Input
                           type="email"
-                          placeholder="Please your email"
+                          placeholder="И-майл ээ оруулна уу."
                           {...field}
+                          className="h-[55px] w-[400px] focus-visible:ring-0 rounded-2xl bg-white border-4 border-blue-400  focus-visible:border-teal-400"
                         />
                       </FormControl>
                       <FormMessage />
@@ -143,12 +145,15 @@ export default function LoginPage() {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Password</FormLabel>
+                      <FormLabel className="text-[14px] text-white">
+                        Нууц үг
+                      </FormLabel>
                       <FormControl>
                         <Input
                           type="password"
-                          placeholder="Please your password"
+                          placeholder="Нууц үгээ оруулна уу."
                           {...field}
+                          className="h-[55px] w-[400px] focus-visible:ring-0 rounded-2xl bg-white border-4 border-blue-400  focus-visible:border-teal-400"
                         />
                       </FormControl>
                       <FormMessage />
@@ -158,9 +163,9 @@ export default function LoginPage() {
                 <Button
                   variant="outline"
                   type="submit"
-                  className="hover:bg-amber-200 bg-amber-300 hover:cursor-pointer rounded-4xl px-15 py-6 text-lg font-semibold border-0"
+                  className="text-white bg-teal-400 hover:bg-teal-500 hover:text-white hover:cursor-pointer rounded-4xl px-15 py-6 text-lg font-semibold border-2 w-[400px]"
                 >
-                  Continue with email
+                  Нэвтрэх
                 </Button>
               </form>
             </Form>
@@ -172,15 +177,23 @@ export default function LoginPage() {
             </div>
 
             <div className="flex gap-4 flex-col [&_button]:w-full [&_button]:rounded-4xl [&_button]:border-2 [&_button]:py-6 [&_button]:text-lg [&_button]:font-semibold">
-              <Button variant="outline">Continue with Google</Button>
-              <Button variant="outline">Continue with Facebook</Button>
-              <Button variant="outline">Continue with Apple</Button>
-              <Button variant="outline">Continue with Twitter</Button>
+              <Button
+                variant="outline"
+                className="text-white bg-teal-400 hover:bg-teal-500 hover:text-white hover:cursor-pointer rounded-4xl px-15 py-6 text-lg font-semibold border-0 w-[400px]"
+              >
+                Google - ээр нэвтрэх
+              </Button>
+              <Button
+                variant="outline"
+                className="text-white bg-teal-400 hover:bg-teal-500 hover:text-white hover:cursor-pointer rounded-4xl px-15 py-6 text-lg font-semibold border-0 w-[400px]"
+              >
+                Facebook - ээр нэвтрэх
+              </Button>
             </div>
 
             <div>
               <hr className="text-gray-400 mt-5 mb-5" />
-              <p className="text-gray-400">
+              <p className="text-white">
                 © 2025 Powered Edu Management edulab company
               </p>
             </div>

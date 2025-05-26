@@ -83,24 +83,15 @@ export default function StudentList() {
     return <p className="p-10 text-center text-red-500">❗ Алдаа: {error}</p>;
 
   return (
-    <div className="px-10 py-10 w-full bg-gray-100">
-      <div className="flex flex-col gap-10">
-        <Card>
-          <CardContent>
-            <CardHeader className="text-2xl font-bold leading-7 text-center">
-              Миний ангийн сурагчдын жагсаалт
-            </CardHeader>
-          </CardContent>
-        </Card>
-
+    <div className="w-[1160px] ml-[100px] mt-[100px] h-full items-center justify-center">
+      <div className="flex flex-col gap-10 pl-[30px]">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
           {students.map((student, index) => (
             <Card
               key={index}
-              className="hover:shadow-xl transition-shadow duration-300 rounded-2xl border border-gray-200 bg-white"
+              className="hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500 rounded-2xl border border-gray-200 bg-white"
             >
               <CardContent className="flex flex-col items-center p-5 text-center space-y-4">
-                {/* Avatar */}
                 <div className="w-28 h-28 relative">
                   <Image
                     src={"/em.jpg"}
@@ -123,18 +114,6 @@ export default function StudentList() {
                     Имэйл: {student.email}
                   </div>
                 </div>
-
-                {/* Parent Info */}
-                {/* <div className="w-full text-left border-t pt-3 text-sm text-gray-600">
-                  <div className="font-medium text-gray-700 mb-1">
-                    👨‍👩‍👧 Эцэг эхийн мэдээлэл:
-                  </div>
-                  <p>Нэр: {student}</p>
-                  <p>Утас: {student.parent.phone}</p>
-                  <p>Имэйл: {student.parent.email}</p>
-                </div> */}
-
-                {/* Emergency Button */}
                 <div className="mt-4 w-full">
                   <button
                     onClick={() =>
