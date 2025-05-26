@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import {
   Backpack,
   BookCheck,
@@ -45,12 +45,13 @@ const items: MenuGroup[] = [
   {
     group: "Анги ба хичээл",
     links: [
-      { title: "Дүн", url: "/student/assessment", icon: BookCheck },
-      { title: "Хичээлүүд", url: "/student/subjects", icon: Backpack },
       { title: "Багш", url: "/student/teacher", icon: LayoutDashboard },
       { title: "Ирц", url: "/student/attendance", icon: ScanEye },
-      { title: "Тохиргоо", url: "/student/settings", icon: BookCheck },
-      { title: "Ангийн сурагчид", url: "/student/studentlist", icon: BookCheck },
+      {
+        title: "Ангийн сурагчид",
+        url: "/student/studentlist",
+        icon: BookCheck,
+      },
     ],
   },
 ];
@@ -59,7 +60,7 @@ export function AppSidebar() {
   const pathname = usePathname();
 
   return (
-    <Sidebar className="bg-white border-r w-64 shadow-md min-h-screen">
+    <Sidebar className="bg-white border-r-8 border-r-blue-400 w-84 shadow-md min-h-screen z-20">
       <SidebarContent>
         <SidebarGroup className="px-4 py-6">
           <SidebarGroupLabel className="mb-6 flex justify-center">
@@ -81,11 +82,14 @@ export function AppSidebar() {
                       <SidebarMenuItem>
                         <Link href={link.url}>
                           <SidebarMenuButton
-                            className={`flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100 transition ${pathname === link.url ? "bg-gray-100 font-semibold text-primary" : ""
-                              }`}
+                            className={`flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-blue-400 hover:text-white transition ${
+                              pathname === link.url
+                                ? "bg-blue-400 text-white font-semibold"
+                                : ""
+                            }`}
                           >
                             <link.icon className="w-5 h-5" />
-                            <span>{link.title}</span>
+                            <span className="text-[16px]">{link.title}</span>
                           </SidebarMenuButton>
                         </Link>
                       </SidebarMenuItem>
@@ -95,8 +99,11 @@ export function AppSidebar() {
                         <SidebarMenuItem key={child.title} className="ml-6">
                           <Link href={child.url}>
                             <SidebarMenuButton
-                              className={`flex items-center gap-2 px-3 py-1.5 rounded hover:bg-gray-50 transition ${pathname === child.url ? "text-primary font-medium" : "text-gray-600"
-                                }`}
+                              className={`flex items-center gap-2 px-3 py-1.5 rounded hover:bg-gray-50 transition ${
+                                pathname === child.url
+                                  ? "text-primary font-medium"
+                                  : "text-gray-600"
+                              }`}
                             >
                               <child.icon className="w-4 h-4" />
                               <span className="text-sm">{child.title}</span>

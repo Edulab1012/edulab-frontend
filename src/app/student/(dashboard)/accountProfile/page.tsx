@@ -4,12 +4,10 @@ import Stickers from "./components/stickers";
 
 export default function ProfilePage() {
   return (
-    <div className="w-full h-full bg-green-100 p-10">
-      <Card className="p-10 w-full h-auto ">
-        <StudentProfileCard className="w-50" ></StudentProfileCard>
-
+    <div className="w-full h-full bg-teal-400 p-10 flex items-center justify-center ml-[40px]">
+      <Card className="p-10 w-[1100px] h-auto ">
+        <StudentProfileCard className="w-50"></StudentProfileCard>
       </Card>
     </div>
   );
 }
-

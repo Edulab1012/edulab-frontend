@@ -103,7 +103,7 @@ export default function SectionHeader() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56 flex flex-col items-center">
                   <DropdownMenuLabel>
-                    Багшийн нэр , овгийн эхний үсэг орж ирнэ
+                    Сурагчийн нэр нэр , овгийн эхний үсэг орж ирнэ
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>

@@ -67,11 +67,11 @@ export default function StudentList() {
   // const navigate = useNavigate();
 
   return (
-    <div className="px-10 pt-30 pb-10 w-full bg-gray-200">
-      <div className="flex flex-col gap-10">
+    <div className="px-10 pt-30 pb-10 w-full bg-teal-400">
+      <div className="flex flex-col gap-10 ml-[100px]">
         <Card>
           <CardContent>
-            <CardHeader className="text-3xl font-bold leading-8 text-center">
+            <CardHeader className="text-3xl w-full font-bold leading-8 text-center">
               11 a aнгийн сурагчдын жагсаалт
             </CardHeader>
           </CardContent>
@@ -80,7 +80,7 @@ export default function StudentList() {
           {students.map((student, index) => (
             <Card
               key={index}
-              className="hover:shadow-xl transition-shadow duration-300 rounded-2xl border border-gray-200"
+              className="hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500 rounded-2xl border border-gray-200 bg-white"
             >
               <CardContent className="flex flex-col items-center p-5">
                 <div className="w-32 h-32 relative mb-4">
