@@ -46,7 +46,7 @@ const AttendanceChart = () => {
     <Card className="bg-white rounded-lg h-full">
       <CardContent>
 
-        <CardHeader className="text-2xl font-bold leading-8 p-0">Ирц</CardHeader>
+        <CardHeader className="text-2xl font-light leading-8 p-0">Ирц</CardHeader>
 
 
         <ResponsiveContainer width="100%" height="90%">

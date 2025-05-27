@@ -54,7 +54,7 @@ export default function EditProfile({ initialData, onSave, onCancel }: EditProfi
         </Avatar>
       </div>
 
-      <h2 className="text-xl font-bold mb-6 text-center">Мэдээлэл засах</h2>
+      <h2 className="text-xl font-light mb-6 text-center">Мэдээлэл засах</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>

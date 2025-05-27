@@ -79,7 +79,8 @@ export default function LoginPage() {
       <div className="w-1/2">
         <div className="flex items-center gap-3 p-2 absolute">
           <Link href={"/"}>
-            <Image alt="logo" src="/logo-back.svg" width={150} height={50} />
+            <Image alt="logo" src="/classheroNoback.png
+            " width={150} height={50} />
           </Link>
         </div>
         <div className="flex justify-center items-center h-full px-5">

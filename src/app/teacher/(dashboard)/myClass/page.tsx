@@ -54,9 +54,8 @@ const StudentCard = ({
         alt={`student-egg-${index}`}
         width={65}
         height={65}
-        className={`absolute -top-14 ${
-          showStatus ? "grayscale opacity-85" : ""
-        }`}
+        className={`absolute -top-14 ${showStatus ? "grayscale opacity-85" : ""
+          }`}
       />
       {showStatus && (
         <div
@@ -204,7 +203,7 @@ export default function MyClassOverview() {
 
   return (
     <div className="p-10 min-h-screen w-full max-w-[1240px] mx-auto flex flex-col items-center justify-center bg-teal-400 mt-[100px] space-y-10">
-      <h2 className="text-4xl font-bold text-white">
+      <h2 className="text-4xl font-light text-white">
         👩‍🏫 11А ангийн хяналтын самбар
       </h2>
 
@@ -246,7 +245,7 @@ export default function MyClassOverview() {
               <CardHeader>
                 <CardTitle>{item.title}</CardTitle>
               </CardHeader>
-              <CardContent className={`text-xl font-bold ${item.color}`}>
+              <CardContent className={`text-xl font-light ${item.color}`}>
                 {item.value}
               </CardContent>
             </Card>
@@ -270,7 +269,7 @@ export default function MyClassOverview() {
             <User className="text-blue-400 w-5 h-5" />
             <CardTitle className="text-sm">Шинээр элссэн сурагч</CardTitle>
           </CardHeader>
-          <CardContent className="text-gray-600 text-xl font-bold flex justify-between items-center">
+          <CardContent className="text-gray-600 text-xl font-light flex justify-between items-center">
             {students.slice(-1).map((student, index) => (
               <p key={index}>{student.firstName}</p>
             ))}

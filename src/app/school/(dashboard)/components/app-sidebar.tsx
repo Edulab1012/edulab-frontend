@@ -92,11 +92,11 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup className="px-6 py-9 flex flex-col gap-4">
           <SidebarGroupLabel className="flex flex-col">
-            <h1 className="text-2xl font-bold leading-8 text-black ">
+            <h1 className="text-2xl font-light leading-8 text-black ">
               Сургууль нэр
             </h1>
             <Link href={"/school"}>
-              <Image src="/logo-back.svg" alt="logo" width={200} height={250} />
+              <Image src="/classheroNoback.png" alt="logo" width={200} height={250} />
             </Link>
           </SidebarGroupLabel>
           <SidebarGroupContent className="mt-5">

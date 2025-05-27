@@ -93,7 +93,7 @@ export const ExperienceInfo = () => {
   return (
     <Card>
       <CardContent>
-        <CardHeader className="text-2xl font-bold leading-8 mb-5">
+        <CardHeader className="text-2xl font-light leading-8 mb-5">
           Туршлага
         </CardHeader>
         <div className="grid ">

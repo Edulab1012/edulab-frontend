@@ -79,14 +79,14 @@ export const PersonalInfo = () => {
   return (
     <Card>
       <CardContent className="">
-        <CardHeader className="text-2xl font-bold leading-8 mb-5">
+        <CardHeader className="text-2xl font-light leading-8 mb-5">
           Хувийн мэдээлэл
         </CardHeader>
         <div className="grid grid-cols-2">
           <div className="flex flex-col gap-3 justify-center items-center">
             <p className="pl-[30px] pb-[20px]">Профайл зураг</p>
             <Image
-              src={"/logo-back.svg"}
+              src={"/classheroNoback.png"}
               alt="profile"
               width={300}
               height={300}
