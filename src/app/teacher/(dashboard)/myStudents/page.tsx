@@ -30,7 +30,7 @@ export default function StudentList() {
         if (!token) throw new Error("No token found");
         console.log("yes1");
         const res = await fetch(
-          "http://localhost:8000/api/v1/student/withStudents",
+          "https://dojoback.onrender.com/api/v1/student/withStudents",
           {
             headers: {
               Authorization: `Bearer ${token}`,

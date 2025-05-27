@@ -8,6 +8,8 @@ import Announcements from "@/components/Announcements";
 import { getUserAndPost } from "@/lib/CreateTestUser";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
+import { BASE_URL, LOCAL_BASE_URL } from "@/constants/baseurl";
+
 
 export default function Page() {
 
@@ -17,7 +19,7 @@ export default function Page() {
 
 
   useEffect(() => {
-    getUserAndPost(`http://localhost:8000/api/v1/auth/testUser`, role)
+    getUserAndPost(`${BASE_URL}auth/testUser`, role)
     console.log(role);
     console.log(Role);
 

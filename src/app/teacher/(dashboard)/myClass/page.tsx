@@ -24,7 +24,7 @@ export default function MyClassOverview() {
 
   //     const decoded = JSON.parse(atob(token.split(".")[1]));
   //     const teacherId = decoded.teacherId;
-  //     const res = await fetch(`http://localhost:8000/api/v1/student/students`, {
+  //     const res = await fetch(`https://dojoback.onrender.com/api/v1/student/students`, {
   //       headers: {
   //         Authorization: `Bearer ${token}`,
   //       },

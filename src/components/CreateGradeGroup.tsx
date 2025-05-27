@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner"; // or use your own toast system
 import { BASE_URL } from "@/constants/baseurl";
-import { LOCAL_BASE_URL } from "@/constants/baseurl 2";
+import { LOCAL_BASE_URL } from "@/constants/baseurl";
 
 export default function CreateGradeGroup() {
     const [grade, setGrade] = useState("");
@@ -24,7 +24,7 @@ export default function CreateGradeGroup() {
         try {
             console.log(`Анги :${grade} Бүлэг :${group}`);
 
-            await axios.post(`${LOCAL_BASE_URL}class/group`, { grade: parseInt(grade), group }); // adapt route
+            await axios.post(`${BASE_URL}class/group`, { grade: parseInt(grade), group }); // adapt route
             toast.success(`Анги :${grade} Бүлэг :${group} : Амжилттай үүсгэгдлээ! 🎉`);
             setGrade("");
             setGroup("");

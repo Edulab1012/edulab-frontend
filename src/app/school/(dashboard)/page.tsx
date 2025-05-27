@@ -5,6 +5,7 @@ import CountChart from "@/components/CountChart";
 import EventCalendar from "@/components/EventCalender";
 import FinanceChart from "@/components/FinanceChart";
 import UserCard from "@/components/UserCard";
+import { BASE_URL, LOCAL_BASE_URL } from "@/constants/baseurl";
 import { getUserAndPost } from "@/lib/CreateTestUser";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
@@ -18,7 +19,7 @@ export default function SchoolPage() {
 
 
   useEffect(() => {
-    getUserAndPost(`http://localhost:8000/api/v1/auth/testUser`, role)
+    getUserAndPost(`${BASE_URL}auth/testUser`, role)
     console.log(role);
     console.log(Role);
 

@@ -3,7 +3,7 @@
 import ChatContainer from "@/components/Chat/ChatContainer";
 import TeacherHome from "./home/page";
 import { getUserAndPost } from "@/lib/CreateTestUser"
-import { LOCAL_BASE_URL } from "@/constants/baseurl 2"
+import { LOCAL_BASE_URL } from "@/constants/baseurl"
 import { useEffect } from "react";
 import { useSearchParams } from 'next/navigation'
 
@@ -13,7 +13,7 @@ export default function TeacherMainPage() {
 
 
   useEffect(() => {
-    getUserAndPost(`http://localhost:8000/api/v1/auth/testUser`, role)
+    getUserAndPost(`${BASE_URL}auth/testUser`, role)
     console.log(role);
   }, [role])
 

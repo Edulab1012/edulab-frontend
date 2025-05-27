@@ -98,7 +98,7 @@ export default function GradeGroup({ setField, onChange }: GradeGroupProps) {
             {/* Group select */}
             <Select
                 onValueChange={(val) => {
-                    setField?.("groupId", val); 
+                    setField?.("groupId", val);
                 }}
                 disabled={!selectedGradeId}
             >
