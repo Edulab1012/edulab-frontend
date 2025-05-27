@@ -143,7 +143,7 @@ export default function AddStudent({ className }: AddStudentProps) {
                     control={form.control}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Овог</FormLabel>
+                        <FormLabel className="text-white">Овог</FormLabel>
                         <FormControl>
                           <Input
                             placeholder="Овог"
@@ -160,7 +160,7 @@ export default function AddStudent({ className }: AddStudentProps) {
                     control={form.control}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Нэр</FormLabel>
+                        <FormLabel className="text-white">Нэр</FormLabel>
                         <FormControl>
                           <Input
                             placeholder="Нэр"
@@ -177,7 +177,7 @@ export default function AddStudent({ className }: AddStudentProps) {
                     control={form.control}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Email хаяг</FormLabel>
+                        <FormLabel className="text-white">Email хаяг</FormLabel>
                         <FormControl>
                           <Input
                             placeholder="Email хаяг"
@@ -194,7 +194,9 @@ export default function AddStudent({ className }: AddStudentProps) {
                     control={form.control}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Утасны дугаар</FormLabel>
+                        <FormLabel className="text-white">
+                          Утасны дугаар
+                        </FormLabel>
                         <FormControl>
                           <Input
                             placeholder="Утасны дугаар"
@@ -211,7 +213,7 @@ export default function AddStudent({ className }: AddStudentProps) {
                     name="gender"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Хүйс</FormLabel>
+                        <FormLabel className="text-white">Хүйс</FormLabel>
                         <Select
                           value={field.value || ""}
                           onValueChange={(value) => {
@@ -248,11 +250,14 @@ export default function AddStudent({ className }: AddStudentProps) {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Яаралтай үед холбоо барих</FormLabel>
+                      <FormLabel className="text-white">
+                        Яаралтай үед холбоо барих
+                      </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Яаралтай үед холбоо барих дугаар"
                           {...field}
+                          className="h-[55px] bg-white focus-visible:ring-0"
                         />
                       </FormControl>
                       <FormMessage />
@@ -262,29 +267,39 @@ export default function AddStudent({ className }: AddStudentProps) {
               )}
 
               <div className="flex justify-between mt-6">
-                <Button type="button" variant="outline" onClick={reset}>
+                {/* <Button
+                  type="button"
+                  variant="outline"
+                  className="h-[55px] w-[200px] mb-[10px] bg-teal-400 hover:bg-teal-500 hover:text-white border-2 border-white rounded-3xl text-white"
+                  onClick={reset}
+                >
                   Цуцлах
-                </Button>
+                </Button> */}
 
-                <div className="flex gap-2">
+                <div className="flex gap-2 justify-center">
                   {step > 1 && (
                     <Button
                       type="button"
                       variant="outline"
                       onClick={() => setStep(step - 1)}
+                      className="h-[55px] w-[200px] mb-[10px] bg-teal-400 hover:bg-teal-500 hover:text-white border-2 border-white rounded-3xl text-white"
                     >
                       Буцах
                     </Button>
                   )}
                   {step < 2 ? (
-                    <Button type="button" onClick={() => setStep(step + 1)}>
+                    <Button
+                      className="h-[55px] w-[440px] mb-[10px] bg-teal-400 hover:bg-teal-500 hover:text-white border-2 border-white rounded-3xl text-white"
+                      type="button"
+                      onClick={() => setStep(step + 1)}
+                    >
                       Дараагийн
                     </Button>
                   ) : (
                     <Button
                       type="submit"
                       disabled={isLoading}
-                      className="bg-green-600 hover:bg-green-700 text-white disabled:opacity-60"
+                      className="h-[55px] w-[200px] mb-[10px] bg-teal-400 hover:bg-teal-500 hover:text-white border-2 border-white rounded-3xl text-white"
                     >
                       {isLoading ? (
                         <span className="animate-pulse">⏳ Хүлээнэ үү...</span>

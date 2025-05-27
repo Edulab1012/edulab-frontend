@@ -1,152 +1,308 @@
 "use client";
-
-import { AlertTriangle, User, NotebookPen } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { AlertTriangle, User } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import AddStudent from "./components/AddStudentButton";
+import Footer from "./components/Footer";
+import Image from "next/image";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-// type User = {
-//   id: number;
-//   lastname: string;
-//   firstname: string;
-//   email: string;
-//   contact: number;
-//   emergency: number;
-// };
 
-export default function MyClassOverview() {
-  // const [data, setData] = useState<User[]>([]);
-  // console.log(data);
-  // useEffect(() => {
-  //   const fetchStudents = async () => {
-  //     const token = localStorage.getItem("token");
-  //     console.log(token);
-  //     if (!token) return;
+interface Student {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  emergencyNumber: string;
+  gender: string;
+  teacher?: { firstName: string; lastName: string };
+  group?: { name: string };
+  grade?: { name: string };
+  img?: string;
+}
 
-  //     const decoded = JSON.parse(atob(token.split(".")[1]));
-  //     const teacherId = decoded.teacherId;
-  //     const res = await fetch(`http://localhost:8000/api/v1/student/students`, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //       cache: "no-store",
-  //     });
-  //     const teacherData = await res.json();
-  //     const students = teacherData.students;
-  //     const formattedData: User[] = students.map((s: any) => ({
-  //       id: Number(s.id),
-  //       lastname: s.lastName,
-  //       firstname: s.firstName,
-  //       email: s.email,
-  //       contact: Number(s.phoneNumber),
-  //       emergency: Number(s.emergencyNumber),
-  //     }));
+const eggImages = [
+  "/egg/yellow-egg.png",
+  "/egg/orange-egg.png",
+  "/egg/green-egg.png",
+  "/egg/red-egg.png",
+  "/egg/pink-egg.png",
+];
 
-  //     setData(formattedData);
-  //   };
-
-  //   fetchStudents();
-  // }, []);
+const StudentCard = ({
+  student,
+  index,
+  showStatus,
+  statusColor = "bg-gray-300",
+}: {
+  student: Student;
+  index: number;
+  showStatus?: boolean;
+  statusColor?: string;
+}) => {
+  const imgSrc = eggImages[index % eggImages.length];
 
   return (
-    <div className="p-10  space-y-8 min-h-screen w-[1000px] ml-[100px] flex flex-col items-center justify-center gap-4 bg-teal-400">
-      <div>
-        {" "}
-        <h2 className="text-4xl font-bold text-white mb-14">
-          👩‍🏫 11А ангийн хяналтын самбар
-        </h2>
-        <motion.div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6  p-2 rounded-2xl">
-            <motion.div
-              initial={{ y: 0 }}
-              animate={{ y: [0, -20, 0] }}
-              transition={{
-                repeat: Infinity,
-                duration: 2,
-                ease: "easeInOut",
-                delay: 0.2,
-              }}
-            >
-              {" "}
-              <Card className="">
-                <CardHeader>
-                  <CardTitle>Сурагчдын тоо</CardTitle>
-                </CardHeader>
-                <CardContent className="text-xl font-bold text-blue-600">
-                  30
-                </CardContent>
-              </Card>
-            </motion.div>
+    <motion.div
+      key={student.id}
+      whileHover={{ scale: 1.2 }}
+      whileTap={{ scale: 0.8 }}
+      className="w-[110px] h-[110px] rounded-2xl bg-white flex items-center justify-center hover:-translate-y-2.5 transition duration-300 relative shadow-md"
+    >
+      <Image
+        src={imgSrc}
+        alt={`student-egg-${index}`}
+        width={65}
+        height={65}
+        className={`absolute -top-14 ${
+          showStatus ? "grayscale opacity-85" : ""
+        }`}
+      />
+      {showStatus && (
+        <div
+          className={`absolute left-20 -top-4 h-[38px] w-[38px] shadow-2xl rounded-full border-4 border-white ${statusColor}`}
+        ></div>
+      )}
+      <p className="text-[14px] font-medium w-[100px] text-center truncate">
+        {student.firstName}
+      </p>
+    </motion.div>
+  );
+};
+// useEffect(() => {
+//   if (activeSection === "attendance") {
+//     const fetchTodaysAttendance = async () => {
+//       try {
+//         const token = localStorage.getItem("token");
+//         if (!token) throw new Error("No token found");
 
-            <motion.div
-              initial={{ y: 0 }}
-              animate={{ y: [0, -20, 0] }}
-              transition={{
-                repeat: Infinity,
-                duration: 2,
-                ease: "easeInOut",
-                delay: 0.2,
-              }}
-            >
-              <Card>
-                <CardHeader>
-                  <CardTitle>Дундаж ирц</CardTitle>
-                </CardHeader>
-                <CardContent className="text-xl font-bold text-green-600">
-                  91%
-                </CardContent>
-              </Card>
-            </motion.div>
+//         const res = await fetch(
+//           "http://localhost:8000/api/v1/teacher/attendance/today",
+//           {
+//             headers: {
+//               Authorization: `Bearer ${token}`,
+//               "Content-Type": "application/json",
+//             },
+//           }
+//         );
 
-            <motion.div
-              initial={{ y: 0 }}
-              animate={{ y: [0, -20, 0] }}
-              transition={{
-                repeat: Infinity,
-                duration: 2,
-                ease: "easeInOut",
-                delay: 0.2,
-              }}
-            >
-              <Card>
-                <CardHeader>
-                  <CardTitle>Сурагчийн асуудал</CardTitle>
-                </CardHeader>
-                <CardContent className="flex items-center gap-2 text-red-500 text-sm">
-                  <AlertTriangle className="w-4 h-4" />2 сурагчийн хичээл
-                  тасалсан
-                </CardContent>
-              </Card>
-            </motion.div>
+//         if (!res.ok) {
+//           const errorData = await res.json().catch(() => res.text());
+//           throw new Error(
+//             typeof errorData === "object" ? errorData.message : errorData
+//           );
+//         }
+
+//         const data = await res.json();
+//         setStudentStatus(data);
+//       } catch (err: any) {
+//         console.error("Error fetching today's attendance:", err);
+//       }
+//     };
+
+//     fetchTodaysAttendance();
+//   }
+// }, [activeSection]);
+export default function MyClassOverview() {
+  const [students, setStudents] = useState<Student[]>([]);
+  const [loading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [activeSection, setActiveSection] = useState<"home" | "attendance">(
+    "home"
+  );
+
+  const [studentStatus, setStudentStatus] = useState<
+    Record<string, "present" | "late" | "absent" | null>
+  >({});
+
+  useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) throw new Error("No token found");
+
+        const res = await fetch(
+          "http://localhost:8000/api/v1/student/withStudents",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => res.text());
+          throw new Error(
+            typeof errorData === "object" ? errorData.message : errorData
+          );
+        }
+
+        const data = await res.json();
+        setStudents(data);
+      } catch (err: any) {
+        setError(err.message || "Unknown error occurred");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchStudents();
+  }, []);
+  const markAllPresent = () => {
+    const newStatus: Record<string, "present" | "late" | "absent" | null> = {};
+    students.forEach((student) => {
+      newStatus[student.id] = "present";
+    });
+    setStudentStatus(newStatus);
+  };
+
+  const markAllAbsent = () => {
+    const newStatus: Record<string, "present" | "late" | "absent" | null> = {};
+    students.forEach((student) => {
+      newStatus[student.id] = "absent";
+    });
+    setStudentStatus(newStatus);
+  };
+
+  const cycleStatus = (studentId: string) => {
+    setStudentStatus((prev) => {
+      const current = prev[studentId];
+      let next: "present" | "late" | "absent" | null;
+
+      if (current === "present") next = "late";
+      else if (current === "late") next = "absent";
+      else if (current === "absent") next = null;
+      else next = "present";
+
+      return { ...prev, [studentId]: next };
+    });
+  };
+
+  const getStatusColor = (
+    status: "present" | "late" | "absent" | null | undefined
+  ) => {
+    switch (status) {
+      case "present":
+        return "bg-green-500";
+      case "late":
+        return "bg-yellow-400";
+      case "absent":
+        return "bg-red-500";
+      default:
+        return "bg-gray-300";
+    }
+  };
+
+  if (loading)
+    return (
+      <p className="p-10 ml-[60px] mt-[50px] text-white">⏳ Уншиж байна...</p>
+    );
+
+  if (error)
+    return <p className="p-10 text-center text-red-500">❗ Алдаа: {error}</p>;
+
+  return (
+    <div className="p-10 min-h-screen w-full max-w-[1240px] mx-auto flex flex-col items-center justify-center bg-teal-400 mt-[100px] space-y-10">
+      <h2 className="text-4xl font-bold text-white">
+        👩‍🏫 11А ангийн хяналтын самбар
+      </h2>
+
+      {/* Cards Overview */}
+      <motion.div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        {[
+          {
+            title: "Сурагчдын тоо",
+            value: `${students.length} сурагч`,
+            color: "text-blue-600",
+          },
+          {
+            title: "Дундаж ирц",
+            value: "91%",
+            color: "text-green-600",
+          },
+          {
+            title: "Сурагчийн асуудал",
+            value: (
+              <span className="flex items-center gap-2 text-sm">
+                <AlertTriangle className="w-4 h-4" />2 сурагчийн хичээл тасалсан
+              </span>
+            ),
+            color: "text-red-500",
+          },
+        ].map((item, index) => (
+          <motion.div
+            key={index}
+            initial={{ y: 0 }}
+            animate={{ y: [0, -20, 0] }}
+            transition={{
+              repeat: Infinity,
+              duration: 2,
+              ease: "easeInOut",
+              delay: 0.2,
+            }}
+          >
+            <Card>
+              <CardHeader>
+                <CardTitle>{item.title}</CardTitle>
+              </CardHeader>
+              <CardContent className={`text-xl font-bold ${item.color}`}>
+                {item.value}
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </motion.div>
+
+      <motion.div
+        initial={{ x: -520 }}
+        animate={{ x: [0, 320, 0] }}
+        transition={{
+          duration: 20,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 0.4,
+        }}
+        className="w-full max-w-md"
+      >
+        <Card>
+          <CardHeader className="flex items-center gap-2">
+            <User className="text-blue-400 w-5 h-5" />
+            <CardTitle className="text-sm">Шинээр элссэн сурагч</CardTitle>
+          </CardHeader>
+          <CardContent className="text-gray-600 text-xl font-bold flex justify-between items-center">
+            {students.slice(-1).map((student, index) => (
+              <p key={index}>{student.firstName}</p>
+            ))}
+            <AddStudent />
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      <div className="mb-[120px] ml-[80px] w-full flex flex-wrap gap-6 justify-center border-2 border-white rounded-md p-10 bg-white/10">
+        {students.map((student, index) => (
+          <div
+            key={student.id}
+            onClick={() =>
+              activeSection === "attendance" && cycleStatus(student.id)
+            }
+          >
+            <StudentCard
+              student={student}
+              index={index}
+              showStatus={activeSection === "attendance"}
+              statusColor={getStatusColor(studentStatus[student.id])}
+            />
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-5 p-2 rounded-2xl ">
-            <motion.div
-              initial={{ x: 0 }}
-              animate={{ x: [0, 420, 0] }}
-              transition={{
-                duration: 20,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 0.4,
-              }}
-            >
-              <Card>
-                <CardHeader className="flex items-center gap-2">
-                  <User className="text-blue-400 w-5 h-5" />
-                  <CardTitle className="text-sm">
-                    Шинээр элссэн сурагч
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="text-gray-600 text-xl font-bold">
-                  Ган-Эрдэнэ (2025/05/19)
-                  <AddStudent className="m-5"></AddStudent>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </div>
-        </motion.div>
+        ))}
       </div>
+
+      <Footer
+        onSelectSection={setActiveSection}
+        activeSection={activeSection}
+        markAllPresent={markAllPresent}
+        markAllAbsent={markAllAbsent}
+      />
     </div>
   );
 }

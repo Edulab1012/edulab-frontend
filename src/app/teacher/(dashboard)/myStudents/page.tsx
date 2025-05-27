@@ -78,7 +78,10 @@ export default function StudentList() {
     fetchStudents();
   }, []);
 
-  if (loading) return <p className="p-10 text-center">⏳ Уншиж байна...</p>;
+  if (loading)
+    return (
+      <p className="p-10 ml-[60px]  mt-[5 0px] text-white">⏳ Уншиж байна...</p>
+    );
   if (error)
     return <p className="p-10 text-center text-red-500">❗ Алдаа: {error}</p>;
 

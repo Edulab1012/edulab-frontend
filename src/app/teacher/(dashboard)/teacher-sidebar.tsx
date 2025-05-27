@@ -37,10 +37,6 @@ interface MenuGroup {
 
 const items: MenuGroup[] = [
   {
-    group: "Профайл",
-    links: [{ title: "Нүүр хуудас", url: "/teacher", icon: Home }],
-  },
-  {
     group: "Анги ба хичээл",
     links: [
       { title: "Даасан анги", url: "/teacher/myClass", icon: PanelTop },
@@ -53,6 +49,10 @@ const items: MenuGroup[] = [
       { title: "Шалгалт", url: "/teacher/exam", icon: BookCheck },
     ],
   },
+  {
+    group: "Профайл",
+    links: [{ title: "Миний хуудас", url: "/teacher", icon: Home }],
+  },
 ];
 
 export function AppSidebar() {
@@ -63,7 +63,7 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup className="px-4 py-6">
           <SidebarGroupLabel className="mb-6 flex justify-center">
-            <Link href="/teacher">
+            <Link href="/teacher/myClass">
               <Image src="/logo-back.svg" alt="logo" width={120} height={40} />
             </Link>
           </SidebarGroupLabel>
