@@ -7,19 +7,25 @@ import { Label } from "@/components/ui/label";
 import Stickers from "./stickers";
 import EditProfile from "./EditProfile";
 import { Student } from "./types";
+import { Divide } from "lucide-react";
 
 export default function StudentProfileCard() {
+  const [isEditing, setIsEditing] = useState(true);
   const [student, setStudent] = useState<Student>({
-    firstName: "Уянга",
-    lastName: "Бат",
-    grade: "11A",
-    phoneNumber: "95152233",
-    email: "uyangaab@gmail.com",
-    teacher: "Дуламсүрэн",
-    avatarUrl: "/student.png",
+    firstName: "",
+    lastName: "",
+    grade: "",
+    phoneNumber: "",
+    email: "",
+    teacher: "",
+    avatarUrl: "",
   });
 
-  const [isEditing, setIsEditing] = useState(false);
+  const [is, setIs] = useState("")
+  if (is == "neesen") {
+
+  }
+
 
   const handleSave = (updatedStudent: Student) => {
     setStudent(updatedStudent);
@@ -27,7 +33,7 @@ export default function StudentProfileCard() {
   };
 
   const handleCancel = () => {
-    setIsEditing(false);
+    setIsEditing(true);
   };
 
   return (
@@ -46,8 +52,16 @@ export default function StudentProfileCard() {
           )}
         </CardHeader>
 
+
+
+
+
+
+
         <CardContent className="pt-6">
-          {!isEditing ? (
+
+          {isEditing
+            ?
             <>
               <div className="grid grid-cols-2 gap-x-16 gap-y-6 font-medium text-sm">
                 <Info label="Овог" value={student.lastName} />
@@ -56,24 +70,30 @@ export default function StudentProfileCard() {
                 <Info label="Утасны дугаар" value={student.phoneNumber} />
                 <Info label="Имэйл хаяг" value={student.email} />
                 <Info label="Анги даасан багш" value={student.teacher} />
+
               </div>
 
               <div className="flex justify-end mt-8">
                 <button
                   className="px-5 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-                  onClick={() => setIsEditing(true)}
+                  onClick={() => setIsEditing(false)}
                 >
                   Засах
                 </button>
               </div>
             </>
-          ) : (
+            :
+
+
             <EditProfile
               initialData={student}
               onSave={handleSave}
               onCancel={handleCancel}
+              isEditing ={isEditing}
+              setIsEditing = {setIsEditing}
+              
             />
-          )}
+          }
         </CardContent>
       </Card>
     </div>
@@ -88,3 +108,10 @@ function Info({ label, value }: { label: string; value: string }) {
     </div>
   );
 }
+
+
+
+
+
+
+
