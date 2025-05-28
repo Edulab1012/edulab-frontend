@@ -3,16 +3,21 @@
 import { useRef, useState } from "react";
 import { Student } from "./types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import axios from "axios";
 
 interface EditProfileProps {
   initialData: Student;
   onSave: (data: Student) => void;
   onCancel: () => void;
+  isEditing: boolean;
+  setIsEditing: (isEditing: boolean) => void
+
 }
 
-export default function EditProfile({ initialData, onSave, onCancel }: EditProfileProps) {
+export default function EditProfile({ initialData, onSave, onCancel, setIsEditing, isEditing }: EditProfileProps) {
   const [formData, setFormData] = useState<Student>(initialData);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -33,6 +38,16 @@ export default function EditProfile({ initialData, onSave, onCancel }: EditProfi
 
   const handleSave = () => {
     onSave(formData);
+    setIsEditing(true)
+    console.log(formData);
+
+
+    const sendProfileToBackend = async () => {
+      const res = await axios.post(`http://localhost:8000/student`, formData)
+      console.log(res);
+    }
+
+    sendProfileToBackend()
   };
 
   return (
@@ -160,3 +175,7 @@ export default function EditProfile({ initialData, onSave, onCancel }: EditProfi
     </div>
   );
 }
+
+
+
+
