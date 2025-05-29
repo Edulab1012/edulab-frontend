@@ -6,7 +6,6 @@ import AccomplishedTask from "@/components/AccomplishedTask";
 export default function Home() {
   return (
     <div>
-
       <MainPage />
       <AccomplishedTask />
       <Footer />

@@ -1,9 +1,18 @@
+"use client";
 import SectionTool from "./section-tool";
+import { useMediaQuery } from "react-responsive";
+import { useEffect, useState } from "react";
 
 export default function TeacherHome() {
+  const isMobileQuery = useMediaQuery({ maxWidth: 639 });
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    setIsMobile(isMobileQuery);
+  }, [isMobileQuery]);
   return (
-    <div className="w-[1140px] ml-[80px] flex flex-col gap-4 bg-red-400">
-      <SectionTool></SectionTool>
+    <div className=" ">
+      {isMobile && <div className="mt-[100px] ml-[10px]">mobile</div>}
+      {!isMobile && <div className="mt-[100px] ml-[100px]">desktop</div>}
     </div>
   );
 }

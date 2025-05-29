@@ -116,18 +116,22 @@ export default function AddStudent({ className }: AddStudentProps) {
 
   return (
     <div className={className}>
-      <Button onClick={() => setOpen(true)} variant="outline">
-        <PlusIcon className="mr-2 h-4 w-4" />
+      <Button
+        onClick={() => setOpen(true)}
+        variant="outline"
+        className="text-white bg-[#FF9C42] dark:bg-[#FF9C42] hover:bg-[#ffb36b] hover:text-white"
+      >
+        <PlusIcon className="mr-2 h-4 w-4 text-white" />
         Сурагч нэмэх
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
+        <DialogContent className="flex flex-col justify-between">
           <DialogHeader>
-            <DialogTitle className="text-3xl text-white font-light">
+            <DialogTitle className="text-3xl text-[#2C3A4A]   dark:text-[#FFD3A1] font-light">
               Шинэ сурагч нэмэх
             </DialogTitle>
-            <DialogDescription className="text-white">
+            <DialogDescription className="text-[#2C3A4A]   dark:text-[#FFD3A1]">
               Мэдээллийг бүрэн бөглөнө үү.
             </DialogDescription>
           </DialogHeader>
@@ -141,12 +145,14 @@ export default function AddStudent({ className }: AddStudentProps) {
                     control={form.control}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-white">Овог</FormLabel>
+                        <FormLabel className="text-[#2C3A4A]   dark:text-[#FFD3A1]">
+                          Овог
+                        </FormLabel>
                         <FormControl>
                           <Input
                             placeholder="Овог"
                             {...field}
-                            className="h-[55px] bg-white focus-visible:ring-0"
+                            className="h-[55px] bg-white focus-visible:ring-0 w-[340px]"
                           />
                         </FormControl>
                         <FormMessage />
@@ -158,12 +164,14 @@ export default function AddStudent({ className }: AddStudentProps) {
                     control={form.control}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-white">Нэр</FormLabel>
+                        <FormLabel className="text-[#2C3A4A]   dark:text-[#FFD3A1]">
+                          Нэр
+                        </FormLabel>
                         <FormControl>
                           <Input
                             placeholder="Нэр"
                             {...field}
-                            className="h-[55px] bg-white focus-visible:ring-0"
+                            className="h-[55px] bg-white focus-visible:ring-0 w-[340px]"
                           />
                         </FormControl>
                         <FormMessage />
@@ -175,12 +183,14 @@ export default function AddStudent({ className }: AddStudentProps) {
                     control={form.control}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-white">Email хаяг</FormLabel>
+                        <FormLabel className="text-[#2C3A4A]   dark:text-[#FFD3A1]">
+                          Email хаяг
+                        </FormLabel>
                         <FormControl>
                           <Input
                             placeholder="Email хаяг"
                             {...field}
-                            className="h-[55px] bg-white focus-visible:ring-0"
+                            className="h-[55px] bg-white focus-visible:ring-0 w-[340px]"
                           />
                         </FormControl>
                         <FormMessage />
@@ -192,14 +202,14 @@ export default function AddStudent({ className }: AddStudentProps) {
                     control={form.control}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-white">
+                        <FormLabel className="text-[#2C3A4A]   dark:text-[#FFD3A1] ">
                           Утасны дугаар
                         </FormLabel>
                         <FormControl>
                           <Input
                             placeholder="Утасны дугаар"
                             {...field}
-                            className="h-[55px] bg-white focus-visible:ring-0"
+                            className="h-[55px] bg-white focus-visible:ring-0 w-[340px]"
                           />
                         </FormControl>
                         <FormMessage />
@@ -211,7 +221,9 @@ export default function AddStudent({ className }: AddStudentProps) {
                     name="gender"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-white">Хүйс</FormLabel>
+                        <FormLabel className="text-[#2C3A4A]   dark:text-[#FFD3A1]">
+                          Хүйс
+                        </FormLabel>
                         <Select
                           value={field.value || ""}
                           onValueChange={(value) => {
@@ -223,16 +235,24 @@ export default function AddStudent({ className }: AddStudentProps) {
                           }}
                         >
                           <FormControl>
-                            <SelectTrigger className="h-[55px] w-[440px] bg-white focus-visible:ring-0">
+                            <SelectTrigger className="h-[55px] w-[340px] bg-white focus-visible:ring-0">
                               <SelectValue placeholder="Хүйсээ сонгоно уу" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="male" className="hover">
+                            <SelectItem
+                              value="male"
+                              className="text-[#2C3A4A]   dark:text-[#FFD3A1]"
+                            >
                               Эрэгтэй
                             </SelectItem>
                             <hr />
-                            <SelectItem value="female">Эмэгтэй</SelectItem>
+                            <SelectItem
+                              value="female"
+                              className="text-[#2C3A4A]   dark:text-[#FFD3A1]"
+                            >
+                              Эмэгтэй
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -243,25 +263,28 @@ export default function AddStudent({ className }: AddStudentProps) {
               )}
 
               {step === 2 && (
-                <FormField
-                  name="emergencyNumber"
-                  control={form.control}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-white">
-                        Яаралтай үед холбоо барих
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Яаралтай үед холбоо барих дугаар"
-                          {...field}
-                          className="h-[55px] bg-white focus-visible:ring-0"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className="mb-[100px]">
+                  {" "}
+                  <FormField
+                    name="emergencyNumber"
+                    control={form.control}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-[#2C3A4A]   dark:text-[#FFD3A1]">
+                          Яаралтай үед холбоо барих
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Яаралтай үед холбоо барих дугаар"
+                            {...field}
+                            className="h-[55px] bg-white focus-visible:ring-0 w-[340px]"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               )}
 
               <div className="flex justify-between mt-6">
@@ -274,20 +297,20 @@ export default function AddStudent({ className }: AddStudentProps) {
                   Цуцлах
                 </Button> */}
 
-                <div className="flex gap-2 justify-center">
+                <div className="flex gap-2 justify-center w-full">
                   {step > 1 && (
                     <Button
                       type="button"
                       variant="outline"
                       onClick={() => setStep(step - 1)}
-                      className="h-[55px] w-[200px] mb-[10px] bg-teal-400 hover:bg-teal-500 hover:text-white border-2 border-white rounded-3xl text-white"
+                      className="h-[55px] w-[140px] mb-[10px] bg-teal-400 hover:bg-teal-500 hover:text-white border-2 border-white rounded-3xl text-white"
                     >
                       Буцах
                     </Button>
                   )}
                   {step < 2 ? (
                     <Button
-                      className="h-[55px] w-[440px] mb-[10px] bg-teal-400 hover:bg-teal-500 hover:text-white border-2 border-white rounded-3xl text-white"
+                      className="h-[55px] w-[340px] mb-[10px]  bg-[#FF9C42]  hover:bg-[#ffb36b] hover:text-white border-2 border-white rounded-3xl text-white"
                       type="button"
                       onClick={() => setStep(step + 1)}
                     >
@@ -297,7 +320,7 @@ export default function AddStudent({ className }: AddStudentProps) {
                     <Button
                       type="submit"
                       disabled={isLoading}
-                      className="h-[55px] w-[200px] mb-[10px] bg-teal-400 hover:bg-teal-500 hover:text-white border-2 border-white rounded-3xl text-white"
+                      className="h-[55px] w-[140px] mb-[10px] bg-[#FF9C42]  hover:bg-[#ffb36b] hover:text-white border-2 border-white rounded-3xl text-white"
                     >
                       {isLoading ? (
                         <span className="animate-pulse">⏳ Хүлээнэ үү...</span>

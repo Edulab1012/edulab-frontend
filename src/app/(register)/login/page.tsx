@@ -83,8 +83,8 @@ export default function LoginPage() {
       {isMobile && (
         <div className="w-full flex h-screen">
           <div className="w-4/4 rounded-l-4xl">
-            <Card className="flex justify-center self-center h-full bg-[#8ED6F0]  dark:bg-gradient-to-br dark:from-[#2C3A4A] dark:to-[#1A2636] ">
-              <div className="flex flex-col self-center justify-center">
+            <Card className="flex justify-center self-center h-full bg-[#8ED6F0]  dark:bg-gradient-to-br dark:from-[#2C3A4A] dark:to-[#1A2636]">
+              <div className="flex flex-col self-center justify-center pt-[40px]">
                 <p className="font-semi  text-[#2C3A4A]  dark:text-[#FFD3A1] text-3xl pb-8 leading-8">
                   Тавтай морилно уу...
                 </p>
@@ -177,7 +177,7 @@ export default function LoginPage() {
       )}
       {!isMobile && (
         <div className="w-full dark:bg-gradient-to-br dark:from-[#2C3A4A] dark:to-[#1A2636] flex h-screen">
-          <div className="w-1/2">
+          <div className="w-1/2 mt-[40px]">
             <div className="flex justify-center items-center h-full px-5">
               <Carousel
                 plugins={[
@@ -205,7 +205,7 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <div className="w-4/4 rounded-l-4xl">
+          <div className="w-4/4 rounded-l-4xl mt-[50px]">
             <Card className="flex justify-center self-center h-full bg-[#8ED6F0]  dark:bg-gradient-to-br dark:from-[#2C3A4A] dark:to-[#1A2636] ">
               <div className="flex flex-col self-center justify-center">
                 <p className="font-semi  text-[#2C3A4A]  dark:text-[#FFD3A1] text-3xl pb-8 leading-8">
