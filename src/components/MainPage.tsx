@@ -3,7 +3,14 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "./ui/button";
-import { Trophy, MessageSquare, BarChart2, Award, Star, Rocket } from "lucide-react";
+import {
+  Trophy,
+  MessageSquare,
+  BarChart2,
+  Award,
+  Star,
+  Rocket,
+} from "lucide-react";
 import { Card } from "@/components/ui/card";
 
 export const MainPage = () => {
@@ -32,9 +39,10 @@ export const MainPage = () => {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
         className={`relative min-h-screen w-full overflow-hidden flex items-center justify-center transition-colors duration-700
-          ${scrolled ? "bg-[#8ED6F0]" : "bg-[#8ED6F0]"} dark:bg-gradient-to-br dark:from-[#2C3A4A] dark:to-[#1A2636]`}
+          ${
+            scrolled ? "bg-[#8ED6F0]" : "bg-[#8ED6F0]"
+          } dark:bg-gradient-to-br dark:from-[#2C3A4A] dark:to-[#1A2636]`}
       >
-        {/* Animated background elements */}
         <motion.div
           animate={{ scale: [1, 1.05, 1], rotate: [0, 5, 0] }}
           transition={{ duration: 15, repeat: Infinity, repeatType: "reverse" }}
@@ -46,12 +54,10 @@ export const MainPage = () => {
           className="absolute -right-20 bottom-0 w-72 h-72 rounded-full bg-[#FF9C42]/20 blur-xl"
         />
 
-        {/* Grass effect at bottom */}
         <div className="absolute bottom-0 left-0 right-0 h-24 "></div>
 
         <div className="container mx-auto px-4 py-16 z-10 dark:bg-[#2C3A4A]/80 rounded-lg shadow-2xl backdrop-blur-md m-8 border-2 border-[#FFE866]/30">
           <div className="flex flex-col lg:flex-row-reverse items-center gap-12 lg:gap-24 p-9">
-            {/* Character Image */}
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
@@ -62,7 +68,11 @@ export const MainPage = () => {
 
               <motion.div
                 animate={{ y: [0, -15, 0] }}
-                transition={{ duration: 6, repeat: Infinity, repeatType: "reverse" }}
+                transition={{
+                  duration: 6,
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                }}
                 className="relative overflow-hidden rounded-full border-4 border-[#FF9C42] shadow-2xl"
               >
                 <Image
@@ -82,7 +92,13 @@ export const MainPage = () => {
                   initial={{ opacity: 0, scale: 0.5 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5, delay: 0.4 + i * 0.1 }}
-                  className={`absolute ${i === 1 ? "-top-5 -left-5" : i === 2 ? "-bottom-5 -right-5" : "top-1/4 -right-8"} bg-[#B077E0] p-2 rounded-full shadow-lg`}
+                  className={`absolute ${
+                    i === 1
+                      ? "-top-5 -left-5"
+                      : i === 2
+                      ? "-bottom-5 -right-5"
+                      : "top-1/4 -right-8"
+                  } bg-[#B077E0] p-2 rounded-full shadow-lg`}
                 >
                   <Star className="w-6 h-6 text-[#FFE866]" />
                 </motion.div>
@@ -109,7 +125,9 @@ export const MainPage = () => {
               </motion.div>
 
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight leading-tight">
-                <span className="text-[#2C3A4A] dark:text-[#FFD3A1]">ClassHero</span>
+                <span className="text-[#2C3A4A] dark:text-[#FFD3A1]">
+                  ClassHero
+                </span>
                 <br />
                 <span className="bg-gradient-to-r from-[#FF9C42] to-[#B077E0] bg-clip-text text-transparent">
                   Ангийн баатар бол!
@@ -117,8 +135,9 @@ export const MainPage = () => {
               </h1>
 
               <p className="text-lg md:text-xl text-[#2C3A4A] dark:text-[#FFD3A1]/90 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                Сурагч бүр өдөр тутмын үйлдлээрээ оноо цуглуулж, шагнал аван урамшдаг.
-                Багш нар хичээлээ илүү хөгжилтэй, үр дүнтэй болгох боломжтой!
+                Сурагч бүр өдөр тутмын үйлдлээрээ оноо цуглуулж, шагнал аван
+                урамшдаг. Багш нар хичээлээ илүү хөгжилтэй, үр дүнтэй болгох
+                боломжтой!
               </p>
 
               {/* Features Grid */}
