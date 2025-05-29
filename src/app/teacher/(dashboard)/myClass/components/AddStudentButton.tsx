@@ -61,8 +61,6 @@ export default function AddStudent({ className }: AddStudentProps) {
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  console.log(token, "suragch nemeh hesegin token--------");
-
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedToken = localStorage.getItem("token");

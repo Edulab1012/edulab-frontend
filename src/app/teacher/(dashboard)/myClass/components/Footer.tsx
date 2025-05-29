@@ -1,4 +1,5 @@
 "use client";
+import { on } from "events";
 import React from "react";
 
 interface FooterProps {
@@ -6,47 +7,17 @@ interface FooterProps {
   activeSection: "home" | "attendance";
   markAllPresent?: () => void;
   markAllAbsent?: () => void;
+  studentStatus: Record<string, "present" | "late" | "absent" | null>;
+  onSubmitAttendance: () => void;
 }
-
 function Footer({
   onSelectSection,
   activeSection,
   markAllPresent,
   markAllAbsent,
+  studentStatus,
+  onSubmitAttendance,
 }: FooterProps) {
-  //   const submitAttendance = async () => {
-  //     try {
-  //       const token = localStorage.getItem("token");
-  //       if (!token) throw new Error("No token found");
-
-  //       const res = await fetch(
-  //         "http://localhost:8000/api/v1/teacher/attendance",
-  //         {
-  //           method: "POST",
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //             "Content-Type": "application/json",
-  //           },
-  //           body: JSON.stringify({
-  //             attendanceData: studentStatus,
-  //           }),
-  //         }
-  //       );
-
-  //       if (!res.ok) {
-  //         const errorData = await res.json().catch(() => res.text());
-  //         throw new Error(
-  //           typeof errorData === "object" ? errorData.message : errorData
-  //         );
-  //       }
-
-  //       const data = await res.json();
-  //       alert("Attendance submitted successfully!");
-  //     } catch (err: any) {
-  //       alert(`Error submitting attendance: ${err.message}`);
-  //     }
-  //   };
-
   return (
     <div className="fixed bottom-0 w-[1240px] ml-[120px] h-[80px] bg-blue-400 border-t-2 border-t-white">
       <div className="h-full w-full flex justify-center items-center text-white">
@@ -99,7 +70,7 @@ function Footer({
               Буцах
             </button>
             <button
-              //   onClick={submitAttendance}
+              onClick={onSubmitAttendance}
               className="text-lg font-semibold hover:bg-white hover:text-black transition-all duration-400 ease-in-out hover:border-4 hover:border-teal-400 p-[10px]  w-[220px] h-full flex items-center justify-center"
             >
               Ирц баталгаажуулах
