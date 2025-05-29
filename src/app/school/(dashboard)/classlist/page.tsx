@@ -88,12 +88,12 @@ export default function Page() {
         prev.map(cls =>
           cls.id === editClassId
             ? {
-                ...cls,
-                className: editClassName,
-                teacherName: editTeacherName,
-                studentCount: editStudentCount,
-                groupName: editGroupName,
-              }
+              ...cls,
+              className: editClassName,
+              teacherName: editTeacherName,
+              studentCount: editStudentCount,
+              groupName: editGroupName,
+            }
             : cls
         )
       )
@@ -128,68 +128,68 @@ export default function Page() {
         <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
           {editClassId ? (
             <>
-              <h2 className="text-xl font-bold mb-4">Засах</h2>
+              <h2 className="text-xl font-light mb-4">Засах</h2>
               <div className="flex flex-col gap-4">
-                <Input 
-                placeholder="Ангиоо" 
-                value={editClassName} 
-                onChange={(e) => setEditClassName(e.target.value)} />
-                <Input 
-                placeholder="Бүлэг" 
-                value={editGroupName} 
-                onChange={(e) => setEditGroupName(e.target.value)} />
-                <Input 
-                placeholder="Анги даасан багш" 
-                value={editTeacherName} 
-                onChange={(e) => setEditTeacherName(e.target.value)} />
-                <Input 
-                placeholder="Сурагчдын тоо"
-                 value={editStudentCount} 
-                 onChange={(e) => setEditStudentCount(e.target.value)} />
+                <Input
+                  placeholder="Ангиоо"
+                  value={editClassName}
+                  onChange={(e) => setEditClassName(e.target.value)} />
+                <Input
+                  placeholder="Бүлэг"
+                  value={editGroupName}
+                  onChange={(e) => setEditGroupName(e.target.value)} />
+                <Input
+                  placeholder="Анги даасан багш"
+                  value={editTeacherName}
+                  onChange={(e) => setEditTeacherName(e.target.value)} />
+                <Input
+                  placeholder="Сурагчдын тоо"
+                  value={editStudentCount}
+                  onChange={(e) => setEditStudentCount(e.target.value)} />
               </div>
               <div className="flex justify-end gap-4 mt-4">
-                <Button 
-                variant="outline" 
-                onClick={() => setIsModalOpen(false)}>
+                <Button
+                  variant="outline"
+                  onClick={() => setIsModalOpen(false)}>
                   Цуцлах
-                  </Button>
-                <Button 
-                onClick={handleSaveEdit}>
+                </Button>
+                <Button
+                  onClick={handleSaveEdit}>
                   Хадгалах
-                  </Button>
+                </Button>
               </div>
             </>
           ) : (
             <>
-              <h2 className="text-xl font-bold mb-4">Шинэ анги нэмэх</h2>
+              <h2 className="text-xl font-light mb-4">Шинэ анги нэмэх</h2>
               <div className="flex flex-col gap-4">
-                <Input 
-                placeholder="Анги" 
-                value={newClassName} 
-                onChange={(e) => setNewClassName(e.target.value)} />
-                <Input 
-                placeholder="Бүлэг" 
-                value={newGroupName} 
-                onChange={(e) => setNewGroupName(e.target.value)} />
-                <Input 
-                placeholder="Анги даасан багш" 
-                value={newTeacherName} 
-                onChange={(e) => setNewTeacherName(e.target.value)} />
                 <Input
-                 placeholder="Сурагчдын тоо"
-                  value={newStudentCount} 
+                  placeholder="Анги"
+                  value={newClassName}
+                  onChange={(e) => setNewClassName(e.target.value)} />
+                <Input
+                  placeholder="Бүлэг"
+                  value={newGroupName}
+                  onChange={(e) => setNewGroupName(e.target.value)} />
+                <Input
+                  placeholder="Анги даасан багш"
+                  value={newTeacherName}
+                  onChange={(e) => setNewTeacherName(e.target.value)} />
+                <Input
+                  placeholder="Сурагчдын тоо"
+                  value={newStudentCount}
                   onChange={(e) => setNewStudentCount(e.target.value)} />
               </div>
               <div className="flex justify-end gap-4 mt-4">
-                <Button 
-                variant="outline" 
-                onClick={() => setIsModalOpen(false)}>
+                <Button
+                  variant="outline"
+                  onClick={() => setIsModalOpen(false)}>
                   Цуцлах
-                  </Button>
-                <Button 
-                onClick={handleAdd}>
+                </Button>
+                <Button
+                  onClick={handleAdd}>
                   Нэмэх
-                  </Button>
+                </Button>
               </div>
             </>
           )}

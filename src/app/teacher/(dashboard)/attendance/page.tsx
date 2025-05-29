@@ -24,7 +24,7 @@ export default function AttendanceHomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-8 space-y-8">
-      <h1 className="text-3xl font-bold text-gray-800">📋 Ирц бүртгэл</h1>
+      <h1 className="text-3xl font-light text-gray-800">📋 Ирц бүртгэл</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Step 1: Choose mode */}
