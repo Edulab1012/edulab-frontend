@@ -81,9 +81,13 @@ export default function TeacherFeatureSelector() {
     }, [isInView, controls]);
 
     return (
-        <div className="w-full min-h-screen py-9 px-4 sm:px-8 bg-[#F3F4F6] dark:bg-[#1E2636] flex items-center justify-center"
+        <div className="w-full min-h-screen py-9 px-4 sm:px-8 bg-[#F3F4F6] dark:bg-[#1E2636] flex items-center justify-center relative mt-30"
             ref={ref}
         >
+            <h1 className="bg-gradient-to-r from-[#FF9C42] to-[#B077E0] bg-clip-text text-transparent text-6xl absolute top-[-10%] sm:relative sm:ml-10   ">
+                Teacher features
+            </h1>
+
             <motion.div
                 animate={controls}
                 initial={{ y: 60, opacity: 0 }}
@@ -91,6 +95,7 @@ export default function TeacherFeatureSelector() {
                 className="w-full max-w-5xl bg-white dark:bg-[#2C3A4A] rounded-3xl p-3 sm:p-6 shadow-xl"
             >
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+
                     {teacherFeatures.map((item) => (
                         <motion.button
                             key={item.id}
