@@ -8,7 +8,7 @@ const Announcements = () => {
       <CardContent>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold leading-8 mb-5">Сургуулийн мэдэгдэл</h1>
+            <h1 className="text-2xl font-light leading-8 mb-5">Сургуулийн мэдэгдэл</h1>
             <Link href={"/school"}><Button
               variant={"outline"}
               className="text-xs text-black cursor-pointer"

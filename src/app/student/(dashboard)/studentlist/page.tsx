@@ -71,7 +71,7 @@ export default function StudentList() {
       <div className="flex flex-col gap-10 ml-[100px]">
         <Card>
           <CardContent>
-            <CardHeader className="text-3xl w-full font-bold leading-8 text-center">
+            <CardHeader className="text-3xl w-full font-light leading-8 text-center">
               11 a aнгийн сурагчдын жагсаалт
             </CardHeader>
           </CardContent>
@@ -110,7 +110,7 @@ export default function StudentList() {
                     <div className="flex justify-center">
                       <Button
                         //  onClick={() => navigate(`/chat/${student.id}`)}
-                        className="flex items-center justify-center bg-white border-2 border-green-500 gap-2 hover:bg-green-500 hover:text-white transition duration-300 ease-in-out text-green-500 font-bold mt-3 cursor-pointer"
+                        className="flex items-center justify-center bg-white border-2 border-green-500 gap-2 hover:bg-green-500 hover:text-white transition duration-300 ease-in-out text-green-500 font-light mt-3 cursor-pointer"
                       >
                         <MessageCircle className="w-6 h-6" />
                         <span>Чат бичих</span>

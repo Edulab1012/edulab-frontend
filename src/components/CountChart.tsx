@@ -31,11 +31,11 @@ const CountChart = () => {
   return (
     <Card className="bg-white rounded-xl w-full h-full ">
       <CardContent>
-        
-          <CardHeader className="text-2xl font-bold leading-8 p-0">
-            Сурагчдын тоо
-          </CardHeader>
-        
+
+        <CardHeader className="text-2xl font-light leading-8 p-0">
+          Сурагчдын тоо
+        </CardHeader>
+
 
         <div className="relative w-full h-[65%]">
           <ResponsiveContainer>
@@ -60,12 +60,12 @@ const CountChart = () => {
         <div className="flex justify-center gap-16">
           <div className="flex flex-col gap-1">
             <div className="bg-lamaSky rounded-full" />
-            <h1 className="font-bold text-xl">1,234</h1>
+            <h1 className="font-light text-xl">1,234</h1>
             <h2 className="text-xs text-gray-500">Boys (55%)</h2>
           </div>
           <div className="flex flex-col gap-1">
             <div className=" bg-lamaYellow rounded-full" />
-            <h1 className="font-bold text-xl">1,234</h1>
+            <h1 className="font-light text-xl">1,234</h1>
             <h2 className="text-xs text-gray-500">Girls (45%)</h2>
           </div>
         </div>

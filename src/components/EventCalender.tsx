@@ -56,13 +56,13 @@ const EventCalendar = () => {
     <div className="flex gap-10 flex-col">
       <Card>
         <CardContent>
-        <Calendar onChange={onChange} value={value}  className="w-full"/>
+          <Calendar onChange={onChange} value={value} className="w-full" />
         </CardContent>
       </Card>
 
       <Card>
         <CardContent className="">
-          <CardHeader className="text-2xl font-bold leading-8 mb-5">
+          <CardHeader className="text-2xl font-light leading-8 mb-5">
             Ангийн үйл ажилгаа
           </CardHeader>
           <div className="flex flex-col gap-4">

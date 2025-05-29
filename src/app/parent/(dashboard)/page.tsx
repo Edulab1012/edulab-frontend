@@ -23,7 +23,7 @@ export default function Page() {
         <div className="flex gap-10 flex-col w-2/3">
           <Card>
             <CardContent className="box-border">
-              <CardHeader className="text-2xl font-bold leading-8 mb-5">
+              <CardHeader className="text-2xl font-light leading-8 mb-5">
                 Сурагч Арии
               </CardHeader>
               <div className="flex w-full flex-row justify-around box-border">
@@ -72,7 +72,7 @@ export default function Page() {
           </Card>
           <Card>
             <CardContent className="h-full bg-white p-5 rounded-md">
-              <CardHeader className="text-2xl font-bold leading-8 ">
+              <CardHeader className="text-2xl font-light leading-8 ">
                 Хичээлийн хуваарь
               </CardHeader>
               <BigCalendar />

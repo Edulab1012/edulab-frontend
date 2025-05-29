@@ -58,7 +58,7 @@ export const EduInfo = () => {
   return (
     <Card>
       <CardContent>
-        <CardHeader className="text-2xl font-bold leading-8 mb-5">
+        <CardHeader className="text-2xl font-light leading-8 mb-5">
           Боловсролын байдал
         </CardHeader>
         <div className="flex flex-col gap-5">

@@ -124,7 +124,7 @@ export default function AddStudent({ className }: AddStudentProps) {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-3xl text-white font-bold">
+            <DialogTitle className="text-3xl text-white font-light">
               Шинэ сурагч нэмэх
             </DialogTitle>
             <DialogDescription className="text-white">

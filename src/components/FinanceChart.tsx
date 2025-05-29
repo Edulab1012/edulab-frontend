@@ -80,7 +80,7 @@ const FinanceChart = () => {
   return (
     <Card className="bg-white rounded-xl w-full h-full p-4">
       <CardContent>
-        <CardHeader className="text-2xl font-bold leading-8 p-0">Finance</CardHeader>
+        <CardHeader className="text-2xl font-light leading-8 p-0">Finance</CardHeader>
 
         <ResponsiveContainer width="100%" height="90%">
           <LineChart

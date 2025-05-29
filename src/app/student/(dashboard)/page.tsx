@@ -17,7 +17,7 @@ export default function StudentHomePage() {
 
   return (
     <div className="ml-[160px] w-[1000px] mt-[120px]">
-      <h1 className="text-2xl font-bold text-white mb-[40px]">
+      <h1 className="text-2xl font-light text-white mb-[40px]">
         👋 Сайн байна уу, {studentName}
       </h1>
 
