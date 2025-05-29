@@ -29,13 +29,14 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
+          <div
+            className={`${geistSans.variable} ${geistMono.variable} font-sans`}
+          >
             <Header />
             <Toaster richColors />
             {children}
           </div>
         </ThemeProvider>
-
       </body>
     </html>
   );
