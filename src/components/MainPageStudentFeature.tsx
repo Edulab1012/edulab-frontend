@@ -61,7 +61,7 @@ const taskData = [
   },
 ];
 
-export default function FeatureSelector() {
+export default function StudentFeatureSelector() {
   const controls = useAnimation();
   const ref = useRef(null);
   const isInView = useInView(ref, { amount: 0.3 });
