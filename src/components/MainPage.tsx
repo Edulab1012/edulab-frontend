@@ -12,8 +12,11 @@ import {
   Rocket,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import RegisterButton from "./RegisterButton";
+
 
 export const MainPage = () => {
+
   const [scrolled, setScrolled] = useState(false);
 
   const handleScroll = () => {
@@ -38,9 +41,7 @@ export const MainPage = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
-        className={`relative min-h-screen w-full overflow-hidden flex items-center justify-center transition-colors duration-700
-          ${
-            scrolled ? "bg-[#8ED6F0]" : "bg-[#8ED6F0]"
+        className={`relative min-h-screen w-full overflow-hidden flex items-center justify-center transition-colors duration-700 ${scrolled ? "bg-[#8ED6F0]" : "bg-[#8ED6F0]"
           } dark:bg-gradient-to-br dark:from-[#2C3A4A] dark:to-[#1A2636]`}
       >
         <motion.div
@@ -54,7 +55,7 @@ export const MainPage = () => {
           className="absolute -right-20 bottom-0 w-72 h-72 rounded-full bg-[#FF9C42]/20 blur-xl"
         />
 
-        <div className="absolute bottom-0 left-0 right-0 h-24 "></div>
+        <div className="absolute bottom-0 left-0 right-0 h-24"></div>
 
         <div className="container mx-auto px-4 py-16 z-10 dark:bg-[#2C3A4A]/80 rounded-lg shadow-2xl backdrop-blur-md m-8 border-2 border-[#FFE866]/30">
           <div className="flex flex-col lg:flex-row-reverse items-center gap-12 lg:gap-24 p-9">
@@ -92,13 +93,12 @@ export const MainPage = () => {
                   initial={{ opacity: 0, scale: 0.5 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5, delay: 0.4 + i * 0.1 }}
-                  className={`absolute ${
-                    i === 1
-                      ? "-top-5 -left-5"
-                      : i === 2
+                  className={`absolute ${i === 1
+                    ? "-top-5 -left-5"
+                    : i === 2
                       ? "-bottom-5 -right-5"
                       : "top-1/4 -right-8"
-                  } bg-[#B077E0] p-2 rounded-full shadow-lg`}
+                    } bg-[#B077E0] p-2 rounded-full shadow-lg`}
                 >
                   <Star className="w-6 h-6 text-[#FFE866]" />
                 </motion.div>
@@ -141,7 +141,7 @@ export const MainPage = () => {
               </p>
 
               {/* Features Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-4 max-w-2xl mx-auto lg:mx-0">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-4 max-w-2xl mx-auto lg:mx-0  justify-items-center">
                 {features.map((feature, index) => (
                   <motion.div
                     key={index}
@@ -149,11 +149,11 @@ export const MainPage = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 + index * 0.1 }}
                   >
-                    <Card className="flex flex-col items-center gap-2 bg-white/80 dark:bg-[#2C3A4A]/80 rounded-lg border border-[#FFE866]/30 shadow-sm h-25 w-25 ">
+                    <Card className="flex flex-col items-center gap-2 bg-white/80 dark:bg-[#2C3A4A]/80 rounded-lg border border-[#FFE866]/30 shadow-sm h-25 w-25">
                       <div className="text-[#B077E0] dark:text-[#FF9C42]">
                         {feature.icon}
                       </div>
-                      <span className="text-sm  font-light text-[#2C3A4A] dark:text-[#FFD3A1]">
+                      <span className="text-sm font-light text-[#2C3A4A] dark:text-[#FFD3A1]">
                         {feature.text}
                       </span>
                     </Card>
@@ -168,15 +168,12 @@ export const MainPage = () => {
                 transition={{ delay: 0.8 }}
                 className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4"
               >
-                <Button className="border-2 border-white text-[#2C3A4A]  px-8 py-4 rounded-full text-lg font-light shadow-lg transition-all hover:bg-amber-500/80 hover:scale-105 hover:text-white hover:border-white bg-amber-200 dark:text-black ">
-                  Демо үзэх
+                <Button onClick={() => window.location.href = "/login"}
+                  className="border-2 border-white text-[#2C3A4A] px-8 py-4 rounded-full text-lg font-light shadow-lg transition-all hover:bg-amber-500/80 hover:scale-105 hover:text-white hover:border-white bg-amber-200 dark:text-black">
+                  Нэвтрэх
                 </Button>
-                <Button
-                  variant="outline"
-                  className="border-2 border-[#FF9C42] text-[#2C3A4A] dark:text-[#FFD3A1] px-8 py-4 rounded-full text-lg font-light shadow-lg transition-all hover:bg-amber-500/80 hover:scale-105 hover:text-white hover:border-white"
-                >
-                  Бүртгүүлэх
-                </Button>
+
+                <RegisterButton></RegisterButton>
               </motion.div>
             </motion.div>
           </div>
