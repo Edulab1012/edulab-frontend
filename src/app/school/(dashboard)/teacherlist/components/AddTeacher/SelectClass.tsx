@@ -35,9 +35,9 @@ export default function SelectClass({ setField }: GradeGroupProps) {
   // fetch all group with grade inside
   useEffect(() => {
     const fetchGroups = async () => {
-      const res = await axios.get("http://localhost:8000/api/v1/class/group");
+      const res = await axios.get(`${BASE_URL}class/allgroup`);
       const data: Group[] = res.data;
-      // `${BASE_URL}class/group`
+
       setGroupData(data);
 
       // 🔹 unique grades гаргах
