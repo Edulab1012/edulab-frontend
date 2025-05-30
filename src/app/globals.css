@@ -121,7 +121,6 @@
   }
 }
 
-
 @layer base {
   :root {
     --chart-1: 12 76% 61%;
@@ -161,5 +160,27 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .dark .glass-card {
+    background: rgba(44, 58, 74, 0.6);
+  }
+
+  .glass-input {
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(8px);
+    border: 1px solid #ffe86660;
+  }
+
+  .dark .glass-input {
+    background: rgba(44, 58, 74, 0.5);
+    border: 1px solid #ff9c4290;
+    color: #fff;
   }
 }
