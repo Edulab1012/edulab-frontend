@@ -7,13 +7,23 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, CheckCircle, XCircle } from "lucide-react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { BASE_URL } from "@/constants/baseurl";
 
 export default function StudentForm() {
+    const router = useRouter();
     const [next, setNext] = useState(false);
     const [promoCode, setPromoCode] = useState("");
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
     const [status, setStatus] = useState("idle");
+    const [className, setClassName] = useState("");
+    const [error, setError] = useState("");
+    const [fieldError, setFieldError] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [formStatus, setFormStatus] = useState<"idle" | "success" | "error">("idle");
+    const [classId, setClassId] = useState<string | null>(null);
 
     const [formData, setFormData] = useState({
         username: "",
@@ -22,38 +32,88 @@ export default function StudentForm() {
         confirmPassword: "",
     });
 
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
     const checkPromoCode = async () => {
         setLoading(true);
         setError("");
         setStatus("idle");
 
         try {
+            const res = await axios.post(`${BASE_URL}class/joinClass`, { promoCode });
             await new Promise((resolve) => setTimeout(resolve, 1500));
-            const valid = ["CLASS2023", "LEARN2024", "STUDENT123"].includes(
-                promoCode.toUpperCase()
-            );
-            if (!valid) throw new Error("Код буруу байна");
-            setStatus("success");
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-            setNext(true);
-        } catch (err) {
+            setClassName(res.data.class.name);
+            setClassId(res.data.class.id);
+
+            if (res.data.success) {
+                setStatus("success");
+                setTimeout(() => setNext(true), 1000);
+            } else {
+                throw new Error("Код буруу байна");
+            }
+        } catch (err: any) {
             setStatus("error");
-            setError(err.message);
+            setError(err.response?.data?.message || "Код буруу байна");
             await new Promise((resolve) => setTimeout(resolve, 1500));
         } finally {
             setLoading(false);
         }
     };
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setFieldError("");
+        setStatus("idle");
+
+        const { username, email, password, confirmPassword } = formData;
+
+        if (!username || !email || !password || !confirmPassword) {
+            setFieldError("Бүх талбарыг бүрэн бөглөнө үү.");
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            setFieldError("Нууц үг тохирохгүй байна.");
+            return;
+        }
+
+        try {
+            setLoading(true);
+            const res = await axios.post(`${BASE_URL}auth/register`, {
+                username: formData.username,
+                email: formData.email,
+                password: formData.password,
+                role: "student",
+                classId: classId,
+            });
+
+            if (res.data.success) {
+                setFormStatus("success");
+                setTimeout(() => {
+                    router.push("/student");
+                }, 3000);
+
+            } else {
+                setStatus("error");
+                setFieldError(res.data.message || "Бүртгэл амжилтгүй боллоо");
+            }
+        } catch (err: any) {
+            console.log(err);
+
+            setStatus("error");
+            setFieldError(err.response?.data?.message || "Бүртгэл амжилтгүй боллоо");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
         <div className="relative flex items-center justify-center sm:w-550 min-h-screen dark:bg-black bg-white px-4">
             <Card className="w-full max-w-md glass-card p-4 sm:p-6 rounded-2xl shadow-2xl border border-[#FFE866]/40">
                 <CardContent>
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <AnimatePresence mode="wait">
                             {!next ? (
                                 <motion.div
@@ -63,14 +123,17 @@ export default function StudentForm() {
                                     exit={{ opacity: 0, y: -10 }}
                                     className="space-y-2"
                                 >
-                                    <Label>Class Promo Code</Label>
-                                    <div className="relative">
+                                    <Label className="text-xl font-bold">Ангийн код</Label>
+                                    <div className="relative mt-3">
                                         <Input
                                             value={promoCode}
                                             onChange={(e) => setPromoCode(e.target.value)}
                                             className="glass-input pr-10"
                                             disabled={loading}
                                         />
+                                        <p className="text-sm text-muted-foreground m-2">
+                                            👉 Энэ кодыг таны багш анги үүсгэх үед гаргаж авсан байдаг. Багш нь тухайн кодыг сурагчидтай хуваалцсанаар та зөв ангид бүртгэгдэх боломжтой болно.
+                                        </p>
                                         <AnimatePresence>
                                             {status === "success" && (
                                                 <motion.span
@@ -90,9 +153,11 @@ export default function StudentForm() {
                                                     <XCircle className="h-5 w-5" />
                                                 </motion.span>
                                             )}
+
                                         </AnimatePresence>
+
                                     </div>
-                                    {error && <p className="text-sm text-red-500">{error}</p>}
+                                    {error && <p className="text-sm text-red-500 mx-2">{error}</p>}
                                 </motion.div>
                             ) : (
                                 <motion.div
@@ -101,56 +166,80 @@ export default function StudentForm() {
                                     animate={{ opacity: 1, y: 0 }}
                                     className="space-y-4"
                                 >
-                                    <div className="space-y-2">
-                                        <Label>Нэр</Label>
-                                        <Input
-                                            name="username"
-                                            value={formData.username}
-                                            onChange={handleChange}
-                                            className="glass-input"
-                                        />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label>Имэйл</Label>
-                                        <Input
-                                            name="email"
-                                            value={formData.email}
-                                            onChange={handleChange}
-                                            className="glass-input"
-                                        />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label>Нууц үг</Label>
-                                        <Input
-                                            name="password"
-                                            type="password"
-                                            value={formData.password}
-                                            onChange={handleChange}
-                                            className="glass-input"
-                                        />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label>Дахин оруулна уу</Label>
-                                        <Input
-                                            name="confirmPassword"
-                                            type="password"
-                                            value={formData.confirmPassword}
-                                            onChange={handleChange}
-                                            className="glass-input"
-                                        />
-                                    </div>
+                                    <motion.h1
+                                        className="text-2xl font-light tracking-tight drop-shadow-sm"
+                                        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                        transition={{ duration: 0.6, ease: "easeOut" }}
+                                    >
+                                        ангийн нэр :
+                                        <span className="ml-2 font-semibold bg-gradient-to-r from-yellow-400 to-pink-500 bg-clip-text text-transparent drop-shadow-md">
+                                            {className}
+                                        </span>
+                                    </motion.h1>
+
+                                    <InputBlock label="Нэр" name="username" value={formData.username} onChange={handleChange} />
+                                    <InputBlock label="Имэйл" name="email" value={formData.email} onChange={handleChange} />
+
+                                    <PasswordInput
+                                        label="Нууц үг"
+                                        name="password"
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                        show={showPassword}
+                                        toggle={() => setShowPassword(!showPassword)}
+                                    />
+
+                                    <PasswordInput
+                                        label="Баталгаажуулах нууц үг"
+                                        name="confirmPassword"
+                                        value={formData.confirmPassword}
+                                        onChange={handleChange}
+                                        show={showConfirmPassword}
+                                        toggle={() => setShowConfirmPassword(!showConfirmPassword)}
+                                        error={formData.password !== formData.confirmPassword && formData.confirmPassword}
+                                    />
+
+                                    {fieldError && <p className="text-sm text-red-500">{fieldError}</p>}
                                 </motion.div>
                             )}
                         </AnimatePresence>
                     </form>
+                    <AnimatePresence mode="wait">
+                        {formStatus === "success" ? (
+                            // ✅ Том амжилтын animation
+                            <motion.div
+                                key="success-form"
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.9 }}
+                                transition={{ duration: 0.5, ease: "easeOut" }}
+                                className="text-center text-green-600 space-y-4 py-10"
+                            >
+                                <CheckCircle className="mx-auto h-12 w-12 text-green-500" />
+                                <h2 className="text-xl font-bold">🎉 Бүртгэл амжилттай!</h2>
+                                <p className="text-sm text-muted-foreground">
+                                    Түр хүлээнэ үү... танд зориулсан хуудас руу шилжүүлж байна.
+                                </p>
+                            </motion.div>
+                        ) : !next ? (
+                            // 🧪 Ангийн код шалгах форм
+                            <motion.div key="promo">...</motion.div>
+                        ) : (
+                            // 👤 Бүртгэлийн форм
+                            <motion.div key="register">...</motion.div>
+                        )}
+                    </AnimatePresence>
                 </CardContent>
 
                 <CardFooter className="flex justify-between pt-4">
+
                     <Button
                         onClick={() => {
                             setNext(false);
                             setStatus("idle");
                             setError("");
+                            setFieldError("");
                         }}
                         disabled={loading || !next}
                         variant="outline"
@@ -158,12 +247,8 @@ export default function StudentForm() {
                         Буцах
                     </Button>
 
-                    {!next && (
-                        <Button
-                            onClick={checkPromoCode}
-                            disabled={loading || !promoCode.trim()}
-                            className="min-w-32"
-                        >
+                    {!next ? (
+                        <Button onClick={checkPromoCode} disabled={loading || !promoCode.trim()} className="min-w-32">
                             {loading ? (
                                 <span className="flex items-center">
                                     <Loader2 className="animate-spin mr-2 h-4 w-4" /> Шалгаж байна...
@@ -172,9 +257,50 @@ export default function StudentForm() {
                                 "Үргэлжлүүлэх"
                             )}
                         </Button>
+                    ) : (
+                        <Button
+                            onClick={handleSubmit}
+                            className="min-w-32"
+                            disabled={loading} // 👉 Товч дарагдсан үед дахин дарагдахаас сэргийлнэ
+                        >
+                            {loading ? (
+                                <span className="flex items-center">
+                                    <Loader2 className="animate-spin mr-2 h-4 w-4" /> Илгээж байна...
+                                </span>
+                            ) : (
+                                "Бүртгүүлэх"
+                            )}
+                        </Button>
+
                     )}
                 </CardFooter>
             </Card>
         </div>
     );
 }
+
+const InputBlock = ({ label, name, value, onChange }: any) => (
+    <div className="space-y-2">
+        <Label>{label}</Label>
+        <Input name={name} value={value} onChange={onChange} className="glass-input" />
+    </div>
+);
+
+const PasswordInput = ({ label, name, value, onChange, show, toggle, error }: any) => (
+    <div className="space-y-2 relative">
+        <Label>{label}</Label>
+        <Input
+            name={name}
+            type={show ? "text" : "password"}
+            value={value}
+            onChange={onChange}
+            className={`glass-input pr-10 ${error ? "border-red-500" : ""}`}
+        />
+        <span
+            className="absolute right-3 top-9 cursor-pointer text-muted-foreground"
+            onClick={toggle}
+        >
+            {show ? "🙈" : "👁️"}
+        </span>
+    </div>
+);
