@@ -10,24 +10,20 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
-import { useUserStore } from "@/hooks/useUserStore"
 
 export default function RegisterButton() {
     const router = useRouter()
-    const { role, setRole } = useUserStore((state) => ({
-        role: state.user?.role,
-        setRole: state.setRole,
-    }))
+
 
     const ClickTeacher = () => {
-        setRole("teacher")
+
         router.push("/TeacherRegister")
 
 
     }
 
     const ClickStudent = () => {
-        setRole("student")
+
         router.push("/StudentRegister")
     }
 
