@@ -9,6 +9,7 @@ import { Loader2 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { BASE_URL } from "@/constants/baseurl";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 
 const steps = [
@@ -20,6 +21,7 @@ const steps = [
 ];
 
 export default function TeacherRegisterForm() {
+    const router = useRouter();
     const [currentStep, setCurrentStep] = useState(0);
     const [userExist, setUserExist] = useState(false);
     const [formData, setFormData] = useState({
@@ -92,6 +94,7 @@ export default function TeacherRegisterForm() {
             console.log("✅ Registration Response:", res.data);
 
             setStatus("success");
+            router.push("/teacher")
         } catch (err: any) {
             err?.response?.status === 403 ? setUserExist(true) : setUserExist(false);
             console.log("❌ Registration Error:", err.response?.data || err);
