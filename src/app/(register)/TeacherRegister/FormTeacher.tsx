@@ -10,6 +10,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { BASE_URL } from "@/constants/baseurl";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 
 const steps = [
@@ -97,6 +98,8 @@ export default function TeacherRegisterForm() {
             router.push("/teacher")
         } catch (err: any) {
             err?.response?.status === 403 ? setUserExist(true) : setUserExist(false);
+            console.log(err);
+
             console.log("❌ Registration Error:", err.response?.data || err);
 
             setStatus("error");
@@ -193,6 +196,9 @@ export default function TeacherRegisterForm() {
                     )}
                 </AnimatePresence>
             </Card>
+            <p className="absolute bottom-20 left-1/2 transform -translate-x-1/2 font-extralight">
+                Хэрэв та аль хэдийн бүртгүүлсэн бол <Link href="/login" className="underline text-blue-600">энд</Link> дарна уу
+            </p>
         </div>
     );
 }
