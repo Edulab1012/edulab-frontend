@@ -6,6 +6,7 @@ import AddStudent from "./components/AddStudentButton";
 import Footer from "./components/Footer";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { BASE_URL } from "@/constants/baseurl";
 
 interface Student {
   id: string;
@@ -150,7 +151,7 @@ export default function MyClassOverview() {
       try {
         const token = localStorage.getItem("token");
         if (!token) throw new Error("No token found");
-        const res = await fetch("http://localhost:8000/api/v1/class/group", {
+        const res = await fetch(`${BASE_URL}class/group`, {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
