@@ -91,6 +91,7 @@ export default function StudentForm() {
 
             if (res.data.success) {
                 setFormStatus("success");
+                localStorage.setItem("token", res.data.id);
                 setTimeout(() => {
                     router.push("/student");
                 }, 3000);

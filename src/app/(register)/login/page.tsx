@@ -1,6 +1,6 @@
 "use client";
 
-import LoginDecor from "./loginDecor";
+import LoginDecor from "./loginLeft";
 import LoginForm from "./loginForm";
 
 export default function LoginPage() {

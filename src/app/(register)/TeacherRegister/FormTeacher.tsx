@@ -24,7 +24,7 @@ const steps = [
 export default function TeacherRegisterForm() {
     const router = useRouter();
     const [currentStep, setCurrentStep] = useState(0);
-    const [userExist, setUserExist] = useState(false);
+    const [errMessage, setErrMessage] = useState("");
     const [formData, setFormData] = useState({
         username: "",
         email: "",
@@ -93,15 +93,13 @@ export default function TeacherRegisterForm() {
                 role: "teacher",
             })
             console.log("✅ Registration Response:", res.data);
-            localStorage.setItem("token", res.data.id);
+            localStorage.setItem("token", res.data.user.id);
             setStatus("success");
             router.push("/teacher")
         } catch (err: any) {
-            err?.response?.status === 403 ? setUserExist(true) : setUserExist(false);
+            setErrMessage(err.response?.data.message)
             console.log(err);
-
             console.log("❌ Registration Error:", err.response?.data || err);
-
             setStatus("error");
         } finally {
             setLoading(false);
@@ -191,7 +189,7 @@ export default function TeacherRegisterForm() {
                             transition={{ duration: 0.4 }}
                             className="absolute top-[-30%] left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-2 rounded-xl shadow-lg z-50 text-center w-80 border-1 border-white font-light"
                         >
-                            {userExist ? "Энэ хэрэглэгч аль хэдийн бүртгэгдсэн байна." : "Бүртгэл амжилтгүй боллоо. Дахин оролдоно уу."}
+                            {errMessage ? "Энэ хэрэглэгч аль хэдийн бүртгэгдсэн байна." : "Бүртгэл амжилтгүй боллоо. Дахин оролдоно уу."}
                         </motion.div>
                     )}
                 </AnimatePresence>

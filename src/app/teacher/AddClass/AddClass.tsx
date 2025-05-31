@@ -33,6 +33,7 @@ export default function AddClass() {
             setIsLoading(false);
             return;
         }
+        console.log();
 
         try {
             await axios.post(`${BASE_URL}class/create`, {
