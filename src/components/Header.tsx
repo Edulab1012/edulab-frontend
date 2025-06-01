@@ -12,6 +12,7 @@ import {
   Home,
   PanelTop,
   ScanEye,
+  Plus,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
@@ -63,6 +64,13 @@ export const Header = () => {
 
   const items: MenuGroup[] = [
     {
+      group: "Манай ангиуд",
+      links: [
+        { title: "Бүх ангиуд", url: "/teacher", icon: BookCheck },
+        { title: "Шинэ анги үүсгэх", url: "", icon: Plus },
+      ],
+    },
+    {
       group: "Анги ба хичээл",
       links: [
         { title: "Даасан анги", url: "/teacher/myClass", icon: PanelTop },
@@ -71,14 +79,9 @@ export const Header = () => {
           url: "/teacher/myStudents",
           icon: Backpack,
         },
-        { title: "Ирц бүртгэл", url: "/teacher/attendance", icon: ScanEye },
-        { title: "Шалгалт", url: "/teacher/exam", icon: BookCheck },
       ],
     },
-    {
-      group: "Профайл",
-      links: [{ title: "Миний хуудас", url: "/teacher", icon: Home }],
-    },
+
     {
       group: "Тохиргоо",
       links: [{ title: "Гарах", url: "/login", icon: LogOut }],
