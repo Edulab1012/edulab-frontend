@@ -12,6 +12,7 @@ import {
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 import {
   FiPlus,
   FiX,
@@ -87,15 +88,24 @@ export default function AddClass() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className="w-[200px] h-[200px] bg-[#2C3A4A] dark:bg-[#e1aa77] text-white dark:text-[#2C3A4A] rounded-2xl shadow-2xl flex flex-col justify-center items-center transition-colors duration-300 hover:bg-[#3a4b5e] dark:hover:bg-[#d19a6a]">
-        <div className="bg-[#e1aa77] dark:bg-[#2C3A4A] p-2 rounded-full transition-colors duration-300">
-          <FiPlus className="text-lg text-white dark:text-[#e1aa77]" />
-        </div>
-        <span className="mt-2 font-medium">Анги нэмэх</span>
+      {" "}
+      <DialogTrigger asChild>
+        <motion.div
+          className="w-[240px] h-[240px] cursor-pointer bg-[#2C3A4A] dark:bg-[#e1aa77] text-white dark:text-[#2C3A4A] rounded-2xl shadow-2xl flex flex-col justify-center items-center transition-colors duration-300 hover:bg-[#3a4b5e] dark:hover:bg-[#d19a6a]"
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <motion.div
+            className="bg-[#e1aa77] dark:bg-[#2C3A4A] p-2 rounded-full transition-colors duration-300"
+            whileHover={{ rotate: 90 }}
+            transition={{ duration: 0.3 }}
+          >
+            <FiPlus className="text-lg text-white dark:text-[#e1aa77]" />
+          </motion.div>
+          <span className="mt-2 font-medium">Анги нэмэх</span>
+        </motion.div>
       </DialogTrigger>
-
       <DialogOverlay className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 animate-fadeIn" />
-
       <DialogContent className="fixed top-1/2 left-1/2 z-50 w-[90%] max-w-md -translate-x-1/2 -translate-y-1/2 bg-[#f5f5f5] dark:bg-[#2C3A4A] p-6 rounded-2xl shadow-xl animate-scaleIn border border-[#e1aa77]/30">
         <div className="flex items-center justify-between">
           <DialogTitle className="text-xl font-medium text-[#2C3A4A] dark:text-[#e1aa77]">
