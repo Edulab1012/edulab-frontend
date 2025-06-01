@@ -1,14 +1,12 @@
 "use client";
 import {
-  Activity,
   Backpack,
   BookCheck,
   Home,
-  LayoutDashboard,
   LogOut,
   PanelTop,
+  Plus,
   ScanEye,
-  User,
 } from "lucide-react";
 import {
   Sidebar,
@@ -38,6 +36,13 @@ interface MenuGroup {
 
 const items: MenuGroup[] = [
   {
+    group: "Манай ангиуд",
+    links: [
+      { title: "Бүх ангиуд", url: "/teacher", icon: BookCheck },
+      { title: "Шинэ анги үүсгэх", url: "", icon: Plus },
+    ],
+  },
+  {
     group: "Анги ба хичээл",
     links: [
       { title: "Даасан анги", url: "/teacher/myClass", icon: PanelTop },
@@ -46,14 +51,9 @@ const items: MenuGroup[] = [
         url: "/teacher/myStudents",
         icon: Backpack,
       },
-      { title: "Ирц бүртгэл", url: "/teacher/attendance", icon: ScanEye },
-      { title: "Шалгалт", url: "/teacher/exam", icon: BookCheck },
     ],
   },
-  {
-    group: "Профайл",
-    links: [{ title: "Миний хуудас", url: "/teacher", icon: Home }],
-  },
+
   {
     group: "Тохиргоо",
     links: [{ title: "Гарах", url: "/login", icon: LogOut }],
@@ -64,7 +64,7 @@ export function AppSidebar() {
   const pathname = usePathname();
 
   return (
-    <Sidebar className="bg-white border-r-8 border-r-blue-400 w-84 shadow-md min-h-screen z-20">
+    <Sidebar className=" border-r-8 border-r-blue-400 w-84 shadow-md min-h-screen z-20">
       <SidebarContent>
         <SidebarGroup className="px-4 py-6 mt-8">
           <SidebarGroupLabel className="mb-6 flex justify-center"></SidebarGroupLabel>
@@ -79,7 +79,7 @@ export function AppSidebar() {
 
                   {group.links.map((link) => (
                     <div key={link.title}>
-                      <SidebarMenuItem>
+                      <SidebarMenuItem className="mb-6">
                         <Link href={link.url}>
                           <SidebarMenuButton
                             className={`flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-blue-400 hover:text-white transition ${
@@ -88,13 +88,12 @@ export function AppSidebar() {
                                 : ""
                             }`}
                           >
-                            <link.icon className="w-7 h-7" />
-                            <span className="text-[16px]">{link.title}</span>
+                            <link.icon className="w-10 h-10" />
+                            <span className="text-[22px]">{link.title}</span>
                           </SidebarMenuButton>
                         </Link>
                       </SidebarMenuItem>
 
-                      {/* Children */}
                       {link.children?.map((child) => (
                         <SidebarMenuItem key={child.title} className="ml-6">
                           <Link href={child.url}>
