@@ -32,7 +32,7 @@ export default function AddClass() {
     setIsLoading(true);
     setIsSuccess(false);
 
-    const teacherId = localStorage.getItem("token");
+    const teacherId = localStorage.getItem("userId");
 
     if (!teacherId) {
       toast.error("Багшийн мэдээлэл олдсонгүй. Та дахин нэвтэрнэ үү.");
