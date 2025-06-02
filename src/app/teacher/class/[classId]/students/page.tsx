@@ -112,7 +112,6 @@ export default function ClassStudentsPage({ params }: any) {
         />
       </motion.div>
 
-      {/* Main content card */}
       <motion.div
         className="bg-white dark:bg-[#121220] rounded-2xl shadow-xl overflow-hidden border border-[#6B5AED]/20 dark:border-[#6B5AED]/10"
         initial={{ opacity: 0, y: 20 }}
