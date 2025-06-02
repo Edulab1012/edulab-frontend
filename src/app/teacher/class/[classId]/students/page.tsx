@@ -83,7 +83,6 @@ export default function ClassStudentsPage({ params }: any) {
         Буцах
       </motion.button>
 
-      {/* Header section with decorative elements */}
       <motion.div
         className="mb-8 relative"
         initial={{ opacity: 0, y: -10 }}
