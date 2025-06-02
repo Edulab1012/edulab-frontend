@@ -20,11 +20,13 @@ import {
   FiCheckCircle,
   FiAlertCircle,
 } from "react-icons/fi";
+
 interface AddClassProps {
   children?: React.ReactNode;
+  onSuccess?: () => void;
 }
 
-export default function AddClass({ children }: AddClassProps) {
+export default function AddClass({ children, onSuccess }: AddClassProps) {
   const [className, setClassName] = useState("");
   const [promoCode, setPromoCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -48,7 +50,7 @@ export default function AddClass({ children }: AddClassProps) {
       await axios.post(`${BASE_URL}class/create`, {
         name: className,
         userId: teacherId,
-        promoCode: promoCode ? promoCode : null,
+        promoCode: promoCode || null,
       });
 
       setIsSuccess(true);
@@ -61,6 +63,8 @@ export default function AddClass({ children }: AddClassProps) {
         },
       });
 
+      if (onSuccess) onSuccess();
+
       setTimeout(() => {
         setClassName("");
         setPromoCode("");
@@ -68,12 +72,13 @@ export default function AddClass({ children }: AddClassProps) {
         setOpen(false);
       }, 1500);
     } catch (err: any) {
-      let errorMessage = "🚫 Анги үүсгэхэд алдаа гарлаа.";
+      let errorMessage = "Анги үүсгэхэд алдаа гарлаа";
+      const status = err.response?.status;
 
-      if (err.response?.status === 409) {
-        errorMessage = "❗ Промо код давхцаж байна. Өөр код ашиглана уу.";
-      } else if (err.response?.status === 400) {
-        errorMessage = "❗ Анги нэр эсвэл багшийн ID дутуу байна.";
+      if (status === 409) {
+        errorMessage = "Энэ промо код аль хэдийн бүртгэгдсэн байна";
+      } else if (status === 400) {
+        errorMessage = "Ангийн нэр оруулаагүй байна";
       }
 
       toast.error(errorMessage, {
@@ -91,53 +96,48 @@ export default function AddClass({ children }: AddClassProps) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      {" "}
       <DialogTrigger asChild>
         {children || (
-          <motion.div
-            className="w-[240px] h-[240px] cursor-pointer bg-[#2C3A4A] dark:bg-[#e1aa77] text-white dark:text-[#2C3A4A] rounded-2xl shadow-2xl flex flex-col justify-center items-center transition-colors duration-300 hover:bg-[#3a4b5e] dark:hover:bg-[#d19a6a]"
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.98 }}
+          <motion.button
+            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            <motion.div
-              className="bg-[#e1aa77] dark:bg-[#2C3A4A] p-2 rounded-full transition-colors duration-300"
-              whileHover={{ rotate: 90 }}
-              transition={{ duration: 0.3 }}
-            >
-              <FiPlus className="text-lg text-white dark:text-[#e1aa77]" />
-            </motion.div>
-            <span className="mt-2 font-medium">Анги нэмэх</span>
-          </motion.div>
+            <FiPlus className="text-lg" />
+            <span>Шинэ анги</span>
+          </motion.button>
         )}
       </DialogTrigger>
-      <DialogOverlay className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 animate-fadeIn" />
-      <DialogContent className="fixed top-1/2 left-1/2 z-50 w-[90%] max-w-md -translate-x-1/2 -translate-y-1/2 bg-[#f5f5f5] dark:bg-[#2C3A4A] p-6 rounded-2xl shadow-xl animate-scaleIn border border-[#e1aa77]/30">
-        <div className="flex items-center justify-between">
-          <DialogTitle className="text-xl font-medium text-[#2C3A4A] dark:text-[#e1aa77]">
-            🏫 Шинэ анги нэмэх
+
+      <DialogOverlay className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50" />
+
+      <DialogContent className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 focus:outline-none border border-gray-200 dark:border-gray-700">
+        <div className="flex justify-between items-center mb-4">
+          <DialogTitle className="text-xl font-bold text-gray-900 dark:text-white">
+            Шинэ анги үүсгэх
           </DialogTitle>
-          <DialogClose className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-[#e1aa77] transition-colors">
-            <FiX className="text-xl" />
+          <DialogClose className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white rounded-full p-1">
+            <FiX className="w-5 h-5" />
           </DialogClose>
         </div>
 
-        <DialogDescription className="text-sm text-gray-600 dark:text-gray-300 mt-1 mb-4">
-          Анги үүсгэх мэдээллээ оруулна уу.
+        <DialogDescription className="text-sm text-gray-600 dark:text-gray-300 mb-6">
+          Ангийн мэдээллийг бөглөн үүсгэнэ үү
         </DialogDescription>
 
-        <form className="space-y-4" onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label
               htmlFor="className"
-              className="block text-sm font-medium text-[#2C3A4A] dark:text-[#e1aa77] mb-1"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
             >
-              Анги нэр
+              Ангийн нэр *
             </label>
             <input
               id="className"
               type="text"
-              placeholder="Ангийн нэр"
-              className="w-full border border-gray-300 dark:border-[#3a4b5e] bg-white dark:bg-[#3a4b5e] text-[#2C3A4A] dark:text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#e1aa77]/50 focus:border-[#e1aa77] transition-all"
+              placeholder="Жишээ: Математик 10А"
+              className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
               value={className}
               onChange={(e) => setClassName(e.target.value)}
               required
@@ -148,35 +148,38 @@ export default function AddClass({ children }: AddClassProps) {
           <div>
             <label
               htmlFor="promoCode"
-              className="block text-sm font-medium text-[#2C3A4A] dark:text-[#e1aa77] mb-1"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
             >
-              Ангийн код (заавал биш)
+              Промо код (заавал биш)
             </label>
             <input
               id="promoCode"
               type="text"
-              placeholder="Ангийн код (заавал биш)"
-              className="w-full border border-gray-300 dark:border-[#3a4b5e] bg-white dark:bg-[#3a4b5e] text-[#2C3A4A] dark:text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#e1aa77]/50 focus:border-[#e1aa77] transition-all"
+              placeholder="Жишээ: MATH10A"
+              className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
               value={promoCode}
               onChange={(e) => setPromoCode(e.target.value)}
               disabled={isLoading || isSuccess}
             />
           </div>
 
-          <button
+          <motion.button
             type="submit"
-            className={`w-full flex items-center justify-center gap-2 py-3 px-4 rounded-lg transition-all duration-200 ${isLoading
-              ? "bg-[#e1aa77]/70 cursor-not-allowed"
-              : isSuccess
+            className={`w-full py-3 px-4 rounded-lg font-medium flex items-center justify-center gap-2 ${
+              isLoading
+                ? "bg-indigo-400 cursor-not-allowed"
+                : isSuccess
                 ? "bg-green-500"
-                : "bg-[#e1aa77] hover:bg-[#d19a6a]"
-              } text-[#2C3A4A] font-medium shadow-md`}
+                : "bg-indigo-600 hover:bg-indigo-700"
+            } text-white transition-colors`}
             disabled={isLoading || isSuccess}
+            whileHover={!isLoading && !isSuccess ? { scale: 1.02 } : {}}
+            whileTap={!isLoading && !isSuccess ? { scale: 0.98 } : {}}
           >
             {isLoading ? (
               <>
                 <FiLoader className="animate-spin" />
-                Боловсруулж байна...
+                Хадгалж байна...
               </>
             ) : isSuccess ? (
               <>
@@ -184,9 +187,9 @@ export default function AddClass({ children }: AddClassProps) {
                 Амжилттай
               </>
             ) : (
-              "✅ Анги үүсгэх"
+              "Анги үүсгэх"
             )}
-          </button>
+          </motion.button>
         </form>
       </DialogContent>
     </Dialog>

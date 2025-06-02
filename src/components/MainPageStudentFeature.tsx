@@ -4,7 +4,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, useAnimation, useInView } from "framer-motion";
 import { CheckIcon } from "lucide-react";
 import Image from "next/image";
-import { TiBookmark, TiKeyboard, TiDatabase, TiGroupOutline } from "react-icons/ti";
+import {
+  TiBookmark,
+  TiKeyboard,
+  TiDatabase,
+  TiGroupOutline,
+} from "react-icons/ti";
 
 const taskData = [
   {
@@ -18,7 +23,7 @@ const taskData = [
     ],
     content_p:
       "ClassHero систем нь сурагч бүрийг өдөр бүр урамшуулж, амжилт руу хөтөлдөг!",
-    icon: TiDatabase
+    icon: TiDatabase,
   },
   {
     id: 2,
@@ -31,7 +36,7 @@ const taskData = [
     ],
     content_p:
       "Тоглолт шиг сонирхолтой badge систем нь сурагчдад хүч өгөх зорилготой!",
-    icon: TiBookmark
+    icon: TiBookmark,
   },
   {
     id: 3,
@@ -42,9 +47,8 @@ const taskData = [
       { id: 1, option: "Чат өрнүүл" },
       { id: 2, option: "Broadcast-оор багшийн зар ав" },
     ],
-    content_p:
-      "Анги доторх харилцааг сонирхолтой, шуурхай болгоно.",
-    icon: TiKeyboard
+    content_p: "Анги доторх харилцааг сонирхолтой, шуурхай болгоно.",
+    icon: TiKeyboard,
   },
   {
     id: 4,
@@ -55,9 +59,8 @@ const taskData = [
       { id: 1, option: "Топ 5 сурагчийн жагсаалт" },
       { id: 2, option: "Багийн амжилтыг харуулна" },
     ],
-    content_p:
-      "Ангийн уур амьсгалыг хөгжөөнт тэмцээн шиг болгоно!",
-    icon: TiGroupOutline
+    content_p: "Ангийн уур амьсгалыг хөгжөөнт тэмцээн шиг болгоно!",
+    icon: TiGroupOutline,
   },
 ];
 
@@ -93,23 +96,21 @@ export default function StudentFeatureSelector() {
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               onClick={() => setSelectedTask(item)}
-              className={`flex flex-col items-center justify-center rounded-2xl aspect-square transition-all w-full h-full ${selectedTask.id === item.id
-                ? "bg-[#FF9C42] dark:bg-[#e1aa77] shadow-lg"
-                : "bg-[#EAEFEF] dark:bg-[#5bcfd3]"
-                }`}
+              className={`flex flex-col items-center justify-center rounded-2xl aspect-square transition-all w-full h-full ${
+                selectedTask.id === item.id
+                  ? "bg-[#FF9C42] dark:bg-[#e1aa77] shadow-lg"
+                  : "bg-[#EAEFEF] dark:bg-[#5bcfd3]"
+              }`}
             >
               <div className="w-15">
-
                 {<item.icon className="w-full h-full" />}
-
-
-
               </div>
               <span
-                className={`text-sm font-semibold text-center ${selectedTask.id === item.id
-                  ? "text-white"
-                  : "text-[#2C3A4A] dark:text-[#FFD3A1]"
-                  }`}
+                className={`text-sm font-semibold text-center ${
+                  selectedTask.id === item.id
+                    ? "text-white"
+                    : "text-[#2C3A4A] dark:text-[#FFD3A1]"
+                }`}
               >
                 {item.title}
               </span>
@@ -151,10 +152,7 @@ export default function StudentFeatureSelector() {
               className="space-y-2 sm:space-y-3 mb-4 sm:mb-6"
             >
               {selectedTask.content.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex items-start gap-2 sm:gap-3"
-                >
+                <div key={item.id} className="flex items-start gap-2 sm:gap-3">
                   <CheckIcon className="w-4 h-4 sm:w-5 sm:h-5 mt-0.5 text-[#FFE866] dark:text-[#FF9C42] flex-shrink-0" />
                   <p className="text-sm sm:text-base text-[#2C3A4A] dark:text-[#EAEFEF] ">
                     {item.option}

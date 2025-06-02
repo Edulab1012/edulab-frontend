@@ -14,7 +14,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Image from "next/image";
+import { PanelTop, Plus } from "lucide-react";
+import { useTheme } from "next-themes";
 
 interface Class {
   id: string;
@@ -37,7 +38,8 @@ export default function TeacherDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const router = useRouter();
-  const [teacherId, setTeacherId] = useState<string | null>(null); // Add state for teacherId
+  const [teacherId, setTeacherId] = useState<string | null>(null);
+  const { theme } = useTheme();
 
   const handleDeleteClass = async (classId: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -48,7 +50,6 @@ export default function TeacherDashboard() {
 
     try {
       await axios.delete(`${BASE_URL}class/${classId}`);
-      // Remove the deleted class from state
       setClasses(classes.filter((cls) => cls.id !== classId));
       toast.success("Анги амжилттай устгагдлаа!");
     } catch (err) {
@@ -101,106 +102,191 @@ export default function TeacherDashboard() {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center lg:items-start p-4 md:p-6 md:ml-64">
-      <div className="mt-[100px]">
-        <h1 className="text-xl font-bold mb-4 text-gray-700 dark:text-[#e1aa77]">
+    <div className="flex flex-col p-4 md:p-6 md:ml-64">
+      <div className="mt-[80px] md:mt-[100px] flex flex-col jcustify-center ">
+        <h1 className="text-2xl font-bold text-gray-700 dark:text-white mb-6 md:mb-[60px] mt-6 md:mt-[60px]">
           Миний ангиуд
         </h1>
-        <div className="flex flex-col space-x-2">
-          <AddClass />
-        </div>
-      </div>
 
-      {classes.length === 0 ? (
-        <div className="text-center py-8 text-gray-500">
-          Анги олдсонгүй. Шинэ анги үүсгэх үү?
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-          {classes.map((cls) => (
-            <motion.div
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.98 }}
-              key={cls.id}
-              className="w-[240px] h-[240px] bg-[#2C3A4A] dark:bg-white rounded-2xl shadow-2xl flex flex-col relative cursor-pointer"
-              onClick={() => handleClassClick(cls.id)}
-            >
-              <div className="absolute top-2 right-2 flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-700/20">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <button className="focus:outline-none">
-                      <Image
-                        src={"/myclass/cogwheel.png"}
-                        width={20}
-                        height={20}
-                        alt="Settings"
-                        className="w-5 h-5 md:w-6 md:h-6"
+        {classes.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-12 text-center">
+            <PanelTop className="w-16 h-16 text-gray-400 mb-4" />
+            <p className="text-lg text-gray-500 dark:text-gray-400 mb-4">
+              Анги олдсонгүй. Шинэ анги үүсгэх үү?
+            </p>
+            <AddClass>
+              <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-[#6B5AED] to-purple-600 text-white shadow-md hover:shadow-lg transition-all duration-200">
+                <Plus className="w-5 h-5" />
+                <span>Шинэ анги үүсгэх</span>
+              </button>
+            </AddClass>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center md:flex-row md:flex-wrap md:justify-center gap-4 md:gap-6">
+            {classes.map((cls) => (
+              <motion.div
+                key={cls.id}
+                whileHover={{ y: -5 }}
+                whileTap={{ scale: 0.98 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="w-full max-w-[280px] h-[240px] rounded-2xl shadow-lg flex flex-col relative cursor-pointer overflow-hidden"
+                onClick={() => handleClassClick(cls.id)}
+              >
+                <div
+                  className={`absolute inset-0 ${
+                    theme === "dark"
+                      ? "bg-gradient-to-br from-[#2C3A4A] to-[#1E293B]"
+                      : "bg-gradient-to-br from-[#F5F6FA] to-[#E2E8F0]"
+                  }`}
+                />
+                <div className="absolute top-3 right-3 z-10">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button
+                        className={`p-1.5 rounded-full ${
+                          theme === "dark"
+                            ? "hover:bg-[#6B5AED]/30 text-[#e1aa77]"
+                            : "hover:bg-[#1DA1F2]/20 text-[#2C3A4A]"
+                        } transition-colors duration-200`}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <circle cx="12" cy="12" r="1" />
+                          <circle cx="12" cy="5" r="1" />
+                          <circle cx="12" cy="19" r="1" />
+                        </svg>
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent
+                      className={`w-48 ${
+                        theme === "dark"
+                          ? "bg-[#2C3A4A] border-[#6B5AED]/30"
+                          : "bg-white border-[#1DA1F2]/30"
+                      } rounded-lg shadow-xl`}
+                      align="end"
+                      sideOffset={5}
+                    >
+                      <DropdownMenuLabel
+                        className={`${
+                          theme === "dark"
+                            ? "text-[#e1aa77]"
+                            : "text-[#6B5AED] "
+                        }`}
+                      >
+                        Ангийн тохиргоо
+                      </DropdownMenuLabel>
+                      <DropdownMenuSeparator
+                        className={
+                          theme === "dark"
+                            ? "bg-[#6B5AED]/30"
+                            : "bg-[#1DA1F2]/30"
+                        }
                       />
-                    </button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent
-                    className="w-46 bg-[#f5f5f5] dark:bg-[#2C3A4A] border border-[#e1aa77]/30 rounded-lg shadow-lg "
-                    align="end"
-                    sideOffset={5}
-                  >
-                    <DropdownMenuLabel className="text-[#2C3A4A] dark:text-[#e1aa77] px-3 py-2 font-medium">
-                      Ангийн тохиргоо
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator className="bg-[#e1aa77]/30" />
-                    <DropdownMenuItem
-                      className="text-[#2C3A4A] dark:text-white hover:bg-[#e1aa77]/20 hover:text-[#2C3A4A] dark:hover:text-[#e1aa77] px-3 py-2 text-sm cursor-pointer focus:bg-[#e1aa77]/10 focus:text-[#2C3A4A] dark:focus:text-[#e1aa77]"
-                      onClick={() => handleClassClick(cls.id)}
-                    >
-                      Ангийн мэдээлэл
-                    </DropdownMenuItem>
+                      <DropdownMenuItem
+                        className={`${
+                          theme === "dark"
+                            ? "hover:bg-[#6B5AED]/20 text-white"
+                            : "hover:bg-[#1DA1F2]/10 text-[#2C3A4A]"
+                        } cursor-pointer`}
+                        onClick={() => handleClassClick(cls.id)}
+                      >
+                        Ангийн мэдээлэл
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        className={`${
+                          theme === "dark"
+                            ? "hover:bg-[#6B5AED]/20 text-white"
+                            : "hover:bg-[#1DA1F2]/10 text-[#2C3A4A]"
+                        } cursor-pointer`}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        Тохиргоо
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator
+                        className={
+                          theme === "dark"
+                            ? "bg-[#6B5AED]/30"
+                            : "bg-[#1DA1F2]/30"
+                        }
+                      />
+                      <DropdownMenuItem
+                        className="text-red-500 hover:bg-red-500/10 cursor-pointer"
+                        onClick={(e) => handleDeleteClass(cls.id, e)}
+                      >
+                        Анги устгах
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
 
-                    <DropdownMenuItem
-                      className="text-[#2C3A4A] dark:text-white hover:bg-[#e1aa77]/20 hover:text-[#2C3A4A] dark:hover:text-[#e1aa77] px-3 py-2 text-sm cursor-pointer focus:bg-[#e1aa77]/10 focus:text-[#2C3A4A] dark:focus:text-[#e1aa77]"
-                      onClick={(e) => e.stopPropagation()}
+                <div className="relative z-0 w-full h-full flex flex-col items-center justify-center p-6">
+                  <div
+                    className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 ${
+                      theme === "dark"
+                        ? "bg-[#6B5AED]/20 text-[#e1aa77]"
+                        : "bg-[#1DA1F2]/10 text-[#6B5AED]"
+                    }`}
+                  >
+                    <PanelTop className="w-8 h-8" />
+                  </div>
+                  <div className="w-full text-center">
+                    <h2
+                      className={`text-xl font-bold mb-1 ${
+                        theme === "dark" ? "text-white" : "text-[#2C3A4A]"
+                      }`}
                     >
-                      Тохиргоо
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator className="bg-[#e1aa77]/30" />
-                    <DropdownMenuItem
-                      className="text-red-500 hover:bg-red-500/10 px-3 py-2 text-sm cursor-pointer focus:bg-red-500/10"
-                      onClick={(e) => handleDeleteClass(cls.id, e)}
+                      {cls.name}
+                    </h2>
+                    <p
+                      className={`text-sm ${
+                        theme === "dark" ? "text-gray-300" : "text-gray-600"
+                      } mb-2`}
                     >
-                      Анги устгах
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-              <div className="w-full h-full flex flex-col items-center justify-center p-4">
-                <div className="mb-4">
-                  <Image
-                    src={"/myclass/earth.png"}
-                    width={60}
-                    height={60}
-                    alt="Class icon"
-                    className="w-14 h-14 md:w-16 md:h-16"
+                      Үүссэн: {new Date(cls.createdAt).toLocaleDateString()}
+                    </p>
+                    {cls.promoCode && (
+                      <div
+                        className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                          theme === "dark"
+                            ? "bg-[#6B5AED]/30 text-[#e1aa77]"
+                            : "bg-[#1DA1F2]/10 text-[#6B5AED]"
+                        }`}
+                      >
+                        Код: {cls.promoCode}
+                      </div>
+                    )}
+                  </div>
+                  <div
+                    className={`absolute bottom-0 left-0 right-0 h-1 ${
+                      theme === "dark"
+                        ? "bg-gradient-to-r from-[#6B5AED] to-purple-600"
+                        : "bg-gradient-to-r from-[#1DA1F2] to-blue-500"
+                    }`}
                   />
                 </div>
-                <div className="w-full flex flex-col items-center text-center">
-                  <h2 className="text-lg md:text-xl font-bold text-white dark:text-[#e1aa77] line-clamp-1">
-                    {cls.name}
-                  </h2>
-                  <p className="text-white dark:text-[#e1aa77] text-xs md:text-sm">
-                    Үүссэн: {new Date(cls.createdAt).toLocaleDateString()}
-                  </p>
-                  {cls.promoCode && (
-                    <p className="text-xs md:text-sm text-white dark:text-[#e1aa77] mt-1">
-                      Код:{" "}
-                      <span className="text-[#e1aa77] dark:text-black font-medium">
-                        {cls.promoCode}
-                      </span>
-                    </p>
-                  )}
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      )}
+              </motion.div>
+            ))}
+            <AddClass>
+              <button className="w-full max-w-[280px] h-[240px] flex flex-col items-center justify-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-[#6B5AED] to-purple-600 text-white shadow-md hover:shadow-lg transition-all duration-200">
+                <Plus className="w-8 h-8" />
+                <span className="text-lg">Шинэ анги</span>
+              </button>
+            </AddClass>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
