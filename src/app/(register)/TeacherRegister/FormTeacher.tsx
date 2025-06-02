@@ -80,9 +80,10 @@ export default function TeacherRegisterForm() {
   };
 
   const handleRegister = async () => {
+    console.log("📤 Submitted Data:", formData);
     setLoading(true);
     setStatus("idle");
-    console.log("📤 Submitted Data:", formData);
+    setErrMessage(""); // reset error message
 
     try {
       const res = await axios.post(`${BASE_URL}auth/register`, {
@@ -91,18 +92,24 @@ export default function TeacherRegisterForm() {
         phoneNumber: formData.phoneNumber,
         password: formData.password,
         role: "teacher",
-      })
-      console.log("✅ Registration Response:", res.data);
+      });
 
-      localStorage.setItem("teacherId", res.data.teacher.id);
-      localStorage.setItem("userId", res.data.user.id);
-      localStorage.setItem("token", res.data.user.id);
+      console.log("✅ Registration Response:", res.data.user);
+
+      if (res.data.user) {
+        const { id, teacherId } = res.data.user;
+        if (teacherId) {
+          localStorage.setItem("teacherId", teacherId);
+        }
+        localStorage.setItem("token", id);
+      }
+
       setStatus("success");
-      router.push("/teacher")
+      router.push("/teacher");
+
     } catch (err: any) {
-      setErrMessage(err.response?.data.message)
-      console.log(err);
-      console.log("❌ Registration Error:", err.response?.data || err);
+      setErrMessage(err.response?.data.message || "Тун тодорхойгүй алдаа гарлаа.");
+      console.log("❌ Registration Error:", err);
       setStatus("error");
     } finally {
       setLoading(false);

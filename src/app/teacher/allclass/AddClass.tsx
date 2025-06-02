@@ -165,13 +165,12 @@ export default function AddClass({ children }: AddClassProps) {
 
           <button
             type="submit"
-            className={`w-full flex items-center justify-center gap-2 py-3 px-4 rounded-lg transition-all duration-200 ${
-              isLoading
-                ? "bg-[#e1aa77]/70 cursor-not-allowed"
-                : isSuccess
+            className={`w-full flex items-center justify-center gap-2 py-3 px-4 rounded-lg transition-all duration-200 ${isLoading
+              ? "bg-[#e1aa77]/70 cursor-not-allowed"
+              : isSuccess
                 ? "bg-green-500"
                 : "bg-[#e1aa77] hover:bg-[#d19a6a]"
-            } text-[#2C3A4A] font-medium shadow-md`}
+              } text-[#2C3A4A] font-medium shadow-md`}
             disabled={isLoading || isSuccess}
           >
             {isLoading ? (

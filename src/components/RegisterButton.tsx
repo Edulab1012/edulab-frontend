@@ -70,7 +70,7 @@ export default function RegisterButton() {
                     <button
                         className={buttonStyle}
                         onClick={ClickTeacher}>
-                        <div className="absolute inset-0 bg-[url('')] bg-cover opacity-10 dark:opacity-10 group-hover:opacity-20 dark:group-hover:opacity-20 transition-opacity duration-500"></div>
+                        <div className="absolute inset-0 bg-cover opacity-10 dark:opacity-10 group-hover:opacity-20 dark:group-hover:opacity-20 transition-opacity duration-500"></div>
                         <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent dark:from-white/5 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                         <div className="relative z-10 h-full flex flex-col items-center justify-center p-4">
                             <div className="text-5xl mb-4 transform group-hover:scale-110 transition-transform duration-500">
@@ -86,7 +86,7 @@ export default function RegisterButton() {
 
                     <button className={buttonStyle}
                         onClick={ClickStudent}>
-                        <div className="absolute inset-0 bg-[url('/')] bg-cover opacity-10 dark:opacity-10 group-hover:opacity-20 dark:group-hover:opacity-20 transition-opacity duration-500"></div>
+                        <div className="absolute inset-0 bg-cover opacity-10 dark:opacity-10 group-hover:opacity-20 dark:group-hover:opacity-20 transition-opacity duration-500"></div>
                         <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent dark:from-white/5 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                         <div className="relative z-10 h-full flex flex-col items-center justify-center p-4">
                             <div className="text-5xl mb-4 transform group-hover:scale-110 transition-transform duration-500">
