@@ -20,8 +20,11 @@ import {
   FiCheckCircle,
   FiAlertCircle,
 } from "react-icons/fi";
+interface AddClassProps {
+  children?: React.ReactNode;
+}
 
-export default function AddClass() {
+export default function AddClass({ children }: AddClassProps) {
   const [className, setClassName] = useState("");
   const [promoCode, setPromoCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -90,20 +93,22 @@ export default function AddClass() {
     <Dialog open={open} onOpenChange={setOpen}>
       {" "}
       <DialogTrigger asChild>
-        <motion.div
-          className="w-[240px] h-[240px] cursor-pointer bg-[#2C3A4A] dark:bg-[#e1aa77] text-white dark:text-[#2C3A4A] rounded-2xl shadow-2xl flex flex-col justify-center items-center transition-colors duration-300 hover:bg-[#3a4b5e] dark:hover:bg-[#d19a6a]"
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.98 }}
-        >
+        {children || (
           <motion.div
-            className="bg-[#e1aa77] dark:bg-[#2C3A4A] p-2 rounded-full transition-colors duration-300"
-            whileHover={{ rotate: 90 }}
-            transition={{ duration: 0.3 }}
+            className="w-[240px] h-[240px] cursor-pointer bg-[#2C3A4A] dark:bg-[#e1aa77] text-white dark:text-[#2C3A4A] rounded-2xl shadow-2xl flex flex-col justify-center items-center transition-colors duration-300 hover:bg-[#3a4b5e] dark:hover:bg-[#d19a6a]"
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.98 }}
           >
-            <FiPlus className="text-lg text-white dark:text-[#e1aa77]" />
+            <motion.div
+              className="bg-[#e1aa77] dark:bg-[#2C3A4A] p-2 rounded-full transition-colors duration-300"
+              whileHover={{ rotate: 90 }}
+              transition={{ duration: 0.3 }}
+            >
+              <FiPlus className="text-lg text-white dark:text-[#e1aa77]" />
+            </motion.div>
+            <span className="mt-2 font-medium">Анги нэмэх</span>
           </motion.div>
-          <span className="mt-2 font-medium">Анги нэмэх</span>
-        </motion.div>
+        )}
       </DialogTrigger>
       <DialogOverlay className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 animate-fadeIn" />
       <DialogContent className="fixed top-1/2 left-1/2 z-50 w-[90%] max-w-md -translate-x-1/2 -translate-y-1/2 bg-[#f5f5f5] dark:bg-[#2C3A4A] p-6 rounded-2xl shadow-xl animate-scaleIn border border-[#e1aa77]/30">

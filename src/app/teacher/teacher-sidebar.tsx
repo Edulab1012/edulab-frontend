@@ -21,7 +21,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
+import AddClass from "./allclass/AddClass";
 interface MenuItem {
   title: string;
   url: string;
@@ -39,7 +39,7 @@ const items: MenuGroup[] = [
     group: "Манай ангиуд",
     links: [
       { title: "Бүх ангиуд", url: "/teacher", icon: BookCheck },
-      { title: "Шинэ анги үүсгэх", url: "", icon: Plus },
+      { title: "Шинэ анги үүсгэх", url: "#", icon: Plus },
     ],
   },
   {
@@ -64,7 +64,7 @@ export function AppSidebar() {
   const pathname = usePathname();
 
   return (
-    <Sidebar className=" border-r-8 border-r-blue-400 w-84 shadow-md min-h-screen z-20">
+    <Sidebar className="border-r-8 border-r-blue-400 w-84 shadow-md min-h-screen z-20">
       <SidebarContent>
         <SidebarGroup className="px-4 py-6 mt-8">
           <SidebarGroupLabel className="mb-6 flex justify-center"></SidebarGroupLabel>
@@ -79,21 +79,37 @@ export function AppSidebar() {
 
                   {group.links.map((link) => (
                     <div key={link.title}>
-                      <SidebarMenuItem className="mb-6">
-                        <Link href={link.url}>
-                          <SidebarMenuButton
-                            className={`flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-blue-400 hover:text-white transition ${
-                              pathname === link.url
-                                ? "bg-blue-400 text-white font-semibold"
-                                : ""
-                            }`}
-                          >
-                            <link.icon className="w-10 h-10" />
-                            <span className="text-[22px]">{link.title}</span>
-                          </SidebarMenuButton>
-                        </Link>
-                      </SidebarMenuItem>
+                      {link.title === "Шинэ анги үүсгэх" ? (
+                        // Render the AddClass component for this specific button
+                        <AddClass>
+                          <SidebarMenuItem className="mb-6">
+                            <SidebarMenuButton
+                              className={`flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-blue-400 hover:text-white transition cursor-pointer`}
+                            >
+                              <link.icon className="w-10 h-10" />
+                              <span className="text-[22px]">{link.title}</span>
+                            </SidebarMenuButton>
+                          </SidebarMenuItem>
+                        </AddClass>
+                      ) : (
+                        // Normal menu item for other links
+                        <SidebarMenuItem className="mb-6">
+                          <Link href={link.url}>
+                            <SidebarMenuButton
+                              className={`flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-blue-400 hover:text-white transition ${
+                                pathname === link.url
+                                  ? "bg-blue-400 text-white font-semibold"
+                                  : ""
+                              }`}
+                            >
+                              <link.icon className="w-10 h-10" />
+                              <span className="text-[22px]">{link.title}</span>
+                            </SidebarMenuButton>
+                          </Link>
+                        </SidebarMenuItem>
+                      )}
 
+                      {/* Keep the children rendering logic */}
                       {link.children?.map((child) => (
                         <SidebarMenuItem key={child.title} className="ml-6">
                           <Link href={child.url}>
