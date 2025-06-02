@@ -29,7 +29,7 @@ const menuItems: MenuItem[] = [
   { title: "Профайл", url: "/student/accountProfile", icon: User },
   { title: "broadcast room", url: "/student/broadcast", icon: LayoutDashboard },
   { title: "leaderboard", url: "/student/leaderboard", icon: Smile },
-  { title: "Сурагчид", url: "/student/studentlist", icon: BookCheck },
+  { title: "planner", url: "/student/planner", icon: BookCheck },
 ]
 
 export function AppSidebar() {
