@@ -136,7 +136,7 @@ export function AppSidebar() {
 
                           {/* Render classes list below the "Шинэ анги үүсгэх" button */}
                           {loading ? (
-                            <div className="pl-4 py-2">Түр хүлээнэ үү...</div>
+                            <div className="pl-4 py-2">Түр хүлээнэ үү..</div>
                           ) : (
                             classes.map((cls) => (
                               <SidebarMenuItem
