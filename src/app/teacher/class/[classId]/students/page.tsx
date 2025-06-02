@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -15,13 +14,7 @@ interface Student {
   phoneNumber?: string;
 }
 
-interface PageProps {
-  params: {
-    classId: string;
-  };
-}
-
-export default function ClassStudentsPage({ params }: PageProps) {
+export default function ClassStudentsPage({ params }: any) {
   const { classId } = params;
   const router = useRouter();
   const [className, setClassName] = useState("");
@@ -31,7 +24,9 @@ export default function ClassStudentsPage({ params }: PageProps) {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}class/${classId}/students`);
+        const response = await axios.get(
+          `${BASE_URL}class/${classId}/students`
+        );
         setClassName(response.data.className);
         setStudents(response.data.students);
       } catch (error) {
@@ -122,10 +117,11 @@ export default function ClassStudentsPage({ params }: PageProps) {
                 {students.map((student, index) => (
                   <motion.tr
                     key={student.id}
-                    className={`border-b border-[#e1aa77]/10 ${index % 2 === 0
+                    className={`border-b border-[#e1aa77]/10 ${
+                      index % 2 === 0
                         ? "bg-white dark:bg-[#2C3A4A]"
                         : "bg-[#f9f9f9] dark:bg-[#3a4a5a]"
-                      }`}
+                    }`}
                     whileHover={{ backgroundColor: "rgba(225, 170, 119, 0.1)" }}
                     transition={{ duration: 0.2 }}
                   >
@@ -135,13 +131,18 @@ export default function ClassStudentsPage({ params }: PageProps) {
                         width={40}
                         height={40}
                         alt="Actions"
+                        className=""
                       />
                     </td>
                     <td className="p-4 text-white dark:text-gray-300">
-                      {student.email || <span className="text-gray-400">-</span>}
+                      {student.email || (
+                        <span className="text-gray-400">-</span>
+                      )}
                     </td>
                     <td className="p-4 text-white dark:text-gray-300">
-                      {student.phoneNumber || <span className="text-gray-400">-</span>}
+                      {student.phoneNumber || (
+                        <span className="text-gray-400">-</span>
+                      )}
                     </td>
                   </motion.tr>
                 ))}
