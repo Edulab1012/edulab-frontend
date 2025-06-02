@@ -12,6 +12,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
+
 const steps = [
   { name: "username", label: "Нэр", type: "text" },
   { name: "email", label: "Имэйл хаяг", type: "email" },
@@ -47,16 +48,10 @@ export default function TeacherRegisterForm() {
     if (!value) {
       return "Энэ талбарыг бөглөнө үү.";
     }
-    if (
-      currentField.name === "email" &&
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
-    ) {
+    if (currentField.name === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
       return "Имэйл буруу байна.";
     }
-    if (
-      currentField.name === "confirmPassword" &&
-      formData.password !== value
-    ) {
+    if (currentField.name === "confirmPassword" && formData.password !== value) {
       return "Нууц үг таарахгүй байна.";
     }
     if (currentField.name === "phoneNumber" && value.length !== 8) {
@@ -96,15 +91,13 @@ export default function TeacherRegisterForm() {
         phoneNumber: formData.phoneNumber,
         password: formData.password,
         role: "teacher",
-      });
+      })
       console.log("✅ Registration Response:", res.data);
-
-      localStorage.setItem("userId", res.data.user.id);
       localStorage.setItem("token", res.data.user.id);
       setStatus("success");
-      router.push("/teacher");
+      router.push("/teacher")
     } catch (err: any) {
-      setErrMessage(err.response?.data.message);
+      setErrMessage(err.response?.data.message)
       console.log(err);
       console.log("❌ Registration Error:", err.response?.data || err);
       setStatus("error");
@@ -114,8 +107,8 @@ export default function TeacherRegisterForm() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-4 bg-white dark:bg-black">
-      <Card className="w-full sm:w-[400px] glass-card p-6 rounded-2xl shadow-2xl border border-[#FFE866]/40 space-y-1.5 mt-20 relative">
+    <div className="">
+      <Card className="w-full sm:w-[400px] glass-card p-6 rounded-2xl shadow-2xl  shadow-amber-600 border border-[#dd7d00] space-y-1.5 mt-20 relative dark:bg-[#16161d]">
         <CardTitle className="text-2xl font-extralight text-center">
           Багш бүртгүүлэх
         </CardTitle>
@@ -140,9 +133,7 @@ export default function TeacherRegisterForm() {
                   type={currentField.type}
                   value={(formData as any)[currentField.name]}
                   onChange={handleChange}
-                  className={`glass-input ${
-                    errors[currentField.name] ? "border-red-500" : ""
-                  }`}
+                  className={`glass-input ${errors[currentField.name] ? "border-red-500" : ""}`}
                 />
                 {errors[currentField.name] && (
                   <p className="text-red-500 text-sm font-light mt-0.5">
@@ -198,19 +189,13 @@ export default function TeacherRegisterForm() {
               transition={{ duration: 0.4 }}
               className="absolute top-[-30%] left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-2 rounded-xl shadow-lg z-50 text-center w-80 border-1 border-white font-light"
             >
-              {errMessage
-                ? "Энэ хэрэглэгч аль хэдийн бүртгэгдсэн байна."
-                : "Бүртгэл амжилтгүй боллоо. Дахин оролдоно уу."}
+              {errMessage ? "Энэ хэрэглэгч аль хэдийн бүртгэгдсэн байна." : "Бүртгэл амжилтгүй боллоо. Дахин оролдоно уу."}
             </motion.div>
           )}
         </AnimatePresence>
       </Card>
       <p className="absolute bottom-20 left-1/2 transform -translate-x-1/2 font-extralight">
-        Хэрэв та аль хэдийн бүртгүүлсэн бол{" "}
-        <Link href="/login" className="underline text-blue-600">
-          энд
-        </Link>{" "}
-        дарна уу
+        Хэрэв та аль хэдийн бүртгүүлсэн бол <Link href="/login" className="underline text-amber-600">энд</Link> дарна уу
       </p>
     </div>
   );

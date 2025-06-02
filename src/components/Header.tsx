@@ -41,7 +41,7 @@ export const Header = () => {
     setScrolled(window.scrollY > 30);
   };
   const showSheet = !["/", "/login"].includes(pathname);
-  useEffect(() => {});
+  useEffect(() => { });
   useEffect(() => {
     setMounted(true);
     window.addEventListener("scroll", handleScroll);
@@ -99,23 +99,17 @@ export const Header = () => {
           fixed top-0 left-0 right-0 z-50 w-full flex justify-between items-center
            px-4 sm:px-8 
           transition-all duration-300 ease-in-out 
-          ${
-            scrolled
-              ? "bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg shadow-sm"
-              : "bg-white dark:bg-gray-900"
-          }
-          border-b border-gray-200 dark:border-gray-700
+          ${scrolled
+              ? "bg-[#f9f9fc]/80 dark:bg-[#101010] backdrop-blur-lg shadow-sm"
+              : "bg-[#f9f9fc] dark:bg-[#101010]"
+            }
+          border-b border-gray-200 dark:border-gray-800
         `}
         >
           <div>
-            {" "}
             <Link href="/">
               <Image
-                src={
-                  theme === "dark"
-                    ? "/classheroNoback.png"
-                    : "/classheroNoback.png"
-                }
+                src="/classheroNoback.png"
                 alt="logo"
                 width={200}
                 height={200}
@@ -126,8 +120,7 @@ export const Header = () => {
             </Link>
           </div>
           <div className="flex gap-6">
-            {" "}
-            <div className="flex items-center gap-2 sm:gap-4 bg-white dark:bg-gray-900 rounded-lg p-2 shadow-md">
+            <div className="flex items-center gap-2 sm:gap-4 bg-[#f9f9fc] dark:bg-[#101010] rounded-lg p-2 shadow-md">
               <Button
                 variant="ghost"
                 size="icon"
@@ -155,11 +148,10 @@ export const Header = () => {
                           <Link
                             key={link.title}
                             href={link.url}
-                            className={`flex items-center gap-2 px-3 py-1.5 rounded hover:bg-gray-50 transition ${
-                              pathname === link.url
-                                ? "text-primary font-medium"
-                                : "text-gray-600"
-                            }`}
+                            className={`flex items-center gap-2 px-3 py-1.5 rounded hover:bg-[#f2f2f2] transition ${pathname === link.url
+                              ? "text-primary font-medium"
+                              : "text-gray-600"
+                              }`}
                           >
                             <link.icon className="w-4 h-4" />
                             <span className="text-sm">{link.title}</span>
@@ -183,21 +175,16 @@ export const Header = () => {
           fixed top-0 left-0 right-0 z-50 w-full
           flex justify-between items-center px-4 sm:px-8 py-3
           transition-all duration-300 ease-in-out 
-          ${
-            scrolled
-              ? "bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg shadow-sm"
-              : "bg-white dark:bg-gray-900"
-          }
-          border-b border-gray-200 dark:border-gray-700
+          ${scrolled
+              ? "bg-[#f9f9fc]/80 dark:bg-[#101010]/80 backdrop-blur-lg shadow-sm"
+              : "bg-[#f9f9fc] dark:bg-[#101010]"
+            }
+          border-b border-gray-200 dark:border-gray-800
         `}
         >
           <Link href="/" className="absolute m-10 ">
             <Image
-              src={
-                theme === "dark"
-                  ? "/classheroNoback.png"
-                  : "/classheroNoback.png"
-              }
+              src="/classheroNoback.png"
               alt="logo"
               width={200}
               height={200}
@@ -207,7 +194,7 @@ export const Header = () => {
             />
           </Link>
           <div></div>
-          <div className="flex items-center gap-2 sm:gap-4 bg-white dark:bg-gray-900 rounded-lg p-2 shadow-md">
+          <div className="flex items-center gap-2 sm:gap-4 bg-[#f9f9fc] dark:bg-[#101010] rounded-lg p-2 shadow-md">
             <Button
               variant="ghost"
               size="icon"
