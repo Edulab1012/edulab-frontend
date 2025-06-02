@@ -1,122 +1,138 @@
-"use client";
+"use client"
+
+import type React from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { useTheme } from "next-themes"
+import { useState, useRef, useEffect, useCallback, useMemo } from "react"
 import {
-  Backpack,
   BookCheck,
   Home,
   LayoutDashboard,
-  PanelTop,
-  ScanEye,
+  Smile,
   User,
-} from "lucide-react";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar";
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+  MenuIcon,
+  DoorClosed as CloseIcon,
+  ChevronLeft,
+  ChevronRight,
+  Cannabis,
+} from "lucide-react"
 
 interface MenuItem {
-  title: string;
-  url: string;
-  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-  children?: MenuItem[];
+  title: string
+  url: string
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
 }
 
-interface MenuGroup {
-  group: string;
-  links: MenuItem[];
-}
-
-const items: MenuGroup[] = [
-  {
-    group: "Профайл",
-    links: [
-      { title: "Нүүр хуудас", url: "/student", icon: Home },
-      { title: "Миний мэдээлэл", url: "/student/accountProfile", icon: User },
-    ],
-  },
-  {
-    group: "Анги ба хичээл",
-    links: [
-      { title: "Багш", url: "/student/teacher", icon: LayoutDashboard },
-      { title: "Ирц", url: "/student/attendance", icon: ScanEye },
-      {
-        title: "Ангийн сурагчид",
-        url: "/student/studentlist",
-        icon: BookCheck,
-      },
-    ],
-  },
-];
+const menuItems: MenuItem[] = [
+  { title: "Нүүр", url: "/student", icon: Cannabis },
+  { title: "Профайл", url: "/student/accountProfile", icon: User },
+  { title: "broadcast room", url: "/student/broadcast", icon: LayoutDashboard },
+  { title: "leaderboard", url: "/student/leaderboard", icon: Smile },
+  { title: "Сурагчид", url: "/student/studentlist", icon: BookCheck },
+]
 
 export function AppSidebar() {
-  const pathname = usePathname();
+  const pathname = usePathname()
+  const { theme } = useTheme()
+
+  const [mounted, setMounted] = useState(false)
+  const [isOpen, setIsOpen] = useState(true)
+  const [isFolded, setIsFolded] = useState(false)
+  const [position, setPosition] = useState({ x: 20, y: 80 })
+  const [isDragging, setIsDragging] = useState(false)
+
+  const sidebarRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => setMounted(true), [])
+  if (!mounted) return null
+
+  const handleDragStart = (e: React.MouseEvent | React.TouchEvent) => {
+    const target = e.target as HTMLElement
+    if (!target.dataset.drag) return
+    e.preventDefault()
+
+    const clientX = "touches" in e ? e.touches[0].clientX : e.clientX
+    const clientY = "touches" in e ? e.touches[0].clientY : e.clientY
+
+    setIsDragging(true)
+    const offsetX = clientX - position.x
+    const offsetY = clientY - position.y
+
+    const onMove = (ev: MouseEvent | TouchEvent) => {
+      const x = "touches" in ev ? ev.touches[0].clientX : ev.clientX
+      const y = "touches" in ev ? ev.touches[0].clientY : ev.clientY
+      setPosition({ x: x - offsetX, y: y - offsetY })
+    }
+
+    const onEnd = () => {
+      setIsDragging(false)
+      document.removeEventListener("mousemove", onMove)
+      document.removeEventListener("mouseup", onEnd)
+      document.removeEventListener("touchmove", onMove)
+      document.removeEventListener("touchend", onEnd)
+    }
+
+    document.addEventListener("mousemove", onMove, { passive: false })
+    document.addEventListener("mouseup", onEnd)
+    document.addEventListener("touchmove", onMove, { passive: false })
+    document.addEventListener("touchend", onEnd)
+  }
 
   return (
-    <Sidebar className="bg-white border-r-8 border-r-blue-400 w-84 shadow-md min-h-screen z-20">
-      <SidebarContent>
-        <SidebarGroup className="px-4 py-6">
-          <SidebarGroupLabel className="mb-6 flex justify-center">
-            <Link href="/student">
-              <Image src="/classheroNoback.png" alt="logo" width={120} height={40} />
-            </Link>
-          </SidebarGroupLabel>
+    <div>
+      <button
+        className="fixed top-[15%] left-4 z-55 p-2 rounded-full bg-[#6B5AED] text-white shadow-lg hover:shadow-xl transition-all duration-200"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        {isOpen ? <CloseIcon className="w-5 h-5" /> : <MenuIcon className="w-5 h-5" />}
+      </button>
 
-          <SidebarGroupContent>
-            <SidebarMenu className="space-y-6">
-              {items.map((group) => (
-                <div key={group.group}>
-                  <div className="text-xs font-light text-gray-400 uppercase px-3 mb-2 tracking-wide">
-                    {group.group}
-                  </div>
+      {isOpen && (
+        <div
+          ref={sidebarRef}
+          onMouseDown={handleDragStart}
+          onTouchStart={handleDragStart}
+          data-drag
+          style={{
+            transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
+            transition: isDragging ? "none" : "transform 0.2s ease-in-out",
+          }}
+          className={`fixed z-40 rounded-3xl border-r-4 flex flex-col items-center mt-[10%]
+            ${theme === "dark" ? "bg-[#121220] border-r-[#6B5AED]" : "bg-[#F5F6FA] border-r-[#1DA1F2]"}
+            ${isFolded ? "w-20" : "w-64"}
+            shadow-xl transition-all duration-200`}
+        >
+          <button
+            onClick={() => setIsFolded(!isFolded)}
+            className={`absolute -right-4 top-[45%] z-50 bg-white dark:bg-gray-800 border-2 rounded-full p-1.5 shadow-lg
+              hover:scale-110 active:scale-95 transition-transform duration-200
+              ${theme === "dark" ? "border-[#6B5AED]" : "border-[#1DA1F2]"}`}
+          >
+            {isFolded ? <ChevronRight className="w-3 h-3" /> : <ChevronLeft className="w-3 h-3" />}
+          </button>
 
-                  {group.links.map((link) => (
-                    <div key={link.title}>
-                      <SidebarMenuItem>
-                        <Link href={link.url}>
-                          <SidebarMenuButton
-                            className={`flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-blue-400 hover:text-white transition ${pathname === link.url
-                              ? "bg-blue-400 text-white font-semibold"
-                              : ""
-                              }`}
-                          >
-                            <link.icon className="w-5 h-5" />
-                            <span className="text-[16px]">{link.title}</span>
-                          </SidebarMenuButton>
-                        </Link>
-                      </SidebarMenuItem>
-
-                      {/* Children */}
-                      {link.children?.map((child) => (
-                        <SidebarMenuItem key={child.title} className="ml-6">
-                          <Link href={child.url}>
-                            <SidebarMenuButton
-                              className={`flex items-center gap-2 px-3 py-1.5 rounded hover:bg-gray-50 transition ${pathname === child.url
-                                ? "text-primary font-medium"
-                                : "text-gray-600"
-                                }`}
-                            >
-                              <child.icon className="w-4 h-4" />
-                              <span className="text-sm">{child.title}</span>
-                            </SidebarMenuButton>
-                          </Link>
-                        </SidebarMenuItem>
-                      ))}
-                    </div>
-                  ))}
+          <nav className={`flex flex-col space-y-2 w-full px-2 py-6 ${isFolded ? "items-center" : "px-4"}`}>
+            {menuItems.map((item) => (
+              <Link key={item.title} href={item.url}>
+                <div
+                  className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-150 w-full
+                    hover:scale-[1.02] active:scale-[0.98] group relative overflow-hidden
+                    ${pathname === item.url
+                      ? "text-white bg-gradient-to-r from-[#6B5AED] to-purple-600 shadow-md"
+                      : theme === "dark"
+                        ? "text-white hover:bg-[#6B5AED]/20"
+                        : "text-black hover:bg-[#1DA1F2]/10"}
+                    ${isFolded ? "justify-center" : ""}`}
+                >
+                  <item.icon className="w-5 h-5" />
+                  {!isFolded && <span className="text-sm font-medium">{item.title}</span>}
                 </div>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-    </Sidebar>
-  );
+              </Link>
+            ))}
+          </nav>
+        </div>
+      )}
+    </div>
+  )
 }

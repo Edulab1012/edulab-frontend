@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { Student } from "./types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { motion } from "framer-motion";
 
 interface EditProfileProps {
   initialData: Student;
@@ -36,7 +37,12 @@ export default function EditProfile({ initialData, onSave, onCancel }: EditProfi
   };
 
   return (
-    <div className="p-6 border rounded shadow bg-gray-50 max-w-3xl mx-auto">
+    <motion.div
+      initial={{ opacity: 0, scale: 0.98 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.4 }}
+      className="bg-gradient-to-tr from-[#FDF2F8] to-[#E0E7FF] dark:from-[#1F1D42] dark:to-[#312E81] p-6 rounded-3xl shadow-xl max-w-4xl w-full mx-auto"
+    >
       <div className="flex justify-center mb-6">
         <input
           type="file"
@@ -47,116 +53,57 @@ export default function EditProfile({ initialData, onSave, onCancel }: EditProfi
         />
         <Avatar
           onClick={handleAvatarClick}
-          className="w-24 h-24 shadow-md cursor-pointer hover:ring-2 hover:ring-blue-500"
+          className="w-24 h-24 shadow-lg cursor-pointer ring-2 ring-[#6B5AED] hover:scale-105 transition"
         >
           <AvatarImage src={formData.avatarUrl} alt="Avatar" />
           <AvatarFallback>{formData.firstName.charAt(0)}</AvatarFallback>
         </Avatar>
       </div>
 
-      <h2 className="text-xl font-light mb-6 text-center">Мэдээлэл засах</h2>
+      <h2 className="text-center text-xl font-bold text-[#6B5AED] dark:text-white mb-8">
+        ✏️ Хувийн мэдээлэл засах
+      </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label htmlFor="lastName" className="block mb-1 text-gray-700">
-            Овог:
-          </label>
-          <input
-            id="lastName"
-            type="text"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-            className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="firstName" className="block mb-1 text-gray-700">
-            Нэр:
-          </label>
-          <input
-            id="firstName"
-            type="text"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleChange}
-            className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="grade" className="block mb-1 text-gray-700">
-            Анги:
-          </label>
-          <input
-            id="grade"
-            type="text"
-            name="grade"
-            value={formData.grade}
-            onChange={handleChange}
-            className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="phoneNumber" className="block mb-1 text-gray-700">
-            Утасны дугаар:
-          </label>
-          <input
-            id="phoneNumber"
-            type="text"
-            name="phoneNumber"
-            value={formData.phoneNumber}
-            onChange={handleChange}
-            className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="email" className="block mb-1 text-gray-700">
-            Имэйл хаяг:
-          </label>
-          <input
-            id="email"
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="teacher" className="block mb-1 text-gray-700">
-            Анги даасан багш:
-          </label>
-          <input
-            id="teacher"
-            type="text"
-            name="teacher"
-            value={formData.teacher}
-            onChange={handleChange}
-            className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {[
+          { id: "lastName", label: "Овог" },
+          { id: "firstName", label: "Нэр" },
+          { id: "grade", label: "Анги" },
+          { id: "phoneNumber", label: "Утасны дугаар" },
+          { id: "email", label: "Имэйл хаяг" },
+          { id: "teacher", label: "Анги даасан багш" },
+        ].map((field) => (
+          <div key={field.id}>
+            <label htmlFor={field.id} className="block mb-1 text-sm text-gray-600 dark:text-gray-300">
+              {field.label}
+            </label>
+            <input
+              id={field.id}
+              type="text"
+              name={field.id}
+              value={(formData as any)[field.id]}
+              onChange={handleChange}
+              className="w-full p-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#6B5AED] dark:bg-white/10 dark:text-white"
+            />
+          </div>
+        ))}
       </div>
 
-      <div className="flex justify-end gap-4 mt-6">
-        <button
-          onClick={handleSave}
-          className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
-        >
-          Хадгалах
-        </button>
-
+      <div className="flex justify-end gap-4 mt-8">
         <button
           onClick={onCancel}
-          className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+          className="px-4 py-2 bg-gray-300 text-gray-800 rounded-xl hover:bg-gray-400 transition"
         >
           Болих
         </button>
+
+        <button
+          onClick={handleSave}
+          className="px-4 py-2 bg-[#6B5AED] text-white rounded-xl hover:bg-purple-700 transition"
+        >
+          Хадгалах
+        </button>
       </div>
-    </div>
+    </motion.div>
   );
 }

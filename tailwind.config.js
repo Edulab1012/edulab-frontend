@@ -1,9 +1,8 @@
-// tailwind.config.js
 module.exports = {
   theme: {
     extend: {
       lineHeight: {
-        extra: "-2.5",
+        extra: "0.75rem", // 12px гэсэн утгатай
       },
     },
   },

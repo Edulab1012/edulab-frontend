@@ -7,8 +7,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <SidebarProvider>
 
       <AppSidebar />
-
-      <main className="w-screen h-screen bg-teal-400">{children}</main>
+      <main className="w-screen h-screen pt-20">{children}</main>
     </SidebarProvider>
   );
 }

@@ -111,8 +111,8 @@ export default function StudentForm() {
     };
 
     return (
-        <div className="relative flex items-center justify-center sm:w-550 min-h-screen dark:bg-black bg-white px-4">
-            <Card className="w-full max-w-md glass-card p-4 sm:p-6 rounded-2xl shadow-2xl border border-[#FFE866]/40">
+        <div className="relative flex items-center justify-center sm:w-550 h-auto px-4 ">
+            <Card className="w-full max-w-md glass-card rounded-xl shadow-2xl shadow-amber-600 border bg-[#f1f1f1] border-amber-600 h-auto dark:bg-amber-900/5 p-10">
                 <CardContent>
                     <form onSubmit={handleSubmit}>
                         <AnimatePresence mode="wait">
@@ -125,7 +125,7 @@ export default function StudentForm() {
                                     className="space-y-2"
                                 >
                                     <Label className="text-xl font-bold">Ангийн код</Label>
-                                    <div className="relative mt-3">
+                                    <div className="relative mt-1">
                                         <Input
                                             value={promoCode}
                                             onChange={(e) => setPromoCode(e.target.value)}
@@ -173,7 +173,7 @@ export default function StudentForm() {
                                         animate={{ opacity: 1, y: 0, scale: 1 }}
                                         transition={{ duration: 0.6, ease: "easeOut" }}
                                     >
-                                        ангийн нэр :
+                                        Ангийн нэр :
                                         <span className="ml-2 font-semibold bg-gradient-to-r from-yellow-400 to-pink-500 bg-clip-text text-transparent drop-shadow-md">
                                             {className}
                                         </span>
@@ -225,7 +225,7 @@ export default function StudentForm() {
                             </motion.div>
                         ) : !next ? (
                             // 🧪 Ангийн код шалгах форм
-                            <motion.div key="promo">...</motion.div>
+                            <motion.div key="promo"></motion.div>
                         ) : (
                             // 👤 Бүртгэлийн форм
                             <motion.div key="register">...</motion.div>
