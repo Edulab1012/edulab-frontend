@@ -78,7 +78,7 @@ export function AppSidebar() {
 
   useEffect(() => {
     const teacherId = localStorage.getItem("teacherId");
-    if (teacherId === undefined || !teacherId) {
+    if (!teacherId) {
       router.push("/login");
       return;
     }
@@ -86,19 +86,18 @@ export function AppSidebar() {
     const fetchClasses = async () => {
       try {
         const response = await axios.get(
-          `${BASE_URL}class/myclasses/${teacherId}`
+          `${BASE_URL}class/teacher/${teacherId}`
         );
         setClasses(response.data);
-      } catch (err: any) {
-        console.log("❌ Error fetching classes:", err.message);
+      } catch (err) {
+        console.error("Error fetching classes:", err);
       } finally {
         setLoading(false);
       }
     };
 
     fetchClasses();
-  }, []);
-
+  }, [router]);
 
   const handleClassClick = (classId: string) => {
     router.push(`/teacher/class/${classId}/students`);
@@ -146,11 +145,12 @@ export function AppSidebar() {
                               >
                                 <SidebarMenuButton
                                   onClick={() => handleClassClick(cls.id)}
-                                  className={`flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-blue-400 hover:text-white transition cursor-pointer ${pathname ===
+                                  className={`flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-blue-400 hover:text-white transition cursor-pointer ${
+                                    pathname ===
                                     `/teacher/class/${cls.id}/students`
-                                    ? "bg-blue-400 text-white font-semibold"
-                                    : ""
-                                    }`}
+                                      ? "bg-blue-400 text-white font-semibold"
+                                      : ""
+                                  }`}
                                 >
                                   <PanelTop className="w-6 h-6" />
                                   <span className="text-lg">{cls.name}</span>
@@ -163,10 +163,11 @@ export function AppSidebar() {
                         <SidebarMenuItem className="mb-6">
                           <Link href={link.url}>
                             <SidebarMenuButton
-                              className={`flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-blue-400 hover:text-white transition ${pathname === link.url
-                                ? "bg-blue-400 text-white font-semibold"
-                                : ""
-                                }`}
+                              className={`flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-blue-400 hover:text-white transition ${
+                                pathname === link.url
+                                  ? "bg-blue-400 text-white font-semibold"
+                                  : ""
+                              }`}
                             >
                               <link.icon className="w-10 h-10" />
                               <span className="text-[22px]">{link.title}</span>
@@ -179,10 +180,11 @@ export function AppSidebar() {
                         <SidebarMenuItem key={child.title} className="ml-6">
                           <Link href={child.url}>
                             <SidebarMenuButton
-                              className={`flex items-center gap-2 px-3 py-1.5 rounded hover:bg-gray-50 transition ${pathname === child.url
-                                ? "text-primary font-medium"
-                                : "text-gray-600"
-                                }`}
+                              className={`flex items-center gap-2 px-3 py-1.5 rounded hover:bg-gray-50 transition ${
+                                pathname === child.url
+                                  ? "text-primary font-medium"
+                                  : "text-gray-600"
+                              }`}
                             >
                               <child.icon className="w-4 h-4" />
                               <span className="text-sm">{child.title}</span>
