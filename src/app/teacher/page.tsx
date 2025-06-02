@@ -37,7 +37,7 @@ export default function TeacherDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const router = useRouter();
-  const teacherId = localStorage.getItem("teacherId");
+  const [teacherId, setTeacherId] = useState<string | null>(null); // Add state for teacherId
 
   const handleDeleteClass = async (classId: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -58,16 +58,16 @@ export default function TeacherDashboard() {
   };
 
   useEffect(() => {
-    if (!teacherId) {
+    const id = localStorage.getItem("teacherId");
+    setTeacherId(id);
+    if (!id) {
       router.push("/login");
       return;
     }
 
     const fetchClasses = async () => {
       try {
-        const response = await axios.get(
-          `${BASE_URL}class/teacher/${teacherId}`
-        );
+        const response = await axios.get(`${BASE_URL}class/teacher/${id}`);
         setClasses(response.data);
       } catch (err) {
         setError("Ангиудыг авахад алдаа гарлаа");
@@ -78,7 +78,7 @@ export default function TeacherDashboard() {
     };
 
     fetchClasses();
-  }, [teacherId, router]);
+  }, [router]);
 
   const handleClassClick = (classId: string) => {
     router.push(`/teacher/class/${classId}/students`);
