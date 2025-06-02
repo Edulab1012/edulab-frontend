@@ -17,7 +17,7 @@ import {
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useTheme } from "next-themes";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useMediaQuery } from "react-responsive";
 import {
   Sheet,
@@ -28,6 +28,8 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import AddClass from "@/app/teacher/allclass/AddClass";
+import axios from "axios";
+import { BASE_URL } from "@/constants/baseurl";
 
 export const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -36,6 +38,9 @@ export const Header = () => {
   const pathname = usePathname();
   const isMobileQuery = useMediaQuery({ maxWidth: 639 });
   const [isMobile, setIsMobile] = useState(false);
+  const [classes, setClasses] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     setIsMobile(isMobileQuery);
@@ -50,8 +55,34 @@ export const Header = () => {
   useEffect(() => {
     setMounted(true);
     window.addEventListener("scroll", handleScroll);
+
+    // Fetch classes when component mounts
+    const fetchClasses = async () => {
+      const teacherId = localStorage.getItem("teacherId");
+      if (!teacherId) return;
+
+      try {
+        const response = await axios.get(
+          `${BASE_URL}class/teacher/${teacherId}`
+        );
+        setClasses(response.data);
+      } catch (err) {
+        console.error("Error fetching classes:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (showSheet) {
+      fetchClasses();
+    }
+
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [showSheet]);
+
+  const handleClassClick = (classId: string) => {
+    router.push(`/teacher/class/${classId}/students`);
+  };
 
   if (!mounted) return null;
 
@@ -167,14 +198,39 @@ export const Header = () => {
                         </SheetDescription>
                         {group.links.map((link) =>
                           link.title === "Шинэ анги үүсгэх" ? (
-                            <AddClass key={link.title}>
-                              <div
-                                className={`flex items-center gap-3 px-4 py-3 rounded-lg mb-3 hover:bg-blue-400 hover:text-white transition cursor-pointer`}
-                              >
-                                <link.icon className="w-6 h-6" />
-                                <span className="text-lg">{link.title}</span>
-                              </div>
-                            </AddClass>
+                            <div key={link.title}>
+                              <AddClass>
+                                <div
+                                  className={`flex items-center gap-3 px-4 py-3 rounded-lg mb-3 hover:bg-blue-400 hover:text-white transition cursor-pointer`}
+                                >
+                                  <link.icon className="w-6 h-6" />
+                                  <span className="text-lg">{link.title}</span>
+                                </div>
+                              </AddClass>
+
+                              {/* Render classes list below the "Шинэ анги үүсгэх" button */}
+                              {loading ? (
+                                <div className="pl-4 py-2 text-sm">
+                                  Түр хүлээнэ үү...
+                                </div>
+                              ) : (
+                                classes.map((cls) => (
+                                  <div
+                                    key={cls.id}
+                                    onClick={() => handleClassClick(cls.id)}
+                                    className={`flex items-center gap-3 px-4 py-3 rounded-lg mb-2 ml-6 hover:bg-blue-400 hover:text-white transition cursor-pointer ${
+                                      pathname ===
+                                      `/teacher/class/${cls.id}/students`
+                                        ? "bg-blue-400 text-white font-semibold"
+                                        : ""
+                                    }`}
+                                  >
+                                    <PanelTop className="w-5 h-5" />
+                                    <span className="text-md">{cls.name}</span>
+                                  </div>
+                                ))
+                              )}
+                            </div>
                           ) : (
                             <Link
                               key={link.title}
