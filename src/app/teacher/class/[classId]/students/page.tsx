@@ -14,11 +14,7 @@ interface Student {
   phoneNumber?: string;
 }
 
-export default function ClassStudentsPage({
-  params,
-}: {
-  params: { classId: string };
-}) {
+export default function ClassStudentsPage({ params }: any) {
   const { classId } = params;
   const router = useRouter();
   const [className, setClassName] = useState("");

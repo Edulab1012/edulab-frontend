@@ -93,6 +93,9 @@ export default function TeacherRegisterForm() {
         role: "teacher",
       })
       console.log("✅ Registration Response:", res.data);
+
+      localStorage.setItem("teacherId", res.data.teacher.id);
+      localStorage.setItem("userId", res.data.user.id);
       localStorage.setItem("token", res.data.user.id);
       setStatus("success");
       router.push("/teacher")
