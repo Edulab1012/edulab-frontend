@@ -27,6 +27,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import AddClass from "@/app/teacher/allclass/AddClass";
+
 export const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const { theme, setTheme } = useTheme();
@@ -34,14 +36,17 @@ export const Header = () => {
   const pathname = usePathname();
   const isMobileQuery = useMediaQuery({ maxWidth: 639 });
   const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
     setIsMobile(isMobileQuery);
   }, [isMobileQuery]);
+
   const handleScroll = () => {
     setScrolled(window.scrollY > 30);
   };
+
   const showSheet = !["/", "/login"].includes(pathname);
-  useEffect(() => {});
+
   useEffect(() => {
     setMounted(true);
     window.addEventListener("scroll", handleScroll);
@@ -67,7 +72,7 @@ export const Header = () => {
       group: "Манай ангиуд",
       links: [
         { title: "Бүх ангиуд", url: "/teacher", icon: BookCheck },
-        { title: "Шинэ анги үүсгэх", url: "", icon: Plus },
+        { title: "Шинэ анги үүсгэх", url: "#", icon: Plus },
       ],
     },
     {
@@ -81,7 +86,6 @@ export const Header = () => {
         },
       ],
     },
-
     {
       group: "Тохиргоо",
       links: [{ title: "Гарах", url: "/login", icon: LogOut }],
@@ -108,7 +112,6 @@ export const Header = () => {
         `}
         >
           <div>
-            {" "}
             <Link href="/">
               <Image
                 src={
@@ -126,7 +129,6 @@ export const Header = () => {
             </Link>
           </div>
           <div className="flex gap-6">
-            {" "}
             <div className="flex items-center gap-2 sm:gap-4 bg-white dark:bg-gray-900 rounded-lg p-2 shadow-md">
               <Button
                 variant="ghost"
@@ -141,30 +143,53 @@ export const Header = () => {
             {showSheet && (
               <Sheet>
                 <SheetTrigger>
-                  <MenuIcon></MenuIcon>
+                  <MenuIcon className="w-6 h-6" />
                 </SheetTrigger>
-                <SheetContent>
-                  <SheetHeader className="mt-[80px]">
-                    <SheetTitle></SheetTitle>
+                <SheetContent side="right" className="w-[300px] sm:w-[350px]">
+                  <SheetHeader className="mt-8">
+                    <SheetTitle className="text-center">
+                      <Image
+                        src={
+                          theme === "dark"
+                            ? "/classheroNoback.png"
+                            : "/classheroNoback.png"
+                        }
+                        alt="logo"
+                        width={200}
+                        height={200}
+                        className="w-auto h-20 mx-auto dark:invert"
+                      />
+                    </SheetTitle>
                     {items.map((group) => (
-                      <div key={group.group} className="mb-4">
-                        <SheetDescription className="text-sm font-semibold mb-2">
+                      <div key={group.group} className="mb-6">
+                        <SheetDescription className="text-xs font-light text-gray-400 uppercase px-3 mb-2 tracking-wide">
                           {group.group}
                         </SheetDescription>
-                        {group.links.map((link) => (
-                          <Link
-                            key={link.title}
-                            href={link.url}
-                            className={`flex items-center gap-2 px-3 py-1.5 rounded hover:bg-gray-50 transition ${
-                              pathname === link.url
-                                ? "text-primary font-medium"
-                                : "text-gray-600"
-                            }`}
-                          >
-                            <link.icon className="w-4 h-4" />
-                            <span className="text-sm">{link.title}</span>
-                          </Link>
-                        ))}
+                        {group.links.map((link) =>
+                          link.title === "Шинэ анги үүсгэх" ? (
+                            <AddClass key={link.title}>
+                              <div
+                                className={`flex items-center gap-3 px-4 py-3 rounded-lg mb-3 hover:bg-blue-400 hover:text-white transition cursor-pointer`}
+                              >
+                                <link.icon className="w-6 h-6" />
+                                <span className="text-lg">{link.title}</span>
+                              </div>
+                            </AddClass>
+                          ) : (
+                            <Link
+                              key={link.title}
+                              href={link.url}
+                              className={`flex items-center gap-3 px-4 py-3 rounded-lg mb-3 hover:bg-blue-400 hover:text-white transition ${
+                                pathname === link.url
+                                  ? "bg-blue-400 text-white font-semibold"
+                                  : ""
+                              }`}
+                            >
+                              <link.icon className="w-6 h-6" />
+                              <span className="text-lg">{link.title}</span>
+                            </Link>
+                          )
+                        )}
                       </div>
                     ))}
                   </SheetHeader>
