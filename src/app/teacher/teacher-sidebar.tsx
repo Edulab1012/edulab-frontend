@@ -20,8 +20,12 @@ import {
 } from "@/components/ui/sidebar";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import AddClass from "./allclass/AddClass";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { BASE_URL } from "@/constants/baseurl";
+
 interface MenuItem {
   title: string;
   url: string;
@@ -32,6 +36,13 @@ interface MenuItem {
 interface MenuGroup {
   group: string;
   links: MenuItem[];
+}
+
+interface Class {
+  id: string;
+  name: string;
+  promoCode?: string;
+  createdAt: string;
 }
 
 const items: MenuGroup[] = [
@@ -53,7 +64,6 @@ const items: MenuGroup[] = [
       },
     ],
   },
-
   {
     group: "Тохиргоо",
     links: [{ title: "Гарах", url: "/login", icon: LogOut }],
@@ -62,6 +72,36 @@ const items: MenuGroup[] = [
 
 export function AppSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const [classes, setClasses] = useState<Class[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const teacherId = localStorage.getItem("teacherId");
+    if (!teacherId) {
+      router.push("/login");
+      return;
+    }
+
+    const fetchClasses = async () => {
+      try {
+        const response = await axios.get(
+          `${BASE_URL}class/teacher/${teacherId}`
+        );
+        setClasses(response.data);
+      } catch (err) {
+        console.error("Error fetching classes:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchClasses();
+  }, [router]);
+
+  const handleClassClick = (classId: string) => {
+    router.push(`/teacher/class/${classId}/students`);
+  };
 
   return (
     <Sidebar className="border-r-8 border-r-blue-400 w-84 shadow-md min-h-screen z-20">
@@ -80,19 +120,46 @@ export function AppSidebar() {
                   {group.links.map((link) => (
                     <div key={link.title}>
                       {link.title === "Шинэ анги үүсгэх" ? (
-                        // Render the AddClass component for this specific button
-                        <AddClass>
-                          <SidebarMenuItem className="mb-6">
-                            <SidebarMenuButton
-                              className={`flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-blue-400 hover:text-white transition cursor-pointer`}
-                            >
-                              <link.icon className="w-10 h-10" />
-                              <span className="text-[22px]">{link.title}</span>
-                            </SidebarMenuButton>
-                          </SidebarMenuItem>
-                        </AddClass>
+                        <>
+                          <AddClass>
+                            <SidebarMenuItem className="mb-6">
+                              <SidebarMenuButton
+                                className={`flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-blue-400 hover:text-white transition cursor-pointer`}
+                              >
+                                <link.icon className="w-10 h-10" />
+                                <span className="text-[22px]">
+                                  {link.title}
+                                </span>
+                              </SidebarMenuButton>
+                            </SidebarMenuItem>
+                          </AddClass>
+
+                          {/* Render classes list below the "Шинэ анги үүсгэх" button */}
+                          {loading ? (
+                            <div className="pl-4 py-2">Түр хүлээнэ үү...</div>
+                          ) : (
+                            classes.map((cls) => (
+                              <SidebarMenuItem
+                                key={cls.id}
+                                className="mb-2 ml-6"
+                              >
+                                <SidebarMenuButton
+                                  onClick={() => handleClassClick(cls.id)}
+                                  className={`flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-blue-400 hover:text-white transition cursor-pointer ${
+                                    pathname ===
+                                    `/teacher/class/${cls.id}/students`
+                                      ? "bg-blue-400 text-white font-semibold"
+                                      : ""
+                                  }`}
+                                >
+                                  <PanelTop className="w-6 h-6" />
+                                  <span className="text-lg">{cls.name}</span>
+                                </SidebarMenuButton>
+                              </SidebarMenuItem>
+                            ))
+                          )}
+                        </>
                       ) : (
-                        // Normal menu item for other links
                         <SidebarMenuItem className="mb-6">
                           <Link href={link.url}>
                             <SidebarMenuButton
@@ -109,7 +176,6 @@ export function AppSidebar() {
                         </SidebarMenuItem>
                       )}
 
-                      {/* Keep the children rendering logic */}
                       {link.children?.map((child) => (
                         <SidebarMenuItem key={child.title} className="ml-6">
                           <Link href={child.url}>
