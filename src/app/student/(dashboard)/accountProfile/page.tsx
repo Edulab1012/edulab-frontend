@@ -4,7 +4,7 @@ import Stickers from "./components/stickers";
 
 export default function ProfilePage() {
   return (
-    <div className="w-full h-fullflex items-center justify-center">
+    <div className="w-full h-full flex items-center justify-center pt-60 ">
       <StudentProfileCard></StudentProfileCard>
     </div>
   );

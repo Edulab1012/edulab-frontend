@@ -85,7 +85,7 @@ export default function StudentProfileCard() {
 
   if (isEditing) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4">
+      <div className="w-full min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4 pl-30">
         <EditProfile
           initialData={student}
           onSave={handleSave}
@@ -96,16 +96,16 @@ export default function StudentProfileCard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4">
+    <div className="w-full flex items-center justify-center mt-70 sm:mt-5 pr-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="w-full max-w-2xl"
       >
-        <Card className="overflow-hidden shadow-2xl border-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">
+        <Card className="overflow-hidden shadow-2xl border-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm shadow-purple-900  ml:w-200 ">
           {/* Header with background */}
-          <div className="relative h-32 sm:h-40 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+          <div className="relative h-32 sm:h-40 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-full ">
             {student.backgroundUrl && (
               <img
                 src={student.backgroundUrl || "/placeholder.svg"}
@@ -129,7 +129,7 @@ export default function StudentProfileCard() {
 
           <CardContent className="p-6 sm:p-8">
             {/* Profile section */}
-            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 -mt-16 sm:-mt-12 mb-8">
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 -mt-16 sm:-mt-12 mb-8 ">
               <Avatar className="h-24 w-24 sm:h-28 sm:w-28 border-4 border-white dark:border-slate-700 shadow-xl">
                 <AvatarImage src={student.avatarUrl || "/placeholder.svg"} alt={`${student.firstName} ${student.lastName}`} />
                 <AvatarFallback className="text-2xl font-semibold bg-gradient-to-br from-indigo-500 to-purple-600 text-white">
@@ -148,7 +148,7 @@ export default function StudentProfileCard() {
             </div>
 
             {/* Info grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-8">
               {profileInfo.map((item, index) => (
                 <motion.div
                   key={item.label}

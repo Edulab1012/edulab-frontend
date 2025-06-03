@@ -7,6 +7,7 @@ import { useTheme } from "next-themes"
 import { useState, useRef, useEffect, useCallback, useMemo } from "react"
 import {
   BookCheck,
+  MenuIcon,
   Home,
   Brush,
   Trophy,
