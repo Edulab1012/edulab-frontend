@@ -25,11 +25,13 @@ interface MenuItem {
 }
 
 const menuItems: MenuItem[] = [
+
   { title: "Нүүр", url: "/student", icon: Home },
   { title: "Профайл", url: "/student/accountProfile", icon: Brush },
   { title: "broadcast room", url: "/student/broadcast", icon: MessagesSquare },
   { title: "leaderboard", url: "/student/leaderboard", icon: Trophy },
   { title: "planner", url: "/student/planner", icon: NotebookPen },
+
 ]
 
 export function AppSidebar() {
