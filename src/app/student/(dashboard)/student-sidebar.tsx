@@ -15,7 +15,9 @@ import {
   DoorClosed as CloseIcon,
   ChevronLeft,
   ChevronRight,
-  MessagesSquare
+  MessagesSquare,
+  PoundSterling
+
 } from "lucide-react"
 
 interface MenuItem {
@@ -31,6 +33,7 @@ const menuItems: MenuItem[] = [
   { title: "broadcast room", url: "/student/broadcast", icon: MessagesSquare },
   { title: "leaderboard", url: "/student/leaderboard", icon: Trophy },
   { title: "planner", url: "/student/planner", icon: NotebookPen },
+  { title: "post", url: "/student/posts", icon: PoundSterling, },
 
 ]
 

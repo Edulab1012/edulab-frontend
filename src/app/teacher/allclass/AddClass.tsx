@@ -10,7 +10,7 @@ import {
   Overlay as DialogOverlay,
 } from "@radix-ui/react-dialog";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import {
@@ -32,6 +32,8 @@ export default function AddClass({ children, onSuccess }: AddClassProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [open, setOpen] = useState(false);
+
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,6 +72,7 @@ export default function AddClass({ children, onSuccess }: AddClassProps) {
         setPromoCode("");
         setIsSuccess(false);
         setOpen(false);
+        window.location.reload();
       }, 1500);
     } catch (err: any) {
       let errorMessage = "Анги үүсгэхэд алдаа гарлаа";
@@ -93,6 +96,7 @@ export default function AddClass({ children, onSuccess }: AddClassProps) {
       setIsLoading(false);
     }
   };
+
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
