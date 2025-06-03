@@ -54,8 +54,14 @@ const items: MenuGroup[] = [
         url: "/teacher/myStudents",
         icon: Backpack,
       },
+       {
+        title: "Пост оруулах",
+        url: "/teacher/posts",
+        icon: Backpack,
+      },
     ],
   },
+
   {
     group: "Тохиргоо",
     links: [{ title: "Гарах", url: "/login", icon: LogOut }],

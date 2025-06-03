@@ -104,7 +104,7 @@ export default function TeacherDashboard() {
   return (
     <div className="flex flex-col p-4 md:p-6 md:ml-64">
       <div className="mt-[80px] md:mt-[100px] flex flex-col jcustify-center ">
-        <h1 className="text-2xl font-bold text-gray-700 dark:text-white mb-6 md:mb-[60px] mt-6 md:mt-[60px]">
+        <h1 className="text-2xl font-bold text-gray-700 dark:text-white mb-6 pl-36 md:mb-[60px] mt-6 md:mt-[60px]">
           Миний ангиуд
         </h1>
 

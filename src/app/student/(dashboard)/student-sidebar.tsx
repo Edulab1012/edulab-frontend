@@ -30,6 +30,7 @@ const menuItems: MenuItem[] = [
   { title: "broadcast room", url: "/student/broadcast", icon: LayoutDashboard },
   { title: "leaderboard", url: "/student/leaderboard", icon: Smile },
   { title: "planner", url: "/student/planner", icon: BookCheck },
+  { title: "post", url: "/student/posts", icon: BookCheck },
 ]
 
 export function AppSidebar() {
