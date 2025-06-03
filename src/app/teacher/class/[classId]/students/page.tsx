@@ -43,7 +43,7 @@ export default function ClassStudentsPage({ params }: any) {
         setClassName(response.data.className);
         setStudents(response.data.students);
       } catch (error) {
-        console.error("Error fetching students:", error);
+        console.log("Error fetching students:", error);
       } finally {
         setLoading(false);
       }
@@ -182,11 +182,10 @@ export default function ClassStudentsPage({ params }: any) {
                 {students.map((student, index) => (
                   <motion.tr
                     key={student.id}
-                    className={`border-b ${
-                      index % 2 === 0
+                    className={`border-b ${index % 2 === 0
                         ? "bg-white dark:bg-[#121220]"
                         : "bg-[#f9f9f9] dark:bg-[#1A1A2E]"
-                    }`}
+                      }`}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 * index }}

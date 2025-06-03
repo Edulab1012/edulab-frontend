@@ -131,79 +131,22 @@ export const Header = () => {
                       {group.group}
                     </p>
                     <div className="space-y-1">
-<<<<<<< HEAD
-                      {group.links.map((link) =>
-                        link.title === "Шинэ анги үүсгэх" ? (
-                          <div key={link.title} className="space-y-1">
-                            <AddClass>
-                              <Button
-                                variant="ghost"
-                                className={`w-full justify-start gap-3 px-3 ${pathname === link.url
-                                    ? "bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300"
-                                    : "hover:bg-gray-100 dark:hover:bg-gray-800"
-                                  }`}
-                              >
-                                <link.icon className="h-5 w-5" />
-                                <span>{link.title}</span>
-                              </Button>
-                            </AddClass>
 
-                            {loading ? (
-                              <div className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">
-                                Түр хүлээнэ үү...
-                              </div>
-                            ) : (
-                              <div className="ml-4 space-y-1">
-                                {classes.map((cls) => (
-                                  <Button
-                                    key={cls.id}
-                                    variant="ghost"
-                                    onClick={() => handleClassClick(cls.id)}
-                                    className={`w-full justify-start gap-3 px-3 ${pathname ===
-                                        `/teacher/class/${cls.id}/students`
-                                        ? "bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300"
-                                        : "hover:bg-gray-100 dark:hover:bg-gray-800"
-                                      }`}
-                                  >
-                                    <PanelTop className="h-5 w-5" />
-                                    <span className="truncate">{cls.name}</span>
-                                  </Button>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                        ) : (
-                          <Link key={link.title} href={link.url}>
-                            <Button
-                              variant="ghost"
-                              className={`w-full justify-start gap-3 px-3 ${pathname === link.url
-                                  ? "bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300"
-                                  : "hover:bg-gray-100 dark:hover:bg-gray-800"
-                                }`}
-                            >
-                              <link.icon className="h-5 w-5" />
-                              <span>{link.title}</span>
-                            </Button>
-                          </Link>
-                        )
-                      )}
-=======
                       {group.links.map((link) => (
                         <Link key={link.title} href={link.url}>
                           <Button
                             variant="ghost"
-                            className={`w-full justify-start gap-3 px-3 ${
-                              pathname === link.url
+                            className={`w-full justify-start gap-3 px-3 ${pathname === link.url
                                 ? "bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300"
                                 : "hover:bg-gray-100 dark:hover:bg-gray-800"
-                            }`}
+                              }`}
                           >
                             <link.icon className="h-5 w-5" />
                             <span>{link.title}</span>
                           </Button>
                         </Link>
                       ))}
->>>>>>> 0c184f34f695a2e3dbc79714c52aae3fbed026ea
+
                     </div>
                   </div>
                 ))}

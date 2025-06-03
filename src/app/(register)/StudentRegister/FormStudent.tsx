@@ -129,6 +129,12 @@ export default function StudentForm() {
                                         <Input
                                             value={promoCode}
                                             onChange={(e) => setPromoCode(e.target.value)}
+                                            onKeyDown={(e) => {
+                                                if (e.key === "Enter") {
+                                                    e.preventDefault();
+                                                    checkPromoCode();
+                                                }
+                                            }}
                                             className="glass-input pr-10"
                                             disabled={loading}
                                         />
@@ -186,6 +192,12 @@ export default function StudentForm() {
                                         label="Нууц үг"
                                         name="password"
                                         value={formData.password}
+                                        onKeyDown={(e: { key: string; preventDefault: () => void; }) => {
+                                            if (e.key === "Enter") {
+                                                e.preventDefault();
+
+                                            }
+                                        }}
                                         onChange={handleChange}
                                         show={showPassword}
                                         toggle={() => setShowPassword(!showPassword)}
@@ -196,6 +208,12 @@ export default function StudentForm() {
                                         name="confirmPassword"
                                         value={formData.confirmPassword}
                                         onChange={handleChange}
+                                        onKeyDown={(e: { key: string; preventDefault: () => void; }) => {
+                                            if (e.key === "Enter") {
+                                                e.preventDefault();
+
+                                            }
+                                        }}
                                         show={showConfirmPassword}
                                         toggle={() => setShowConfirmPassword(!showConfirmPassword)}
                                         error={formData.password !== formData.confirmPassword && formData.confirmPassword}

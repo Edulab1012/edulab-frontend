@@ -165,13 +165,12 @@ export default function AddClass({ children, onSuccess }: AddClassProps) {
 
           <motion.button
             type="submit"
-            className={`w-full py-3 px-4 rounded-lg font-medium flex items-center justify-center gap-2 ${
-              isLoading
-                ? "bg-indigo-400 cursor-not-allowed"
-                : isSuccess
+            className={`w-full py-3 px-4 rounded-lg font-medium flex items-center justify-center gap-2 ${isLoading
+              ? "bg-indigo-400 cursor-not-allowed"
+              : isSuccess
                 ? "bg-green-500"
                 : "bg-indigo-600 hover:bg-indigo-700"
-            } text-white transition-colors`}
+              } text-white transition-colors`}
             disabled={isLoading || isSuccess}
             whileHover={!isLoading && !isSuccess ? { scale: 1.02 } : {}}
             whileTap={!isLoading && !isSuccess ? { scale: 0.98 } : {}}

@@ -62,13 +62,13 @@ export default function StudentList() {
         const data = await res.json();
         setStudents(data);
       } catch (err) {
-        console.error("Fetch error:", err);
+        console.log("Fetch error:", err);
         setError(
           err instanceof Error
             ? err.message
             : typeof err === "string"
-            ? err
-            : "An unknown error occurred"
+              ? err
+              : "An unknown error occurred"
         );
       } finally {
         setIsLoading(false);

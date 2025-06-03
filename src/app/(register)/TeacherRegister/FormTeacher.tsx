@@ -97,15 +97,20 @@ export default function TeacherRegisterForm() {
         password: formData.password,
         role: "teacher",
       });
-      console.log("✅ Registration Response:", res.data);
+      console.log("✅ Registration Response:", res);
       localStorage.setItem("teacherId", res.data.teacher.id);
       localStorage.setItem("userId", res.data.user.id);
-      localStorage.setItem("token", res.data.user.id);
       setStatus("success");
-      router.push("/teacher");
+
+      if (res.data.user.role === "teacher") {
+        router.push("/teacher");
+      }
+
     } catch (err: any) {
+      if (err.response.status === 403) {
+        setTimeout(() => { router.push("/login") }, 3000)
+      }
       setErrMessage(err.response?.data.message);
-      console.log(err);
       console.log("❌ Registration Error:", err.response?.data || err);
       setStatus("error");
     } finally {
@@ -140,9 +145,14 @@ export default function TeacherRegisterForm() {
                   type={currentField.type}
                   value={(formData as any)[currentField.name]}
                   onChange={handleChange}
-                  className={`glass-input ${
-                    errors[currentField.name] ? "border-red-500" : ""
-                  }`}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      handleNext();
+                    }
+                  }}
+                  className={`glass-input ${errors[currentField.name] ? "border-red-500" : ""
+                    }`}
                 />
                 {errors[currentField.name] && (
                   <p className="text-red-500 text-sm font-light mt-0.5">
@@ -199,7 +209,7 @@ export default function TeacherRegisterForm() {
               className="absolute top-[-30%] left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-2 rounded-xl shadow-lg z-50 text-center w-80 border-1 border-white font-light"
             >
               {errMessage
-                ? "Энэ хэрэглэгч аль хэдийн бүртгэгдсэн байна."
+                ? errMessage
                 : "Бүртгэл амжилтгүй боллоо. Дахин оролдоно уу."}
             </motion.div>
           )}

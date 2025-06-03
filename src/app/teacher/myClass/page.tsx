@@ -75,9 +75,8 @@ const StudentCard = ({
         alt={`student-egg-${index}`}
         width={65}
         height={65}
-        className={`absolute -top-14 ${
-          showStatus ? "grayscale opacity-85" : ""
-        }`}
+        className={`absolute -top-14 ${showStatus ? "grayscale opacity-85" : ""
+          }`}
       />
       {showStatus && (
         <div
@@ -138,7 +137,7 @@ export default function MyClassOverview() {
           const data = await res.json();
           setStudentStatus(data);
         } catch (err: any) {
-          console.error("Error fetching today's attendance:", err);
+          console.log("Error fetching today's attendance:", err);
         }
       };
 
@@ -159,7 +158,7 @@ export default function MyClassOverview() {
         const data = await res.json();
         setGroup(data);
       } catch (err: any) {
-        console.error("Error fetching group:", err);
+        console.log("Error fetching group:", err);
         setError(err.message || "Unknown error occurred");
       }
     };
@@ -220,7 +219,7 @@ export default function MyClassOverview() {
         const data = await res.json();
         setSemester(data);
       } catch (err) {
-        console.error("Error fetching semester:", err);
+        console.log("Error fetching semester:", err);
       }
     };
 
@@ -253,7 +252,7 @@ export default function MyClassOverview() {
       setAttendanceSummary(data.summary);
       setShowSummary(true);
     } catch (err) {
-      console.error("Error fetching attendance summary:", err);
+      console.log("Error fetching attendance summary:", err);
     }
   };
   const markAllPresent = () => {
@@ -339,7 +338,7 @@ export default function MyClassOverview() {
 
       if (!res.ok) {
         const errorData = await res.json().catch(() => res.text());
-        console.error("Server error details:", errorData);
+        console.log("Server error details:", errorData);
         throw new Error(
           typeof errorData === "object" ? errorData.message : errorData
         );
@@ -349,7 +348,7 @@ export default function MyClassOverview() {
       console.log("Success response:", responseData);
       alert("Ирц амжилттай бүртгэгдлээ!");
     } catch (err: any) {
-      console.error("Submission error:", err);
+      console.log("Submission error:", err);
       alert("Failed to submit attendance: " + (err.message || "Unknown error"));
     }
   }

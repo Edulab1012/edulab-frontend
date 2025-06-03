@@ -53,7 +53,7 @@ export default function TeacherDashboard() {
       setClasses(classes.filter((cls) => cls.id !== classId));
       toast.success("Анги амжилттай устгагдлаа!");
     } catch (err) {
-      console.error("Error deleting class:", err);
+      console.log("Error deleting class:", err);
       toast.error("Анги устгахад алдаа гарлаа");
     }
   };
@@ -72,7 +72,7 @@ export default function TeacherDashboard() {
         setClasses(response.data);
       } catch (err) {
         setError("Ангиудыг авахад алдаа гарлаа");
-        console.error("Error fetching classes:", err);
+        console.log("Error fetching classes:", err);
       } finally {
         setLoading(false);
       }
@@ -135,21 +135,19 @@ export default function TeacherDashboard() {
                 onClick={() => handleClassClick(cls.id)}
               >
                 <div
-                  className={`absolute inset-0 ${
-                    theme === "dark"
+                  className={`absolute inset-0 ${theme === "dark"
                       ? "bg-gradient-to-br from-[#2C3A4A] to-[#1E293B]"
                       : "bg-gradient-to-br from-[#F5F6FA] to-[#E2E8F0]"
-                  }`}
+                    }`}
                 />
                 <div className="absolute top-3 right-3 z-10">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <button
-                        className={`p-1.5 rounded-full ${
-                          theme === "dark"
+                        className={`p-1.5 rounded-full ${theme === "dark"
                             ? "hover:bg-[#6B5AED]/30 text-[#e1aa77]"
                             : "hover:bg-[#1DA1F2]/20 text-[#2C3A4A]"
-                        } transition-colors duration-200`}
+                          } transition-colors duration-200`}
                         onClick={(e) => e.stopPropagation()}
                       >
                         <svg
@@ -170,20 +168,18 @@ export default function TeacherDashboard() {
                       </button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
-                      className={`w-48 ${
-                        theme === "dark"
+                      className={`w-48 ${theme === "dark"
                           ? "bg-[#2C3A4A] border-[#6B5AED]/30"
                           : "bg-white border-[#1DA1F2]/30"
-                      } rounded-lg shadow-xl`}
+                        } rounded-lg shadow-xl`}
                       align="end"
                       sideOffset={5}
                     >
                       <DropdownMenuLabel
-                        className={`${
-                          theme === "dark"
+                        className={`${theme === "dark"
                             ? "text-[#e1aa77]"
                             : "text-[#6B5AED] "
-                        }`}
+                          }`}
                       >
                         Ангийн тохиргоо
                       </DropdownMenuLabel>
@@ -195,21 +191,19 @@ export default function TeacherDashboard() {
                         }
                       />
                       <DropdownMenuItem
-                        className={`${
-                          theme === "dark"
+                        className={`${theme === "dark"
                             ? "hover:bg-[#6B5AED]/20 text-white"
                             : "hover:bg-[#1DA1F2]/10 text-[#2C3A4A]"
-                        } cursor-pointer`}
+                          } cursor-pointer`}
                         onClick={() => handleClassClick(cls.id)}
                       >
                         Ангийн мэдээлэл
                       </DropdownMenuItem>
                       <DropdownMenuItem
-                        className={`${
-                          theme === "dark"
+                        className={`${theme === "dark"
                             ? "hover:bg-[#6B5AED]/20 text-white"
                             : "hover:bg-[#1DA1F2]/10 text-[#2C3A4A]"
-                        } cursor-pointer`}
+                          } cursor-pointer`}
                         onClick={(e) => e.stopPropagation()}
                       >
                         Тохиргоо
@@ -233,47 +227,42 @@ export default function TeacherDashboard() {
 
                 <div className="relative z-0 w-full h-full flex flex-col items-center justify-center p-6">
                   <div
-                    className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 ${
-                      theme === "dark"
+                    className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 ${theme === "dark"
                         ? "bg-[#6B5AED]/20 text-[#e1aa77]"
                         : "bg-[#1DA1F2]/10 text-[#6B5AED]"
-                    }`}
+                      }`}
                   >
                     <PanelTop className="w-8 h-8" />
                   </div>
                   <div className="w-full text-center">
                     <h2
-                      className={`text-xl font-bold mb-1 ${
-                        theme === "dark" ? "text-white" : "text-[#2C3A4A]"
-                      }`}
+                      className={`text-xl font-bold mb-1 ${theme === "dark" ? "text-white" : "text-[#2C3A4A]"
+                        }`}
                     >
                       {cls.name}
                     </h2>
                     <p
-                      className={`text-sm ${
-                        theme === "dark" ? "text-gray-300" : "text-gray-600"
-                      } mb-2`}
+                      className={`text-sm ${theme === "dark" ? "text-gray-300" : "text-gray-600"
+                        } mb-2`}
                     >
                       Үүссэн: {new Date(cls.createdAt).toLocaleDateString()}
                     </p>
                     {cls.promoCode && (
                       <div
-                        className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-                          theme === "dark"
+                        className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${theme === "dark"
                             ? "bg-[#6B5AED]/30 text-[#e1aa77]"
                             : "bg-[#1DA1F2]/10 text-[#6B5AED]"
-                        }`}
+                          }`}
                       >
                         Код: {cls.promoCode}
                       </div>
                     )}
                   </div>
                   <div
-                    className={`absolute bottom-0 left-0 right-0 h-1 ${
-                      theme === "dark"
+                    className={`absolute bottom-0 left-0 right-0 h-1 ${theme === "dark"
                         ? "bg-gradient-to-r from-[#6B5AED] to-purple-600"
                         : "bg-gradient-to-r from-[#1DA1F2] to-blue-500"
-                    }`}
+                      }`}
                   />
                 </div>
               </motion.div>
