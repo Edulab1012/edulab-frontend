@@ -357,7 +357,7 @@ export default function MyClassOverview() {
     <div className="p-10 min-h-screen w-full max-w-[1240px] md:max-w-[800px] mx-auto flex flex-col items-center justify-center  bg-[#8ED6F0] dark:bg-gradient-to-br dark:from-[#2C3A4A] dark:to-[#1A2636]  mt-[100px] space-y-10 ">
       <div className="flex gap-2">
         {" "}
-        <h2 className="lg:text-4xl lg:font-bold mb-[100px] text-2xl font-light text-center  text-[#2C3A4A] dark:text-[#FFD3A1]">
+        <h2 className="lg:text-4xl lg:font-light mb-[100px] text-2xl font-light text-center  text-[#2C3A4A] dark:text-[#FFD3A1]">
           {groups.map((group) => (
             <div className="flex ">
               <h1>{group.grade?.number}</h1>
@@ -365,7 +365,7 @@ export default function MyClassOverview() {
             </div>
           ))}{" "}
         </h2>
-        <h2 className="lg:text-4xl lg:font-bold mb-[100px] text-2xl font-light text-center  text-[#2C3A4A] dark:text-[#FFD3A1]">
+        <h2 className="lg:text-4xl lg:font-light mb-[100px] text-2xl font-light text-center  text-[#2C3A4A] dark:text-[#FFD3A1]">
           {" "}
           ангийн хяналтын самбар
         </h2>
@@ -473,7 +473,7 @@ export default function MyClassOverview() {
       )}
       {showSummary && (
         <div className="w-full bg-[#2C3A4A] dark:bg-black  p-6 rounded-lg shadow-lg mb-20">
-          <h3 className="text-xl lg:text-2xl font-bold mb-4 text-white dark:text-[#FFD3A1]">
+          <h3 className="text-xl lg:text-2xl font-light mb-4 text-white dark:text-[#FFD3A1]">
             Сурагчдын ирцийн дүнгийн тойм
           </h3>
           <div className="overflow-x-auto">

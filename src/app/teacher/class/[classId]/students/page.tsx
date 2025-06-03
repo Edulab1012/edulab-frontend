@@ -89,7 +89,7 @@ export default function ClassStudentsPage({ params }: any) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1, duration: 0.3 }}
       >
-        <h1 className="text-2xl md:text-3xl font-bold text-[#2C3A4A] dark:text-white mb-2 flex items-center gap-3">
+        <h1 className="text-2xl md:text-3xl font-light text-[#2C3A4A] dark:text-white mb-2 flex items-center gap-3">
           <BookOpen className="text-[#6B5AED]" />
           {className}
         </h1>
@@ -183,8 +183,8 @@ export default function ClassStudentsPage({ params }: any) {
                   <motion.tr
                     key={student.id}
                     className={`border-b ${index % 2 === 0
-                        ? "bg-white dark:bg-[#121220]"
-                        : "bg-[#f9f9f9] dark:bg-[#1A1A2E]"
+                      ? "bg-white dark:bg-[#121220]"
+                      : "bg-[#f9f9f9] dark:bg-[#1A1A2E]"
                       }`}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}

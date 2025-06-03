@@ -38,7 +38,7 @@ export default function Stickers() {
 
   return (
     <div className="w-full max-w-3xl mx-auto font-sans">
-      <h2 className="text-center text-lg font-bold text-[#6B5AED] dark:text-white mb-4">
+      <h2 className="text-center text-lg font-light text-[#6B5AED] dark:text-white mb-4">
         🏅 Миний шагналууд
       </h2>
 

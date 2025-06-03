@@ -124,7 +124,7 @@ export default function StudentForm() {
                                     exit={{ opacity: 0, y: -10 }}
                                     className="space-y-2"
                                 >
-                                    <Label className="text-xl font-bold">Ангийн код</Label>
+                                    <Label className="text-xl font-light">Ангийн код</Label>
                                     <div className="relative mt-1">
                                         <Input
                                             value={promoCode}
@@ -236,7 +236,7 @@ export default function StudentForm() {
                                 className="text-center text-green-600 space-y-4 py-10"
                             >
                                 <CheckCircle className="mx-auto h-12 w-12 text-green-500" />
-                                <h2 className="text-xl font-bold">🎉 Бүртгэл амжилттай!</h2>
+                                <h2 className="text-xl font-light">🎉 Бүртгэл амжилттай!</h2>
                                 <p className="text-sm text-muted-foreground">
                                     Түр хүлээнэ үү... танд зориулсан хуудас руу шилжүүлж байна.
                                 </p>

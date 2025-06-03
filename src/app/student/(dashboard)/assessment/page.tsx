@@ -85,7 +85,7 @@ export default function Page() {
         <div className=" px-10 pt-30 pb-10 bg-gray-200">
             <Card>
                 <CardContent>
-                    <CardHeader className="text-2xl font-bold leading-8 ">
+                    <CardHeader className="text-2xl font-light leading-8 ">
                         Дүнгийн жагсаалт
                     </CardHeader>
                     <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
@@ -109,7 +109,7 @@ export default function Page() {
                                         <Stat label="Улирлын шалгалт" value={s.exam} />
                                         <Stat label="Ирц" value={s.attendance} />
                                         <Stat label="Идэвх" value={s.initiative} />
-                                        <p className="text-sm w-full bg-white text-black rounded-md flex items-center justify-center font-bold h-7">
+                                        <p className="text-sm w-full bg-white text-black rounded-md flex items-center justify-center font-light h-7">
                                             Нийт дүн: {average.toFixed(1)}%
                                         </p>
                                         <StatusBadge score={average} />
@@ -144,7 +144,7 @@ function StatusBadge({ score }: { score: number }) {
     const isPass = score >= 60;
     return (
         <span
-            className={`absolute top-2 right-2 px-1 py-0.5 rounded-full text-xs font-bold
+            className={`absolute top-2 right-2 px-1 py-0.5 rounded-full text-xs font-light
         ${isPass ? "bg-white text-green-600" : "bg-red-600 text-white"}`}
         >
             {isPass ? "Тэнцсэн" : "Унасан"}

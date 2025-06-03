@@ -113,7 +113,7 @@ export default function AddClass({ children, onSuccess }: AddClassProps) {
 
       <DialogContent className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 focus:outline-none border border-gray-200 dark:border-gray-700">
         <div className="flex justify-between items-center mb-4">
-          <DialogTitle className="text-xl font-bold text-gray-900 dark:text-white">
+          <DialogTitle className="text-xl font-light text-gray-900 dark:text-white">
             Шинэ анги үүсгэх
           </DialogTitle>
           <DialogClose className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white rounded-full p-1">

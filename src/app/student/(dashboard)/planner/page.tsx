@@ -26,15 +26,16 @@ interface Task {
   priority: "low" | "medium" | "high"
 }
 
+// Эхний жишээ даалгаврууд
 const initialTasks: Task[] = [
-  { id: "1", title: "📚 Math homework", day: "Monday", completed: false, priority: "high" },
-  { id: "2", title: "🧪 Science project", day: "Tuesday", completed: false, priority: "medium" },
-  { id: "3", title: "🎨 Art class", day: "Wednesday", completed: true, priority: "low" },
-  { id: "4", title: "📝 Essay writing", day: "Thursday", completed: false, priority: "high" },
-  { id: "5", title: "🏀 Basketball practice", day: "Friday", completed: false, priority: "medium" },
+  { id: "1", title: "📚 Математикийн даалгавар", day: "Даваа", completed: false, priority: "high" },
+  { id: "2", title: "🧪 Шинжлэх ухааны төсөл", day: "Мягмар", completed: false, priority: "medium" },
+  { id: "3", title: "🎨 Зургийн хичээл", day: "Лхагва", completed: true, priority: "low" },
+  { id: "4", title: "📝 Эссэ бичих", day: "Пүрэв", completed: false, priority: "high" },
+  { id: "5", title: "🏀 Сагсан бөмбөгийн дасгал", day: "Баасан", completed: false, priority: "medium" },
 ]
 
-const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+const days = ["Даваа", "Мягмар", "Лхагва", "Пүрэв", "Баасан"]
 
 const priorityColors = {
   low: "bg-green-100 dark:bg-green-900/30 border-green-300 dark:border-green-700",
@@ -42,18 +43,12 @@ const priorityColors = {
   high: "bg-red-100 dark:bg-red-900/30 border-red-300 dark:border-red-700",
 }
 
-export default function ImprovedSelfPlannerDragDrop() {
+export default function PlannerComponent() {
   const [tasks, setTasks] = useState<Task[]>(initialTasks)
   const [activeTask, setActiveTask] = useState<Task | null>(null)
   const [newTaskInputs, setNewTaskInputs] = useState<Record<string, string>>({})
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 8,
-      },
-    }),
-  )
+  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }))
 
   const handleDragStart = (event: DragStartEvent) => {
     const task = tasks.find((t) => t.id === event.active.id)
@@ -63,31 +58,16 @@ export default function ImprovedSelfPlannerDragDrop() {
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
     setActiveTask(null)
-
     if (!over) return
-
     const activeTask = tasks.find((t) => t.id === active.id)
-    if (!activeTask) return
-
-    // Check if dropping on a day column
-    if (days.includes(over.id as string)) {
-      const newDay = over.id as string
-      setTasks((prev) => prev.map((t) => (t.id === active.id ? { ...t, day: newDay } : t)))
-      return
-    }
-
-    // Handle reordering within the same day or moving to different day
     const overTask = tasks.find((t) => t.id === over.id)
-    if (!overTask) return
-
-    const activeIndex = tasks.findIndex((t) => t.id === active.id)
-    const overIndex = tasks.findIndex((t) => t.id === over.id)
+    if (!activeTask || !overTask) return
 
     if (activeTask.day === overTask.day) {
-      // Reordering within the same day
+      const activeIndex = tasks.findIndex((t) => t.id === active.id)
+      const overIndex = tasks.findIndex((t) => t.id === over.id)
       setTasks((prev) => arrayMove(prev, activeIndex, overIndex))
     } else {
-      // Moving to a different day
       setTasks((prev) => prev.map((t) => (t.id === active.id ? { ...t, day: overTask.day } : t)))
     }
   }
@@ -95,7 +75,6 @@ export default function ImprovedSelfPlannerDragDrop() {
   const addTask = (day: string) => {
     const title = newTaskInputs[day]?.trim()
     if (!title) return
-
     const newTask: Task = {
       id: Date.now().toString(),
       title,
@@ -103,7 +82,6 @@ export default function ImprovedSelfPlannerDragDrop() {
       completed: false,
       priority: "medium",
     }
-
     setTasks((prev) => [...prev, newTask])
     setNewTaskInputs((prev) => ({ ...prev, [day]: "" }))
   }
@@ -130,41 +108,33 @@ export default function ImprovedSelfPlannerDragDrop() {
     )
   }
 
-  const getTasksForDay = (day: string) => {
-    return tasks.filter((task) => task.day === day)
-  }
+  const getTasksForDay = (day: string) => tasks.filter((task) => task.day === day)
 
   return (
-    <main className="p-4 md:p-6 min-h-screen bg-gradient-to-br from-[#F5F6FA] to-[#E0E7FF] dark:from-[#121220] dark:to-[#1E1B4B] font-sans">
+    <main className="p-4 md:p-6 min-h-screen bg-gradient-to-br from-[#E0F7FA] to-[#9a91ff] dark:from-[#1A1A40] dark:to-[#311B92] font-sans">
       <motion.h1
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-2xl md:text-3xl font-bold text-center text-[#6B5AED] mb-6 md:mb-8"
+        className="text-2xl md:text-3xl font-light text-center text-[#6B5AED] mb-6 md:mb-8"
       >
-        🗓️ Weekly Planner
+        🗓️ Tөлөвлөгч
       </motion.h1>
 
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragStart={handleDragStart}
-        onDragEnd={handleDragEnd}
-      >
+      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 md:gap-6">
           {days.map((day, index) => {
             const dayTasks = getTasksForDay(day)
             const completedCount = dayTasks.filter((t) => t.completed).length
-
             return (
               <motion.div
                 key={day}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-white dark:bg-[#1f1d42] p-4 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700"
+                className="bg-white dark:bg-[#2C2C54] p-4 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700"
               >
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-bold text-[#6B5AED] text-center flex-1">{day}</h2>
+                  <h2 className="text-lg font-light text-[#6B5AED] text-center flex-1">{day}</h2>
                   {dayTasks.length > 0 && (
                     <div className="text-xs text-gray-500 dark:text-gray-400">
                       {completedCount}/{dayTasks.length}
@@ -173,7 +143,7 @@ export default function ImprovedSelfPlannerDragDrop() {
                 </div>
 
                 <SortableContext items={dayTasks.map((t) => t.id)} strategy={verticalListSortingStrategy}>
-                  <div className="space-y-3 min-h-[120px] mb-4">
+                  <div className="space-y-3 min-h-[90px] mb-4">
                     <AnimatePresence>
                       {dayTasks.map((task) => (
                         <SortableTask
@@ -188,22 +158,12 @@ export default function ImprovedSelfPlannerDragDrop() {
                   </div>
                 </SortableContext>
 
-                {/* Add new task input */}
                 <div className="flex gap-2">
                   <Input
-                    placeholder="Add task..."
+                    placeholder="Даалгавар нэмэх..."
                     value={newTaskInputs[day] || ""}
-                    onChange={(e) =>
-                      setNewTaskInputs((prev) => ({
-                        ...prev,
-                        [day]: e.target.value,
-                      }))
-                    }
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        addTask(day)
-                      }
-                    }}
+                    onChange={(e) => setNewTaskInputs((prev) => ({ ...prev, [day]: e.target.value }))}
+                    onKeyDown={(e) => { if (e.key === "Enter") addTask(day) }}
                     className="text-sm"
                   />
                   <Button onClick={() => addTask(day)} size="sm" className="bg-[#6B5AED] hover:bg-[#5A4BD4] shrink-0">
@@ -216,38 +176,21 @@ export default function ImprovedSelfPlannerDragDrop() {
         </div>
 
         <DragOverlay>
-          {activeTask ? (
-            <div
-              className={`p-3 rounded-xl shadow-lg border-2 ${priorityColors[activeTask.priority]} opacity-90 cursor-grabbing`}
-            >
-              <span className={`text-sm font-medium ${activeTask.completed ? "line-through opacity-60" : ""}`}>
-                {activeTask.title}
-              </span>
+          {activeTask && (
+            <div className={`p-3 rounded-xl shadow-lg border-2 ${priorityColors[activeTask.priority]} opacity-90 cursor-grabbing`}>
+              <span className={`text-sm font-medium ${activeTask.completed ? "line-through opacity-60" : ""}`}>{activeTask.title}</span>
             </div>
-          ) : null}
+          )}
         </DragOverlay>
       </DndContext>
     </main>
   )
 }
 
-function SortableTask({
-  task,
-  onDelete,
-  onToggleComplete,
-  onCyclePriority,
-}: {
-  task: Task
-  onDelete: (id: string) => void
-  onToggleComplete: (id: string) => void
-  onCyclePriority: (id: string) => void
-}) {
+// 🔧 Даалгавар зөөх боломжтой жижиг компонент
+function SortableTask({ task, onDelete, onToggleComplete, onCyclePriority }: { task: Task; onDelete: (id: string) => void; onToggleComplete: (id: string) => void; onCyclePriority: (id: string) => void }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: task.id })
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  }
+  const style = { transform: CSS.Transform.toString(transform), transition }
 
   return (
     <motion.div
@@ -256,62 +199,17 @@ function SortableTask({
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.8 }}
-      className={`
-        ${priorityColors[task.priority]} 
-        p-3 rounded-xl shadow-sm border-2 group hover:shadow-md transition-all duration-200
-        ${isDragging ? "opacity-50" : ""}
-        ${task.completed ? "opacity-75" : ""}
-      `}
+      className={`${priorityColors[task.priority]} p-3 rounded-xl shadow-sm border-2 group hover:shadow-md transition-all duration-200 relative ${isDragging ? "opacity-50" : ""} ${task.completed ? "opacity-75" : ""}`}
     >
       <div className="flex items-center gap-2">
-        <button
-          onClick={() => onToggleComplete(task.id)}
-          className={`
-            w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors
-            ${task.completed ? "bg-green-500 border-green-500 text-white" : "border-gray-300 hover:border-green-400"}
-          `}
-        >
-          {task.completed && <Check className="w-3 h-3" />}
-        </button>
-
-        <span
-          className={`
-            text-sm font-medium flex-1 cursor-pointer
-            ${task.completed ? "line-through opacity-60" : "text-gray-700 dark:text-gray-200"}
-          `}
-          onClick={() => onCyclePriority(task.id)}
-          title="Click to change priority"
-        >
-          {task.title}
-        </span>
-
+        <button onClick={() => onToggleComplete(task.id)} className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${task.completed ? "bg-green-500 border-green-500 text-white" : "border-gray-300 hover:border-green-400"}`}>{task.completed && <Check className="w-3 h-3" />}</button>
+        <span onClick={() => onCyclePriority(task.id)} className={`text-sm font-medium flex-1 cursor-pointer rounded-xl p-1 px-1.5 ${task.completed ? "line-through opacity-60" : "text-gray-700 dark:text-gray-200"}`} title="Эрэмбэ өөрчлөх">{task.title}</span>
         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-          <div
-            {...attributes}
-            {...listeners}
-            className="cursor-grab active:cursor-grabbing p-1 hover:bg-black/10 rounded"
-          >
-            <GripVertical className="w-4 h-4 text-gray-400" />
-          </div>
-
-          <button
-            onClick={() => onDelete(task.id)}
-            className="p-1 hover:bg-red-100 dark:hover:bg-red-900/30 rounded text-red-500 hover:text-red-700"
-          >
-            <Trash2 className="w-4 h-4" />
-          </button>
+          <div {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing p-1 hover:bg-black/10 rounded"><GripVertical className="w-4 h-4 text-gray-400" /></div>
+          <button onClick={() => onDelete(task.id)} className="p-1 hover:bg-red-100 dark:hover:bg-red-900/30 rounded text-red-500 hover:text-red-700"><Trash2 className="w-4 h-4" /></button>
         </div>
       </div>
-
-      {/* Priority indicator */}
-      <div className="flex justify-end mt-1">
-        <div
-          className={`
-          w-2 h-2 rounded-full
-          ${task.priority === "high" ? "bg-red-500" : task.priority === "medium" ? "bg-yellow-500" : "bg-green-500"}
-        `}
-        />
-      </div>
+      <div className="absolute top-[45%] right-1 "><div className={`w-2 h-2 rounded-full ${task.priority === "high" ? "bg-red-500" : task.priority === "medium" ? "bg-yellow-500" : "bg-green-500"}`} /></div>
     </motion.div>
   )
 }

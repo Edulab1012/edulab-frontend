@@ -24,3 +24,30 @@ export const useTestUserStore = create<TestUserState>((set) => ({
     setUser: (user) => set({ user }),
     clearUser: () => set({ user: null }),
 }))
+
+
+
+
+interface UserProfile {
+    name: string;
+    about: string;
+    image?: string;
+    background?: string;
+    socialmediaUrl: string;
+}
+
+interface UserDataStore {
+    profile: UserProfile | null;
+    setProfile: (profile: UserProfile) => void;
+}
+
+export const useUserDataStore = create<UserDataStore>((set) => ({
+    profile: {
+        name: "Уянга",
+        about: "Ном унших, код бичих дуртай.",
+        image: "/student.png",
+        background: "/bg-default.jpg",
+        socialmediaUrl: "https://facebook.com/uyanga.dev",
+    },
+    setProfile: (profile) => set({ profile }),
+}));
