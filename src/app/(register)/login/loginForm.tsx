@@ -5,11 +5,14 @@ import { BASE_URL } from "@/constants/baseurl";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 import { FiUser, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
+import { BookCheck, PanelTop, Backpack } from "lucide-react";
 
 export default function LoginForm() {
   const router = useRouter();
+  const { theme } = useTheme();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -19,7 +22,12 @@ export default function LoginForm() {
     text: string;
   }>(null);
   const [res, setRes] = useState(false);
-  console.log("res", res);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -40,7 +48,6 @@ export default function LoginForm() {
         setTimeout(() => {
           if (role === "teacher") {
             router.push("/teacher");
-
             localStorage.setItem("userId", res.data.user.id);
             localStorage.setItem("teacherId", res.data.user.teacherId);
           } else if (role === "student") {
@@ -64,18 +71,61 @@ export default function LoginForm() {
     }
   };
 
+  if (!mounted) return null;
+
   return (
-    <div className="flex w-full h-screen items-center justify-center p-4 z-1 backdrop-blur-sm">
-      <div className="w-full max-w-md">
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white dark:bg-[#2C3A4A] rounded-2xl shadow-xl overflow-hidden p-8 backdrop-blur-sm"
-        >
+    <div className="flex w-full h-screen items-center justify-center p-4">
+      <div
+        className={`w-full max-w-md rounded-3xl border-r-4 shadow-xl transition-all duration-200 ${
+          theme === "dark"
+            ? "bg-[#121220] border-r-[#6B5AED]"
+            : "bg-[#F5F6FA] border-r-[#1DA1F2]"
+        }`}
+      >
+        <form onSubmit={handleSubmit} className="p-8">
+          <div className="flex justify-center gap-4 mb-6">
+            <div
+              className={`p-3 rounded-xl ${
+                theme === "dark"
+                  ? "bg-[#6B5AED] text-white"
+                  : "bg-[#1DA1F2] text-white"
+              } shadow-md`}
+            >
+              <BookCheck className="w-6 h-6" />
+            </div>
+            <div
+              className={`p-3 rounded-xl ${
+                theme === "dark"
+                  ? "bg-[#6B5AED] text-white"
+                  : "bg-[#1DA1F2] text-white"
+              } shadow-md`}
+            >
+              <PanelTop className="w-6 h-6" />
+            </div>
+            <div
+              className={`p-3 rounded-xl ${
+                theme === "dark"
+                  ? "bg-[#6B5AED] text-white"
+                  : "bg-[#1DA1F2] text-white"
+              } shadow-md`}
+            >
+              <Backpack className="w-6 h-6" />
+            </div>
+          </div>
+
           <div className="text-center mb-6">
-            <h2 className="text-3xl font-light text-[#1E2636] dark:text-[#FFD3A1]">
+            <h2
+              className={`text-3xl font-light ${
+                theme === "dark" ? "text-white" : "text-gray-800"
+              }`}
+            >
               ClassHero-д тавтай морил
             </h2>
-            <p className="text-[#333] dark:text-[#EAEFEF] mt-2">
+            <p
+              className={`mt-2 ${
+                theme === "dark" ? "text-gray-400" : "text-gray-500"
+              }`}
+            >
               Бүртгэлтэй хаягаа ашиглан нэвтэрнэ үү
             </p>
           </div>
@@ -83,7 +133,9 @@ export default function LoginForm() {
           {message && (
             <div
               className={`text-center text-sm mb-4 p-2 rounded-md ${
-                message.type === "success" ? "text-green-500" : " text-red-400"
+                message.type === "success"
+                  ? "bg-green-500/20 text-green-500"
+                  : "bg-red-500/20 text-red-400"
               }`}
             >
               {message.text}
@@ -95,20 +147,40 @@ export default function LoginForm() {
             <div className="space-y-2">
               <label
                 htmlFor="email"
-                className="block text-sm font-light text-[#333] dark:text-[#EAEFEF]"
+                className={`block text-sm font-light ${
+                  theme === "dark" ? "text-gray-400" : "text-gray-500"
+                }`}
               >
                 Имэйл
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FiUser className="h-5 w-5 text-[#555] dark:text-[#EAEFEF]" />
+                  <FiUser
+                    className={`h-5 w-5 ${
+                      theme === "dark" ? "text-gray-400" : "text-gray-500"
+                    }`}
+                  />
                 </div>
                 <input
                   id="email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-white dark:bg-[#1E2636] border border-[#5bcfd3] rounded-lg text-[#1E2636] dark:text-[#FFD3A1] placeholder-gray-500 dark:placeholder-[#EAEFEF] focus:outline-none focus:ring-2 focus:ring-[#5bcfd3]"
+                  className={`w-full pl-10 pr-4 py-3 ${
+                    theme === "dark" ? "bg-[#1E1E2D]" : "bg-white"
+                  } border ${
+                    theme === "dark"
+                      ? "border-[#6B5AED]/50"
+                      : "border-[#1DA1F2]/50"
+                  } rounded-lg ${
+                    theme === "dark" ? "text-white" : "text-gray-800"
+                  } placeholder-${
+                    theme === "dark" ? "gray-500" : "gray-400"
+                  } focus:outline-none focus:ring-2 ${
+                    theme === "dark"
+                      ? "focus:ring-[#6B5AED]"
+                      : "focus:ring-[#1DA1F2]"
+                  }`}
                   placeholder="your@email.com"
                   required
                 />
@@ -119,20 +191,40 @@ export default function LoginForm() {
             <div className="space-y-2">
               <label
                 htmlFor="password"
-                className="block text-sm font-light text-[#333] dark:text-[#EAEFEF]"
+                className={`block text-sm font-light ${
+                  theme === "dark" ? "text-gray-400" : "text-gray-500"
+                }`}
               >
                 Нууц үг
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FiLock className="h-5 w-5 text-[#555] dark:text-[#EAEFEF]" />
+                  <FiLock
+                    className={`h-5 w-5 ${
+                      theme === "dark" ? "text-gray-400" : "text-gray-500"
+                    }`}
+                  />
                 </div>
                 <input
                   id="password"
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-12 py-3 bg-white dark:bg-[#1E2636] border border-[#5bcfd3] rounded-lg text-[#1E2636] dark:text-[#FFD3A1] placeholder-gray-500 dark:placeholder-[#EAEFEF] focus:outline-none focus:ring-2 focus:ring-[#5bcfd3]"
+                  className={`w-full pl-10 pr-12 py-3 ${
+                    theme === "dark" ? "bg-[#1E1E2D]" : "bg-white"
+                  } border ${
+                    theme === "dark"
+                      ? "border-[#6B5AED]/50"
+                      : "border-[#1DA1F2]/50"
+                  } rounded-lg ${
+                    theme === "dark" ? "text-white" : "text-gray-800"
+                  } placeholder-${
+                    theme === "dark" ? "gray-500" : "gray-400"
+                  } focus:outline-none focus:ring-2 ${
+                    theme === "dark"
+                      ? "focus:ring-[#6B5AED]"
+                      : "focus:ring-[#1DA1F2]"
+                  }`}
                   placeholder="••••••••"
                   required
                 />
@@ -142,9 +234,17 @@ export default function LoginForm() {
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
-                    <FiEyeOff className="h-5 w-5 text-[#555] dark:text-[#EAEFEF]" />
+                    <FiEyeOff
+                      className={`h-5 w-5 ${
+                        theme === "dark" ? "text-gray-400" : "text-gray-500"
+                      }`}
+                    />
                   ) : (
-                    <FiEye className="h-5 w-5 text-[#555] dark:text-[#EAEFEF]" />
+                    <FiEye
+                      className={`h-5 w-5 ${
+                        theme === "dark" ? "text-gray-400" : "text-gray-500"
+                      }`}
+                    />
                   )}
                 </button>
               </div>
@@ -152,16 +252,28 @@ export default function LoginForm() {
 
             {/* Remember + Forgot */}
             <div className="flex items-center justify-between">
-              <label className="flex items-center text-sm text-[#333] dark:text-[#EAEFEF]">
+              <label
+                className={`flex items-center text-sm ${
+                  theme === "dark" ? "text-gray-400" : "text-gray-500"
+                }`}
+              >
                 <input
                   type="checkbox"
-                  className="h-4 w-4 rounded border-[#5bcfd3] bg-white dark:bg-[#1E2636] text-[#FF9C42] focus:ring-[#FF9C42]"
+                  className={`h-4 w-4 rounded border ${
+                    theme === "dark"
+                      ? "border-[#6B5AED] bg-[#1E1E2D] text-[#6B5AED]"
+                      : "border-[#1DA1F2] bg-white text-[#1DA1F2]"
+                  } focus:ring-${theme === "dark" ? "[#6B5AED]" : "[#1DA1F2]"}`}
                 />
                 <span className="ml-2">Сануулах</span>
               </label>
               <a
                 href="#"
-                className="text-sm text-[#555] dark:text-[#EAEFEF] hover:underline"
+                className={`text-sm ${
+                  theme === "dark" ? "text-gray-400" : "text-gray-500"
+                } hover:underline hover:${
+                  theme === "dark" ? "text-[#6B5AED]" : "text-[#1DA1F2]"
+                }`}
               >
                 Нууц үгээ мартсан уу?
               </a>
@@ -171,7 +283,11 @@ export default function LoginForm() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3 px-4 rounded-lg text-sm font-medium text-white bg-[#e1aa77] hover:bg-[#e8ba91] transition disabled:opacity-60"
+              className={`w-full py-3 px-4 rounded-lg text-sm font-medium text-white ${
+                theme === "dark" ? "bg-[#6B5AED]" : "bg-[#1DA1F2]"
+              } hover:${
+                theme === "dark" ? "bg-[#7C6BED]" : "bg-[#2DA1F2]"
+              } transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60`}
             >
               {isLoading ? "Нэвтэрч байна..." : "Нэвтрэх"}
             </button>
@@ -179,8 +295,15 @@ export default function LoginForm() {
 
           {/* Register */}
           <div className="mt-6 text-center">
-            <p className="text-sm text-[#333] dark:text-[#EAEFEF] flex items-center justify-center gap-6">
-              Бүртгэл байхгүй юу? <RegisterButton />
+            <p
+              className={`text-sm ${
+                theme === "dark" ? "text-gray-400" : "text-gray-500"
+              } flex items-center justify-center gap-2`}
+            >
+              Бүртгэл байхгүй юу?{" "}
+              <span className="inline-block">
+                <RegisterButton />
+              </span>
             </p>
           </div>
         </form>
