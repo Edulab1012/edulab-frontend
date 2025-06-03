@@ -4,8 +4,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, useAnimation, useInView } from "framer-motion";
 import { CheckIcon } from "lucide-react";
 import Image from "next/image";
-import { TiBookmark, TiKeyboard, TiDatabase, TiGroupOutline } from "react-icons/ti";
-
+import {
+  TiBookmark,
+  TiKeyboard,
+  TiDatabase,
+  TiGroupOutline,
+} from "react-icons/ti";
+import { useTheme } from "next-themes";
 const taskData = [
   {
     id: 1,
@@ -18,7 +23,7 @@ const taskData = [
     ],
     content_p:
       "ClassHero систем нь сурагч бүрийг өдөр бүр урамшуулж, амжилт руу хөтөлдөг!",
-    icon: TiDatabase
+    icon: TiDatabase,
   },
   {
     id: 2,
@@ -31,7 +36,7 @@ const taskData = [
     ],
     content_p:
       "Тоглолт шиг сонирхолтой badge систем нь сурагчдад хүч өгөх зорилготой!",
-    icon: TiBookmark
+    icon: TiBookmark,
   },
   {
     id: 3,
@@ -42,9 +47,8 @@ const taskData = [
       { id: 1, option: "Чат өрнүүл" },
       { id: 2, option: "Broadcast-оор багшийн зар ав" },
     ],
-    content_p:
-      "Анги доторх харилцааг сонирхолтой, шуурхай болгоно.",
-    icon: TiKeyboard
+    content_p: "Анги доторх харилцааг сонирхолтой, шуурхай болгоно.",
+    icon: TiKeyboard,
   },
   {
     id: 4,
@@ -55,9 +59,8 @@ const taskData = [
       { id: 1, option: "Топ 5 сурагчийн жагсаалт" },
       { id: 2, option: "Багийн амжилтыг харуулна" },
     ],
-    content_p:
-      "Ангийн уур амьсгалыг хөгжөөнт тэмцээн шиг болгоно!",
-    icon: TiGroupOutline
+    content_p: "Ангийн уур амьсгалыг хөгжөөнт тэмцээн шиг болгоно!",
+    icon: TiGroupOutline,
   },
 ];
 
@@ -66,7 +69,7 @@ export default function StudentFeatureSelector() {
   const ref = useRef(null);
   const isInView = useInView(ref, { amount: 0.3 });
   const [selectedTask, setSelectedTask] = useState(taskData[0]);
-
+  const { theme } = useTheme();
   useEffect(() => {
     if (isInView) {
       controls.start({ y: 0, opacity: 1 });
@@ -77,7 +80,7 @@ export default function StudentFeatureSelector() {
 
   return (
     <div
-      className="w-full min-h-screen py-9 px-4 sm:px-8 bg-[#F3F4F6] dark:bg-[#1E2636] flex items-center justify-center relative mt-30"
+      className="w-full min-h-screen py-9 px-4 sm:px-8 bg-gradient-to-br from-[#F5F6FA] to-[#E0E7FF] dark:from-[#121220] dark:to-[#1E1B4B] flex items-center justify-center relative mt-30"
       ref={ref}
     >
       <motion.div
@@ -93,23 +96,21 @@ export default function StudentFeatureSelector() {
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               onClick={() => setSelectedTask(item)}
-              className={`flex flex-col items-center justify-center rounded-2xl aspect-square transition-all w-full h-full ${selectedTask.id === item.id
-                ? "bg-[#FF9C42] dark:bg-[#e1aa77] shadow-lg"
-                : "bg-[#EAEFEF] dark:bg-[#5bcfd3]"
-                }`}
+              className={`flex flex-col items-center justify-center rounded-2xl aspect-square transition-all w-full h-full ${
+                selectedTask.id === item.id
+                  ? "bg-[#ffc288] dark:bg-white shadow-lg "
+                  : "bg-[#EAEFEF]  dark:bg-[#1f1d42]"
+              }`}
             >
-              <div className="w-15">
-
-                {<item.icon className="w-full h-full" />}
-
-
-
+              <div className="w-15 text-black dark:text-[#6B5AED]">
+                {<item.icon className="w-full h-full  " />}
               </div>
               <span
-                className={`text-sm font-semibold text-center ${selectedTask.id === item.id
-                  ? "text-white"
-                  : "text-[#2C3A4A] dark:text-[#FFD3A1]"
-                  }`}
+                className={`text-sm font-semibold text-center ${
+                  selectedTask.id === item.id
+                    ? "text-white dark:text-black"
+                    : "text-[#2C3A4A] dark:text-white"
+                }`}
               >
                 {item.title}
               </span>
@@ -117,14 +118,14 @@ export default function StudentFeatureSelector() {
           ))}
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-6 bg-white dark:bg-[#2C3A4A] rounded-2xl p-6 sm:p-8">
+        <div className="flex flex-col lg:flex-row gap-6 bg-white dark:bg-[#1f1d42] rounded-2xl p-6 sm:p-8">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
             className="flex items-center justify-center lg:justify-start bg"
           >
-            <div className="relative w-90 h-50  lg:w-48 lg:h-48 bg-[#EAEFEF] dark:bg-[#7F8CAA] rounded-xl p-4 border-2 border-[#FFE866]">
+            <div className="relative w-90 h-50  lg:w-48 lg:h-48 bg-white dark:bg-[#1f1d42] rounded-xl p-4 border-2 border-[#FFE866]">
               <Image
                 src={selectedTask.img_url}
                 fill
@@ -139,7 +140,11 @@ export default function StudentFeatureSelector() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-xl sm:text-2xl lg:text-3xl font-light text-[#2C3A4A] dark:text-[#FFD3A1] mb-3 sm:mb-4"
+              className={`bg-gradient-to-r ${
+                theme === "dark"
+                  ? "from-[#6B5AED] to-[#B077E0]"
+                  : "from-[#1DA1F2] to-[#5bcfd3]"
+              } bg-clip-text text-transparent text-xl sm:text-2xl lg:text-3xl font-light mb-3 sm:mb-4`}
             >
               {selectedTask.content_title}
             </motion.h2>
@@ -151,10 +156,7 @@ export default function StudentFeatureSelector() {
               className="space-y-2 sm:space-y-3 mb-4 sm:mb-6"
             >
               {selectedTask.content.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex items-start gap-2 sm:gap-3"
-                >
+                <div key={item.id} className="flex items-start gap-2 sm:gap-3">
                   <CheckIcon className="w-4 h-4 sm:w-5 sm:h-5 mt-0.5 text-[#FFE866] dark:text-[#FF9C42] flex-shrink-0" />
                   <p className="text-sm sm:text-base text-[#2C3A4A] dark:text-[#EAEFEF] ">
                     {item.option}
@@ -174,7 +176,13 @@ export default function StudentFeatureSelector() {
           </div>
         </div>
       </motion.div>
-      <h1 className="bg-gradient-to-r from-[#FF9C42] to-[#B077E0] bg-clip-text text-transparent text-6xl absolute top-[-10%] sm:relative sm:ml-20  ">
+      <h1
+        className={`bg-gradient-to-r ${
+          theme === "dark"
+            ? "from-[#6B5AED] to-[#B077E0]"
+            : "from-[#1DA1F2] to-[#5bcfd3]"
+        } bg-clip-text text-transparent text-6xl absolute top-[-10%] sm:relative sm:ml-20`}
+      >
         Student features
       </h1>
     </div>
