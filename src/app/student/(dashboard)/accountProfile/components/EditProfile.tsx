@@ -1,109 +1,187 @@
-"use client";
+"use client"
 
-import { useRef, useState } from "react";
-import { Student } from "./types";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { motion } from "framer-motion";
+import type React from "react"
+
+import { useRef, useState } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { motion } from "framer-motion"
+import {
+  Camera,
+  Upload,
+  Save,
+  X,
+  Loader2,
+  User,
+  Mail,
+  Phone,
+  GraduationCap,
+  Instagram,
+  Facebook,
+} from "lucide-react"
+import type { Student } from "./student-profile-card"
 
 interface EditProfileProps {
-  initialData: Student;
-  onSave: (data: Student) => void;
-  onCancel: () => void;
+  initialData: Student
+  onSave: (data: Student) => void
+  onCancel: () => void
 }
 
 export default function EditProfile({ initialData, onSave, onCancel }: EditProfileProps) {
-  const [formData, setFormData] = useState<Student>(initialData);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [formData, setFormData] = useState<Student>(initialData)
+  const [isUploading, setIsUploading] = useState(false)
+  const [errors, setErrors] = useState<Record<string, string>>({})
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const avatarInputRef = useRef<HTMLInputElement>(null)
+  const backgroundInputRef = useRef<HTMLInputElement>(null)
 
-  const handleAvatarClick = () => {
-    fileInputRef.current?.click();
-  };
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormData((prev: any) => ({ ...prev, [name]: value }))
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setFormData((prev) => ({ ...prev, avatarUrl: url }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }))
+  }
+
+  const handleSocialChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setFormData((prev: { socials: any }) => ({
+      ...prev,
+      socials: { ...prev.socials, [name]: value },
+    }))
+  }
+
+  const handleImageUpload = async (file: File, type: "avatar" | "background") => {
+    if (!file) return
+    setIsUploading(true)
+    try {
+      const imageUrl = URL.createObjectURL(file)
+      setFormData((prev: any) => ({
+        ...prev,
+        ...(type === "avatar" ? { avatarUrl: imageUrl } : { backgroundUrl: imageUrl }),
+      }))
+    } catch (error) {
+      console.error(`Failed to upload ${type}:`, error)
+    } finally {
+      setIsUploading(false)
     }
-  };
+  }
+
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {}
+    if (!formData.firstName.trim()) newErrors.firstName = "Нэр оруулна уу"
+    if (!formData.lastName.trim()) newErrors.lastName = "Овог оруулна уу"
+    if (!formData.grade.trim()) newErrors.grade = "Анги оруулна уу"
+    if (!formData.email.trim()) newErrors.email = "Имэйл оруулна уу"
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Зөв имэйл оруулна уу"
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
 
   const handleSave = () => {
-    onSave(formData);
-  };
+    if (validateForm()) onSave(formData)
+  }
+
+  const formFields = [
+    { name: "lastName", label: "Овог", icon: User, type: "text", required: true },
+    { name: "firstName", label: "Нэр", icon: User, type: "text", required: true },
+    { name: "grade", label: "Анги", icon: GraduationCap, type: "text", required: true },
+    { name: "teacher", label: "Багшийн нэр", icon: User, type: "text" },
+    { name: "phoneNumber", label: "Утасны дугаар", icon: Phone, type: "tel" },
+    { name: "email", label: "Имэйл", icon: Mail, type: "email", required: true },
+  ]
+
+  const socialFields = [
+    { name: "instagram", label: "Instagram", icon: Instagram, placeholder: "@username" },
+    { name: "facebook", label: "Facebook", icon: Facebook, placeholder: "Нэр" },
+  ]
 
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.98 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.4 }}
-      className="bg-gradient-to-tr from-[#FDF2F8] to-[#E0E7FF] dark:from-[#1F1D42] dark:to-[#312E81] p-6 rounded-3xl shadow-xl max-w-4xl w-full mx-auto"
-    >
-      <div className="flex justify-center mb-6">
-        <input
-          type="file"
-          accept="image/*"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-          className="hidden"
-        />
-        <Avatar
-          onClick={handleAvatarClick}
-          className="w-24 h-24 shadow-lg cursor-pointer ring-2 ring-[#6B5AED] hover:scale-105 transition"
-        >
-          <AvatarImage src={formData.avatarUrl} alt="Avatar" />
-          <AvatarFallback>{formData.firstName.charAt(0)}</AvatarFallback>
-        </Avatar>
-      </div>
+    <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.3 }} className="w-full max-w-4xl mx-auto">
+      <Card className="shadow-2xl border-0 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm">
+        <div className="relative h-40 rounded-t-lg overflow-hidden">
+          {formData.backgroundUrl && (
+            <img src={formData.backgroundUrl} alt="Background" className="absolute inset-0 w-full h-full object-cover" />
+          )}
+          <div className="absolute inset-0 bg-black/30" />
+          <input type="file" accept="image/*" ref={backgroundInputRef} onChange={(e) => e.target.files?.[0] && handleImageUpload(e.target.files[0], "background")} className="hidden" />
+          <Button onClick={() => backgroundInputRef.current?.click()} variant="secondary" size="sm" className="absolute bottom-4 right-4 text-white bg-white/20 hover:bg-white/30 backdrop-blur-sm border-white/20" disabled={isUploading}>
+            <Camera className="h-4 w-4 mr-2" /> Арын зураг
+          </Button>
+        </div>
 
-      <h2 className="text-center text-xl font-bold text-[#6B5AED] dark:text-white mb-8">
-        ✏️ Хувийн мэдээлэл засах
-      </h2>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {[
-          { id: "lastName", label: "Овог" },
-          { id: "firstName", label: "Нэр" },
-          { id: "grade", label: "Анги" },
-          { id: "phoneNumber", label: "Утасны дугаар" },
-          { id: "email", label: "Имэйл хаяг" },
-          { id: "teacher", label: "Анги даасан багш" },
-        ].map((field) => (
-          <div key={field.id}>
-            <label htmlFor={field.id} className="block mb-1 text-sm text-gray-600 dark:text-gray-300">
-              {field.label}
-            </label>
-            <input
-              id={field.id}
-              type="text"
-              name={field.id}
-              value={(formData as any)[field.id]}
-              onChange={handleChange}
-              className="w-full p-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#6B5AED] dark:bg-white/10 dark:text-white"
-            />
+        <CardHeader className="pb-4">
+          <div className="flex flex-col items-center -mt-16">
+            <div className="relative group w-fit">
+              <input type="file" accept="image/*" ref={avatarInputRef} onChange={(e) => e.target.files?.[0] && handleImageUpload(e.target.files[0], "avatar")} className="hidden" />
+              <div onClick={() => avatarInputRef.current?.click()} className="cursor-pointer">
+                <Avatar className="h-32 w-32 border-4 border-white dark:border-slate-700 shadow-xl transition-all hover:opacity-80">
+                  <AvatarImage src={formData.avatarUrl || "/placeholder.svg"} alt="Profile" />
+                  <AvatarFallback className="text-2xl font-semibold bg-gradient-to-br from-indigo-500 to-purple-600 text-white">
+                    {formData.firstName.charAt(0)}{formData.lastName.charAt(0)}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition">
+                  <Upload className="h-8 w-8 text-white" />
+                </div>
+                {isUploading && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-full">
+                    <Loader2 className="h-6 w-6 text-white animate-spin" />
+                  </div>
+                )}
+              </div>
+            </div>
+            <CardTitle className="text-2xl font-bold text-slate-900 dark:text-white mt-4 text-center">
+              Профайл засах
+            </CardTitle>
           </div>
-        ))}
-      </div>
+        </CardHeader>
 
-      <div className="flex justify-end gap-4 mt-8">
-        <button
-          onClick={onCancel}
-          className="px-4 py-2 bg-gray-300 text-gray-800 rounded-xl hover:bg-gray-400 transition"
-        >
-          Болих
-        </button>
+        <CardContent className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {formFields.map((field, index) => (
+              <motion.div key={field.name} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: index * 0.05 }} className="space-y-2">
+                <Label htmlFor={field.name} className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                  <field.icon className="h-4 w-4" /> {field.label} {field.required && <span className="text-red-500">*</span>}
+                </Label>
+                <Input id={field.name} name={field.name} type={field.type} value={(formData as any)[field.name] || ""} onChange={handleInputChange} placeholder={field.label} className={`transition-colors ${errors[field.name] ? "border-red-500 focus:border-red-500" : "border-slate-300 dark:border-slate-600"}`} />
+                {errors[field.name] && <p className="text-sm text-red-500">{errors[field.name]}</p>}
+              </motion.div>
+            ))}
+          </div>
 
-        <button
-          onClick={handleSave}
-          className="px-4 py-2 bg-[#6B5AED] text-white rounded-xl hover:bg-purple-700 transition"
-        >
-          Хадгалах
-        </button>
-      </div>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.3 }} className="space-y-2">
+            <Label htmlFor="bio" className="text-slate-700 dark:text-slate-300">Товч танилцуулга</Label>
+            <Textarea id="bio" name="bio" value={formData.bio} onChange={handleInputChange} placeholder="Өөрийн тухай товч бичнэ үү..." className="min-h-[100px] resize-none" />
+          </motion.div>
+
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.4 }} className="space-y-4">
+            <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Сошиал сүлжээ</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {socialFields.map((field) => (
+                <div key={field.name} className="space-y-2">
+                  <Label htmlFor={field.name} className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                    <field.icon className="h-4 w-4" /> {field.label}
+                  </Label>
+                  <Input id={field.name} name={field.name} value={formData.socials?.[field.name as keyof typeof formData.socials] || ""} onChange={handleSocialChange} placeholder={field.placeholder} />
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.5 }} className="flex flex-col sm:flex-row gap-3 pt-6">
+            <Button onClick={onCancel} variant="outline" className="flex-1 hover:bg-slate-100 dark:hover:bg-slate-700">
+              <X className="h-4 w-4 mr-2" /> Болих
+            </Button>
+            <Button onClick={handleSave} disabled={isUploading} className="flex-1 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-700 dark:hover:bg-indigo-800">
+              {isUploading ? (<><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Түр хүлээнэ үү...</>) : (<><Save className="h-4 w-4 mr-2" /> Хадгалах</>)}
+            </Button>
+          </motion.div>
+        </CardContent>
+      </Card>
     </motion.div>
-  );
+  )
 }

@@ -27,7 +27,7 @@ const sampleData = [
 export default function Leaderboard() {
   return (
     <div className="w-full max-w-3xl mx-auto px-4 py-8 font-sans">
-      <h2 className="text-2xl font-bold text-center mb-6 text-[#6B5AED] dark:text-white ">
+      <h2 className="text-2xl font-light text-center mb-6 text-[#6B5AED] dark:text-white ">
         🏆 Ангийн Хамгийн Шилдгүүд
       </h2>
 
@@ -60,7 +60,7 @@ export default function Leaderboard() {
                 <p className="text-sm text-gray-500">Оноо: {student.points}</p>
               </div>
             </div>
-            <div className="text-xl font-bold text-[#6B5AED]">+{Math.floor(student.points / 10)}</div>
+            <div className="text-xl font-light text-[#6B5AED]">+{Math.floor(student.points / 10)}</div>
           </motion.div>
         ))}
       </div>

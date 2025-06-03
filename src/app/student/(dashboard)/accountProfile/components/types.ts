@@ -5,6 +5,11 @@ export interface Student {
     phoneNumber: string;
     email: string;
     teacher: string;
+    bgImage:string
     avatarUrl: string,
-
+    bio: string,
+    socials: {
+        instagram: string
+        facebook: string,
+    }
 }
