@@ -136,7 +136,7 @@ export default function BroadcastRoomByClass() {
       <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-4 sm:px-6 py-3 sm:py-4 rounded-t-2xl shadow-md">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div className="flex-1 min-w-0">
-            <h1 className="text-lg sm:text-xl font-bold truncate">
+            <h1 className="text-lg sm:text-xl font-light truncate">
               {user.grade}-р анги {user.group} бүлэг
             </h1>
             <p className="text-xs sm:text-sm opacity-90 mt-1 flex items-center">

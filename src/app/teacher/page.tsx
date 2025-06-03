@@ -104,7 +104,9 @@ export default function TeacherDashboard() {
   return (
     <div className="flex flex-col p-4 md:p-6 md:ml-64">
       <div className="mt-[80px] md:mt-[100px] flex flex-col jcustify-center ">
+
         <h1 className="text-2xl font-bold text-gray-700 dark:text-white mb-6 pl-36 md:mb-[60px] mt-6 md:mt-[60px]">
+
           Миний ангиуд
         </h1>
 
@@ -136,8 +138,8 @@ export default function TeacherDashboard() {
               >
                 <div
                   className={`absolute inset-0 ${theme === "dark"
-                      ? "bg-gradient-to-br from-[#2C3A4A] to-[#1E293B]"
-                      : "bg-gradient-to-br from-[#F5F6FA] to-[#E2E8F0]"
+                    ? "bg-gradient-to-br from-[#2C3A4A] to-[#1E293B]"
+                    : "bg-gradient-to-br from-[#F5F6FA] to-[#E2E8F0]"
                     }`}
                 />
                 <div className="absolute top-3 right-3 z-10">
@@ -145,8 +147,8 @@ export default function TeacherDashboard() {
                     <DropdownMenuTrigger asChild>
                       <button
                         className={`p-1.5 rounded-full ${theme === "dark"
-                            ? "hover:bg-[#6B5AED]/30 text-[#e1aa77]"
-                            : "hover:bg-[#1DA1F2]/20 text-[#2C3A4A]"
+                          ? "hover:bg-[#6B5AED]/30 text-[#e1aa77]"
+                          : "hover:bg-[#1DA1F2]/20 text-[#2C3A4A]"
                           } transition-colors duration-200`}
                         onClick={(e) => e.stopPropagation()}
                       >
@@ -169,16 +171,16 @@ export default function TeacherDashboard() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
                       className={`w-48 ${theme === "dark"
-                          ? "bg-[#2C3A4A] border-[#6B5AED]/30"
-                          : "bg-white border-[#1DA1F2]/30"
+                        ? "bg-[#2C3A4A] border-[#6B5AED]/30"
+                        : "bg-white border-[#1DA1F2]/30"
                         } rounded-lg shadow-xl`}
                       align="end"
                       sideOffset={5}
                     >
                       <DropdownMenuLabel
                         className={`${theme === "dark"
-                            ? "text-[#e1aa77]"
-                            : "text-[#6B5AED] "
+                          ? "text-[#e1aa77]"
+                          : "text-[#6B5AED] "
                           }`}
                       >
                         Ангийн тохиргоо
@@ -192,8 +194,8 @@ export default function TeacherDashboard() {
                       />
                       <DropdownMenuItem
                         className={`${theme === "dark"
-                            ? "hover:bg-[#6B5AED]/20 text-white"
-                            : "hover:bg-[#1DA1F2]/10 text-[#2C3A4A]"
+                          ? "hover:bg-[#6B5AED]/20 text-white"
+                          : "hover:bg-[#1DA1F2]/10 text-[#2C3A4A]"
                           } cursor-pointer`}
                         onClick={() => handleClassClick(cls.id)}
                       >
@@ -201,8 +203,8 @@ export default function TeacherDashboard() {
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         className={`${theme === "dark"
-                            ? "hover:bg-[#6B5AED]/20 text-white"
-                            : "hover:bg-[#1DA1F2]/10 text-[#2C3A4A]"
+                          ? "hover:bg-[#6B5AED]/20 text-white"
+                          : "hover:bg-[#1DA1F2]/10 text-[#2C3A4A]"
                           } cursor-pointer`}
                         onClick={(e) => e.stopPropagation()}
                       >
@@ -228,15 +230,15 @@ export default function TeacherDashboard() {
                 <div className="relative z-0 w-full h-full flex flex-col items-center justify-center p-6">
                   <div
                     className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 ${theme === "dark"
-                        ? "bg-[#6B5AED]/20 text-[#e1aa77]"
-                        : "bg-[#1DA1F2]/10 text-[#6B5AED]"
+                      ? "bg-[#6B5AED]/20 text-[#e1aa77]"
+                      : "bg-[#1DA1F2]/10 text-[#6B5AED]"
                       }`}
                   >
                     <PanelTop className="w-8 h-8" />
                   </div>
                   <div className="w-full text-center">
                     <h2
-                      className={`text-xl font-bold mb-1 ${theme === "dark" ? "text-white" : "text-[#2C3A4A]"
+                      className={`text-xl font-light mb-1 ${theme === "dark" ? "text-white" : "text-[#2C3A4A]"
                         }`}
                     >
                       {cls.name}
@@ -250,8 +252,8 @@ export default function TeacherDashboard() {
                     {cls.promoCode && (
                       <div
                         className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${theme === "dark"
-                            ? "bg-[#6B5AED]/30 text-[#e1aa77]"
-                            : "bg-[#1DA1F2]/10 text-[#6B5AED]"
+                          ? "bg-[#6B5AED]/30 text-[#e1aa77]"
+                          : "bg-[#1DA1F2]/10 text-[#6B5AED]"
                           }`}
                       >
                         Код: {cls.promoCode}
@@ -260,8 +262,8 @@ export default function TeacherDashboard() {
                   </div>
                   <div
                     className={`absolute bottom-0 left-0 right-0 h-1 ${theme === "dark"
-                        ? "bg-gradient-to-r from-[#6B5AED] to-purple-600"
-                        : "bg-gradient-to-r from-[#1DA1F2] to-blue-500"
+                      ? "bg-gradient-to-r from-[#6B5AED] to-purple-600"
+                      : "bg-gradient-to-r from-[#1DA1F2] to-blue-500"
                       }`}
                   />
                 </div>

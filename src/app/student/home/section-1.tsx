@@ -37,7 +37,7 @@ export default function StudentHomePage() {
                             className="rounded-full"
                         />
                         <div>
-                            <h2 className="text-lg font-bold text-[#6B5AED] dark:text-white">Nomin Erdene</h2>
+                            <h2 className="text-lg font-light text-[#6B5AED] dark:text-white">Nomin Erdene</h2>
                             <p className="text-gray-500 dark:text-gray-300">Level 7 • Class A</p>
                         </div>
                     </div>
@@ -75,7 +75,7 @@ function SummaryCard({ icon: Icon, title, value }: { icon: any; title: string; v
             </div>
             <div>
                 <p className="text-sm text-gray-500 dark:text-gray-300">{title}</p>
-                <h3 className="text-lg font-bold text-[#6B5AED] dark:text-white">{value}</h3>
+                <h3 className="text-lg font-light text-[#6B5AED] dark:text-white">{value}</h3>
             </div>
         </motion.div>
     );

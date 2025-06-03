@@ -7,15 +7,15 @@ import { useTheme } from "next-themes"
 import { useState, useRef, useEffect, useCallback, useMemo } from "react"
 import {
   BookCheck,
-  Home,
-  LayoutDashboard,
-  Smile,
-  User,
   MenuIcon,
+  Home,
+  Brush,
+  Trophy,
+  NotebookPen,
   DoorClosed as CloseIcon,
   ChevronLeft,
   ChevronRight,
-  Cannabis,
+  MessagesSquare
 } from "lucide-react"
 
 interface MenuItem {
@@ -25,12 +25,13 @@ interface MenuItem {
 }
 
 const menuItems: MenuItem[] = [
-  { title: "Нүүр", url: "/student", icon: Cannabis },
-  { title: "Профайл", url: "/student/accountProfile", icon: User },
-  { title: "broadcast room", url: "/student/broadcast", icon: LayoutDashboard },
-  { title: "leaderboard", url: "/student/leaderboard", icon: Smile },
-  { title: "planner", url: "/student/planner", icon: BookCheck },
-  { title: "post", url: "/student/posts", icon: BookCheck },
+
+  { title: "Нүүр", url: "/student", icon: Home },
+  { title: "Профайл", url: "/student/accountProfile", icon: Brush },
+  { title: "broadcast room", url: "/student/broadcast", icon: MessagesSquare },
+  { title: "leaderboard", url: "/student/leaderboard", icon: Trophy },
+  { title: "planner", url: "/student/planner", icon: NotebookPen },
+
 ]
 
 export function AppSidebar() {
