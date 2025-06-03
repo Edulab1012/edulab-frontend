@@ -122,10 +122,9 @@ export const Header = () => {
         fixed top-0 left-0 right-0 z-50 w-full
         flex justify-between items-center px-4 sm:px-6 py-3
         transition-all duration-300 ease-in-out 
-        ${
-          scrolled
-            ? "bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg shadow-sm"
-            : "bg-white dark:bg-gray-900"
+        ${scrolled
+          ? "bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg shadow-sm"
+          : "bg-white dark:bg-gray-900"
         }
         border-b border-gray-200 dark:border-gray-700
       `}
@@ -138,9 +137,8 @@ export const Header = () => {
           alt="logo"
           width={200}
           height={200}
-          className={`h-12 w-auto dark:invert transition-all duration-300 ${
-            scrolled ? "scale-90" : "scale-100"
-          }`}
+          className={`h-12 w-auto dark:invert transition-all duration-300 ${scrolled ? "scale-90" : "scale-100"
+            }`}
           priority
         />
       </Link>
@@ -201,11 +199,10 @@ export const Header = () => {
                             <AddClass>
                               <Button
                                 variant="ghost"
-                                className={`w-full justify-start gap-3 px-3 ${
-                                  pathname === link.url
+                                className={`w-full justify-start gap-3 px-3 ${pathname === link.url
                                     ? "bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300"
                                     : "hover:bg-gray-100 dark:hover:bg-gray-800"
-                                }`}
+                                  }`}
                               >
                                 <link.icon className="h-5 w-5" />
                                 <span>{link.title}</span>
@@ -223,12 +220,11 @@ export const Header = () => {
                                     key={cls.id}
                                     variant="ghost"
                                     onClick={() => handleClassClick(cls.id)}
-                                    className={`w-full justify-start gap-3 px-3 ${
-                                      pathname ===
-                                      `/teacher/class/${cls.id}/students`
+                                    className={`w-full justify-start gap-3 px-3 ${pathname ===
+                                        `/teacher/class/${cls.id}/students`
                                         ? "bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300"
                                         : "hover:bg-gray-100 dark:hover:bg-gray-800"
-                                    }`}
+                                      }`}
                                   >
                                     <PanelTop className="h-5 w-5" />
                                     <span className="truncate">{cls.name}</span>
@@ -241,11 +237,10 @@ export const Header = () => {
                           <Link key={link.title} href={link.url}>
                             <Button
                               variant="ghost"
-                              className={`w-full justify-start gap-3 px-3 ${
-                                pathname === link.url
+                              className={`w-full justify-start gap-3 px-3 ${pathname === link.url
                                   ? "bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300"
                                   : "hover:bg-gray-100 dark:hover:bg-gray-800"
-                              }`}
+                                }`}
                             >
                               <link.icon className="h-5 w-5" />
                               <span>{link.title}</span>
