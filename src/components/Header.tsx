@@ -2,21 +2,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "./ui/button";
-import {
-  LogOut,
-  Moon,
-  Sun,
-  MenuIcon,
-  Backpack,
-  BookCheck,
-  PanelTop,
-  Plus,
-} from "lucide-react";
+import { LogOut, Moon, Sun, MenuIcon } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useTheme } from "next-themes";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useMediaQuery } from "react-responsive";
+import { useRouter } from "next/navigation";
 import {
   Sheet,
   SheetContent,
@@ -24,9 +16,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import AddClass from "@/app/teacher/allclass/AddClass";
-import axios from "axios";
-import { BASE_URL } from "@/constants/baseurl";
 
 export const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -34,8 +23,6 @@ export const Header = () => {
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const isMobile = useMediaQuery({ maxWidth: 767 });
-  const [classes, setClasses] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   const handleScroll = () => {
@@ -47,33 +34,8 @@ export const Header = () => {
   useEffect(() => {
     setMounted(true);
     window.addEventListener("scroll", handleScroll);
-
-    const fetchClasses = async () => {
-      const teacherId = localStorage.getItem("teacherId");
-      if (!teacherId) return;
-
-      try {
-        const response = await axios.get(
-          `${BASE_URL}class/teacher/${teacherId}`
-        );
-        setClasses(response.data);
-      } catch (err) {
-        console.error("Error fetching classes:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (showSheet) {
-      fetchClasses();
-    }
-
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [showSheet, pathname]);
-
-  const handleClassClick = (classId: string) => {
-    router.push(`/teacher/class/${classId}/students`);
-  };
+  }, []);
 
   if (!mounted) return null;
 
@@ -89,24 +51,6 @@ export const Header = () => {
   }
 
   const items: MenuGroup[] = [
-    {
-      group: "Манай ангиуд",
-      links: [
-        { title: "Бүх ангиуд", url: "/teacher", icon: BookCheck },
-        { title: "Шинэ анги үүсгэх", url: "#", icon: Plus },
-      ],
-    },
-    {
-      group: "Анги ба хичээл",
-      links: [
-        { title: "Даасан анги", url: "/teacher/myClass", icon: PanelTop },
-        {
-          title: "Сурагчдын мэдээлэл",
-          url: "/teacher/myStudents",
-          icon: Backpack,
-        },
-      ],
-    },
     {
       group: "Тохиргоо",
       links: [{ title: "Гарах", url: "/login", icon: LogOut }],
@@ -132,9 +76,7 @@ export const Header = () => {
     >
       <Link href="/" className="flex items-center">
         <Image
-          src={
-            theme === "dark" ? "/classheroNoback.png" : "/classheroNoback.png"
-          }
+          src="/classheroNoback.png"
           alt="logo"
           width={200}
           height={200}
@@ -175,11 +117,7 @@ export const Header = () => {
               <SheetHeader className="mt-4">
                 <SheetTitle className="flex justify-center">
                   <Image
-                    src={
-                      theme === "dark"
-                        ? "/classheroNoback.png"
-                        : "/classheroNoback.png"
-                    }
+                    src="/classheroNoback.png"
                     alt="logo"
                     width={200}
                     height={200}
@@ -195,64 +133,21 @@ export const Header = () => {
                       {group.group}
                     </p>
                     <div className="space-y-1">
-                      {group.links.map((link) =>
-                        link.title === "Шинэ анги үүсгэх" ? (
-                          <div key={link.title} className="space-y-1">
-                            <AddClass>
-                              <Button
-                                variant="ghost"
-                                className={`w-full justify-start gap-3 px-3 ${
-                                  pathname === link.url
-                                    ? "bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300"
-                                    : "hover:bg-gray-100 dark:hover:bg-gray-800"
-                                }`}
-                              >
-                                <link.icon className="h-5 w-5" />
-                                <span>{link.title}</span>
-                              </Button>
-                            </AddClass>
-
-                            {loading ? (
-                              <div className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">
-                                Түр хүлээнэ үү...
-                              </div>
-                            ) : (
-                              <div className="ml-4 space-y-1">
-                                {classes.map((cls) => (
-                                  <Button
-                                    key={cls.id}
-                                    variant="ghost"
-                                    onClick={() => handleClassClick(cls.id)}
-                                    className={`w-full justify-start gap-3 px-3 ${
-                                      pathname ===
-                                      `/teacher/class/${cls.id}/students`
-                                        ? "bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300"
-                                        : "hover:bg-gray-100 dark:hover:bg-gray-800"
-                                    }`}
-                                  >
-                                    <PanelTop className="h-5 w-5" />
-                                    <span className="truncate">{cls.name}</span>
-                                  </Button>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                        ) : (
-                          <Link key={link.title} href={link.url}>
-                            <Button
-                              variant="ghost"
-                              className={`w-full justify-start gap-3 px-3 ${
-                                pathname === link.url
-                                  ? "bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300"
-                                  : "hover:bg-gray-100 dark:hover:bg-gray-800"
-                              }`}
-                            >
-                              <link.icon className="h-5 w-5" />
-                              <span>{link.title}</span>
-                            </Button>
-                          </Link>
-                        )
-                      )}
+                      {group.links.map((link) => (
+                        <Link key={link.title} href={link.url}>
+                          <Button
+                            variant="ghost"
+                            className={`w-full justify-start gap-3 px-3 ${
+                              pathname === link.url
+                                ? "bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300"
+                                : "hover:bg-gray-100 dark:hover:bg-gray-800"
+                            }`}
+                          >
+                            <link.icon className="h-5 w-5" />
+                            <span>{link.title}</span>
+                          </Button>
+                        </Link>
+                      ))}
                     </div>
                   </div>
                 ))}
