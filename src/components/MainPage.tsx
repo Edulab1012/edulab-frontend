@@ -51,7 +51,6 @@ export const MainPage = () => {
             : "bg-gradient-to-br from-[#F5F6FA] to-[#E6E9F4]"
         }`}
       >
-        {/* Background elements */}
         <motion.div
           animate={{ scale: [1, 1.05, 1], rotate: [0, 5, 0] }}
           transition={{ duration: 15, repeat: Infinity, repeatType: "reverse" }}
