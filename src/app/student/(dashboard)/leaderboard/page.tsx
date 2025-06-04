@@ -7,17 +7,17 @@ import Image from "next/image";
 const sampleData = [
   {
     name: "Уянга Бат",
-    avatar: "/avatars/uya.png",
+    avatar: "/student.png",
     points: 1500,
   },
   {
     name: "Тэмүүжин Сүх",
-    avatar: "/avatars/temka.png",
+    avatar: "/student.png",
     points: 1320,
   },
   {
     name: "Ануужин Мөнх",
-    avatar: "/avatars/anu.png",
+    avatar: "/student.png",
     points: 1210,
   },
 
