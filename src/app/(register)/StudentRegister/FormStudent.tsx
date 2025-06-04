@@ -92,6 +92,8 @@ export default function StudentForm() {
             if (res.data.success) {
                 setFormStatus("success");
                 localStorage.setItem("studentId", res.data.student.id);
+                localStorage.setItem("userId", res.data.user.id);
+                localStorage.setItem("token", res.data.token)
                 setTimeout(() => {
                     router.push("/student");
                 }, 3000);

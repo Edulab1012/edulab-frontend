@@ -100,6 +100,7 @@ export default function TeacherRegisterForm() {
       console.log("✅ Registration Response:", res);
       localStorage.setItem("teacherId", res.data.teacher.id);
       localStorage.setItem("userId", res.data.user.id);
+            localStorage.setItem("token", res.data.token)
       setStatus("success");
 
       if (res.data.user.role === "teacher") {
