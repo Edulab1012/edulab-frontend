@@ -51,11 +51,14 @@ export default function LoginForm() {
           if (role === "teacher") {
             localStorage.setItem("userId", res.data.user.id);
             localStorage.setItem("teacherId", res.data.teacher.id);
+            localStorage.setItem("token", res.data.token)
+
             router.push("/teacher");
 
           } else if (role === "student") {
             localStorage.setItem("userId", res.data.user.id);
             localStorage.setItem("studentId", res.data.student.id);
+            localStorage.setItem("token", res.data.token)
             router.push("/student");
           }
         }, 1200);
