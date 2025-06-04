@@ -22,6 +22,7 @@ import {
   Instagram,
   Facebook,
 } from "lucide-react"
+import { uploadCloudinary } from "@/lib/cloudinary"
 
 
 interface EditProfileProps {
@@ -50,7 +51,6 @@ interface Student {
 export default function EditProfile({ initialData, onSave, onCancel }: EditProfileProps) {
 
 
-
   const [formData, setFormData] = useState<Student>(initialData)
   const [isUploading, setIsUploading] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -77,7 +77,7 @@ export default function EditProfile({ initialData, onSave, onCancel }: EditProfi
     if (!file) return
     setIsUploading(true)
     try {
-      const imageUrl = URL.createObjectURL(file)
+      const imageUrl = await uploadCloudinary(file,cloudname,uplaod)
       setFormData((prev: any) => ({
         ...prev,
         ...(type === "avatar" ? { avatarUrl: imageUrl } : { backgroundUrl: imageUrl }),

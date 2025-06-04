@@ -4,14 +4,25 @@ import { AppSidebar } from "./student-sidebar";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
+import { supabase } from "@/lib/supabase";
+import { getUserAndPost } from "@/lib/googleUserData";
+import { BASE_URL } from "@/constants/baseurl";
+
 export default function Layout({ children }: { children: React.ReactNode }) {
 
-  const token = localStorage.getItem("token");
+  useEffect(() => {
+    console.log("🚀 StudentHomePage loaded");
 
-  if (token) {
-    const decoded = jwtDecode(token);
-    console.log("🪪 Декодлогдсон токен:", decoded);
-  }
+    const fetchUser = async () => {
+      const { data: { user }, error } = await supabase.auth.getUser();
+      console.log(user);
+    };
+
+    fetchUser();
+
+    getUserAndPost(`${BASE_URL}auth/testUser`, "student");
+  }, [])
+
 
   const router = useRouter()
 
@@ -19,6 +30,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     const studentId = localStorage.getItem("studentId");
     if (!studentId) {
       router.push("/login");
+    }
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decoded = jwtDecode(token);
+      console.log(decoded);
     }
   }, [router]);
 
