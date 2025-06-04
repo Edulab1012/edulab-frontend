@@ -9,6 +9,7 @@ import {
   ChevronLeft,
   ChevronRight,
   DoorClosed as CloseIcon,
+  User,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -38,6 +39,13 @@ interface Class {
 }
 
 const items: MenuGroup[] = [
+    {
+    group: "Багшийн тохиргоо",
+    links: [
+      { title: "Профайл", url: "/teacher/profileSettings", icon: User },
+     
+    ],
+  },
   {
     group: "Манай ангиуд",
     links: [
