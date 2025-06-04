@@ -19,24 +19,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import EditProfile from "./EditProfile";
-
-export interface Student {
-  firstName: string;
-  lastName: string;
-  class: string;
-  grade: string;
-  phoneNumber: string;
-  email: string;
-  teacher: string;
-  avatarUrl?: string;
-  bio?: string;
-  backgroundUrl?: string;
-  socials: {
-    instagram?: string;
-    facebook?: string;
-  };
-}
-
+import { Student } from "@/constants/types/student";
 const StudentProfileCard = () => {
   const [student, setStudent] = useState<Student>({
     firstName: "Уянга",
@@ -97,11 +80,11 @@ const StudentProfileCard = () => {
   if (isEditing) {
     return (
       <div className="w-full min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4 pl-30">
-        {/* <EditProfile
+        <EditProfile
           initialData={student}
           onSave={handleSave}
           onCancel={() => setIsEditing(false)}
-        /> */}
+        />
       </div>
     );
   }

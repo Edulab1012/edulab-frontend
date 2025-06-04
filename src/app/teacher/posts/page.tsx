@@ -3,7 +3,7 @@
 import React, { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import {BASE_URL} from "../../../constants/baseurl"
+import { BASE_URL } from "../../../constants/baseurl";
 import { useTheme } from "next-themes";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
@@ -21,15 +21,20 @@ export default function CreatePost() {
   const [classId, setClassId] = useState("");
   const [classes, setClasses] = useState<Class[]>([]);
   const [loading, setLoading] = useState(true);
+  const [teacherId, setTeacherId] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
   const router = useRouter();
   const { theme } = useTheme();
-  const userId = localStorage.getItem("userId");
-  const teacherId = localStorage.getItem("teacherId");  
+
   console.log("User ID:", userId);
-  
+
   console.log("Teacher ID:", userId);
   console.log(classId, "Class ID");
   useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    const teacherId = localStorage.getItem("teacherId");
+    setUserId(userId);
+    setTeacherId(teacherId);
     if (!teacherId) {
       router.push("/login");
       return;
@@ -37,7 +42,9 @@ export default function CreatePost() {
 
     const fetchClasses = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}class/teacher/${teacherId}`, );
+        const response = await axios.get(
+          `${BASE_URL}class/teacher/${teacherId}`
+        );
         setClasses(response.data);
       } catch (err) {
         console.error("Error fetching classes:", err);
@@ -50,49 +57,49 @@ export default function CreatePost() {
     fetchClasses();
   }, [router, teacherId]);
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  if (!title || !content || !classId) {
-    toast.error("Title, content, and class are required");
-    return;
-  }
+    if (!title || !content || !classId) {
+      toast.error("Title, content, and class are required");
+      return;
+    }
 
-  try {
-    const response = await axios.post(`${BASE_URL}posts`, {
-      title,
-      content,
-      imageUrl: imageUrl || null,
-      classId,
-      userId,
-    });
-
-    if (response.status >= 200 && response.status < 300) {
-      toast.success("Post created successfully!", {
-        icon: <FiCheckCircle className="text-green-500" />,
-        style: {
-          background: "#f0fdf4",
-          color: "#166534",
-          border: "1px solid #bbf7d0",
-        },
+    try {
+      const response = await axios.post(`${BASE_URL}posts`, {
+        title,
+        content,
+        imageUrl: imageUrl || null,
+        classId,
+        userId,
       });
-      
-      setTitle("");
-      setContent("");
-      setImageUrl("");
-      setClassId("");
-    } else {
-      toast.error("Failed to create post");
+
+      if (response.status >= 200 && response.status < 300) {
+        toast.success("Post created successfully!", {
+          icon: <FiCheckCircle className="text-green-500" />,
+          style: {
+            background: "#f0fdf4",
+            color: "#166534",
+            border: "1px solid #bbf7d0",
+          },
+        });
+
+        setTitle("");
+        setContent("");
+        setImageUrl("");
+        setClassId("");
+      } else {
+        toast.error("Failed to create post");
+      }
+    } catch (err) {
+      console.error("Error creating post:", err);
+      if (axios.isAxiosError(err)) {
+        toast.error(err.response?.data?.message || "Failed to create post");
+      } else {
+        toast.error("Failed to create post");
+      }
     }
-  } catch (err) {
-    console.error("Error creating post:", err);
-    if (axios.isAxiosError(err)) {
-      toast.error(err.response?.data?.message || "Failed to create post");
-    } else {
-      toast.error("Failed to create post");
-    }
-  }
-};
+  };
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
