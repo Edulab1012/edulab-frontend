@@ -1,30 +1,40 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
-import { motion } from "framer-motion"
-import { Edit3, Mail, Phone, GraduationCap, User, Instagram, Facebook, FileText, Sparkles } from 'lucide-react'
-import EditProfile from "./EditProfile"
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { motion } from "framer-motion";
+import {
+  Edit3,
+  Mail,
+  Phone,
+  GraduationCap,
+  User,
+  Instagram,
+  Facebook,
+  FileText,
+  Sparkles,
+} from "lucide-react";
+import EditProfile from "./EditProfile";
 
 export interface Student {
-  firstName: string
-  lastName: string
-  class: string
-  grade: string
-  phoneNumber: string
-  email: string
-  teacher: string
-  avatarUrl?: string
-  bio?: string
-  backgroundUrl?: string
+  firstName: string;
+  lastName: string;
+  class: string;
+  grade: string;
+  phoneNumber: string;
+  email: string;
+  teacher: string;
+  avatarUrl?: string;
+  bio?: string;
+  backgroundUrl?: string;
   socials: {
-    instagram?: string
-    facebook?: string
-  }
+    instagram?: string;
+    facebook?: string;
+  };
 }
 
 const StudentProfileCard = () => {
@@ -40,60 +50,60 @@ const StudentProfileCard = () => {
     bio: "Ном унших, код бичих дуртай сурагч.",
     socials: {
       instagram: "@uyanga_dev",
-      facebook: "Уянга Бат"
-    }
-  })
+      facebook: "Уянга Бат",
+    },
+  });
 
-  const [isEditing, setIsEditing] = useState(false)
-  const [activeTab, setActiveTab] = useState<"posts" | "stickers">("posts")
+  const [isEditing, setIsEditing] = useState(false);
+  const [activeTab, setActiveTab] = useState<"posts" | "stickers">("posts");
 
   const handleSave = (updatedStudent: Student) => {
-    setStudent(updatedStudent)
-    setIsEditing(false)
-  }
+    setStudent(updatedStudent);
+    setIsEditing(false);
+  };
 
   const profileInfo = [
     {
       icon: GraduationCap,
       label: "Анги",
       value: student.grade,
-      color: "text-blue-600 dark:text-blue-400"
+      color: "text-blue-600 dark:text-blue-400",
     },
     {
       icon: User,
       label: "Багш",
       value: student.teacher,
-      color: "text-green-600 dark:text-green-400"
+      color: "text-green-600 dark:text-green-400",
     },
     {
       icon: Phone,
       label: "Утас",
       value: student.phoneNumber,
-      color: "text-purple-600 dark:text-purple-400"
+      color: "text-purple-600 dark:text-purple-400",
     },
     {
       icon: Mail,
       label: "Имэйл",
       value: student.email,
-      color: "text-orange-600 dark:text-orange-400"
-    }
-  ]
+      color: "text-orange-600 dark:text-orange-400",
+    },
+  ];
 
   const tabs = [
     { id: "posts", label: "Нийтлэлүүд", icon: FileText },
-    { id: "stickers", label: "🏅 Миний шагналууд", icon: Sparkles }
-  ]
+    { id: "stickers", label: "🏅 Миний шагналууд", icon: Sparkles },
+  ];
 
   if (isEditing) {
     return (
       <div className="w-full min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4 pl-30">
-        <EditProfile
+        {/* <EditProfile
           initialData={student}
           onSave={handleSave}
           onCancel={() => setIsEditing(false)}
-        />
+        /> */}
       </div>
-    )
+    );
   }
 
   return (
@@ -129,9 +139,13 @@ const StudentProfileCard = () => {
           <CardContent className="p-6 sm:p-8">
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 -mt-16 sm:-mt-12 mb-8 ">
               <Avatar className="h-24 w-24 sm:h-28 sm:w-28 border-4 border-white dark:border-slate-700 shadow-xl">
-                <AvatarImage src={student.avatarUrl || "/placeholder.svg"} alt={`${student.firstName} ${student.lastName}`} />
+                <AvatarImage
+                  src={student.avatarUrl || "/placeholder.svg"}
+                  alt={`${student.firstName} ${student.lastName}`}
+                />
                 <AvatarFallback className="text-2xl font-semibold bg-gradient-to-br from-indigo-500 to-purple-600 text-white">
-                  {student.firstName.charAt(0)}{student.lastName.charAt(0)}
+                  {student.firstName.charAt(0)}
+                  {student.lastName.charAt(0)}
                 </AvatarFallback>
               </Avatar>
 
@@ -154,7 +168,9 @@ const StudentProfileCard = () => {
                   transition={{ duration: 0.3, delay: index * 0.1 }}
                   className="flex items-center gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
                 >
-                  <div className={`p-2 rounded-lg bg-white dark:bg-slate-800 ${item.color}`}>
+                  <div
+                    className={`p-2 rounded-lg bg-white dark:bg-slate-800 ${item.color}`}
+                  >
                     <item.icon className="h-5 w-5" />
                   </div>
                   <div className="flex-1 min-w-0">
@@ -176,13 +192,19 @@ const StudentProfileCard = () => {
                 </h3>
                 <div className="flex flex-wrap gap-3">
                   {student.socials.instagram && (
-                    <Badge variant="secondary" className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-pink-500 to-orange-500 text-white hover:from-pink-600 hover:to-orange-600">
+                    <Badge
+                      variant="secondary"
+                      className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-pink-500 to-orange-500 text-white hover:from-pink-600 hover:to-orange-600"
+                    >
                       <Instagram className="h-4 w-4" />
                       {student.socials.instagram}
                     </Badge>
                   )}
                   {student.socials.facebook && (
-                    <Badge variant="secondary" className="flex items-center gap-2 px-3 py-2 bg-blue-600 text-white hover:bg-blue-700">
+                    <Badge
+                      variant="secondary"
+                      className="flex items-center gap-2 px-3 py-2 bg-blue-600 text-white hover:bg-blue-700"
+                    >
                       <Facebook className="h-4 w-4" />
                       {student.socials.facebook}
                     </Badge>
@@ -198,10 +220,11 @@ const StudentProfileCard = () => {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as "posts" | "stickers")}
-                  className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium transition-colors ${activeTab === tab.id
-                    ? "text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-600 dark:border-indigo-400"
-                    : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
-                    }`}
+                  className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium transition-colors ${
+                    activeTab === tab.id
+                      ? "text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-600 dark:border-indigo-400"
+                      : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
+                  }`}
                 >
                   <tab.icon className="h-4 w-4" />
                   {tab.label}
@@ -229,7 +252,7 @@ const StudentProfileCard = () => {
         </Card>
       </motion.div>
     </div>
-  )
-}
+  );
+};
 
 export default StudentProfileCard;
