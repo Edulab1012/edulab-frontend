@@ -47,6 +47,7 @@ export default function StudentForm() {
             await new Promise((resolve) => setTimeout(resolve, 1500));
             setClassName(res.data.class.name);
             setClassId(res.data.class.id);
+            localStorage.setItem("classId", res.data.class.id)
 
             if (res.data.success) {
                 setStatus("success");

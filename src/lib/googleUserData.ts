@@ -3,7 +3,7 @@ import { useTestUserStore } from "@/hooks/useUserStore"
 import supabase from "@/utils/supabase"
 import axios from "axios"
 
-export const getUserAndPost = async (endpoint: string, role?: string) => {
+export const getUserAndPost = async (endpoint: string, role?: string, classId?: string | null) => {
 
     try {
         const { data: { user }, error } = await supabase.auth.getUser()
@@ -18,12 +18,13 @@ export const getUserAndPost = async (endpoint: string, role?: string) => {
             avatarUrl: user.user_metadata.avatar_url,
             provider: user.user_metadata.provider,
             role: role,
+            classId: classId
         }
 
         const response = await axios.post(endpoint, userData)
-
-        const backendUser = response.data.testUser
-        useTestUserStore.getState().setUser(backendUser) // ✅ saving backend response
+        console.log(response);
+        const backendUser = response.data
+        // useTestUserStore.getState().setUser(backendUser)
 
         console.log("✅ Saved backend user to store:", backendUser)
         return backendUser
