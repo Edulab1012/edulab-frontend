@@ -17,12 +17,14 @@ interface Post {
   createdAt: string;
   user: {
     username: string;
+    id: string;
   };
   teacher?: {
     firstName: string;
     lastName: string;
+    id: string;
   };
-  comments?: Comment[]; // Make comments optional
+  comments?: Comment[];
 }
 
 interface Comment {
@@ -31,12 +33,16 @@ interface Comment {
   createdAt: string;
   user: {
     username: string;
+    id: string;
   };
   student?: {
     firstName: string;
     lastName: string;
+    id: string;
   };
   postId: string;
+  userId: string;
+  studentId?: string;
 }
 
 export default function StudentPosts() {
@@ -50,7 +56,57 @@ export default function StudentPosts() {
   const [studentId, setStudentId] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [checkClassID, setCheckClassID] = useState<string | null>(null);
+  const [editingComment, setEditingComment] = useState<{
+    id: string | null;
+    content: string;
+  }>({ id: null, content: "" });
   const channelRef = useRef<any>(null);
+
+  const handleUpdateComment = async (commentId: string) => {
+    if (!editingComment.content.trim()) {
+      toast.error("Comment cannot be empty");
+      return;
+    }
+
+    try {
+      await axios.put(`${BASE_URL}posts/comments/${commentId}`, {
+        content: editingComment.content,
+      });
+
+      setEditingComment({ id: null, content: "" });
+      toast.success("Comment updated successfully");
+
+      if (checkClassID) {
+        await fetchPosts(checkClassID);
+      }
+    } catch (err) {
+      console.error("Error updating comment:", err);
+      toast.error("Failed to update comment");
+    }
+  };
+
+  const handleDeleteComment = async (commentId: string) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this comment?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      await axios.delete(`${BASE_URL}posts/comments/${commentId}`);
+      toast.success("Comment deleted successfully");
+
+      if (checkClassID) {
+        await fetchPosts(checkClassID);
+      }
+    } catch (err) {
+      console.error("Error deleting comment:", err);
+      toast.error("Failed to delete comment");
+    }
+  };
+
+  const startEditing = (comment: Comment) => {
+    setEditingComment({ id: comment.id, content: comment.content });
+  };
 
   useEffect(() => {
     const studentId = localStorage.getItem("studentId");
@@ -63,7 +119,7 @@ export default function StudentPosts() {
       return;
     }
 
-    const fetchStudentClass = async () => {  
+    const fetchStudentClass = async () => {
       try {
         const response = await axios.get(`${BASE_URL}student/${studentId}`);
         const classId = response.data.classId;
@@ -98,7 +154,11 @@ export default function StudentPosts() {
       const response = await axios.get(`${BASE_URL}posts/class/${classId}`);
       const postsWithComments = response.data.map((post: Post) => ({
         ...post,
-        comments: post.comments || []
+        comments: (post.comments || []).map((comment: any) => ({
+          ...comment,
+          userId: comment.user?.id,
+          studentId: comment.student?.id,
+        })),
       }));
       setPosts(postsWithComments);
     } catch (err) {
@@ -115,28 +175,58 @@ export default function StudentPosts() {
     }
 
     const channel = supabase
-      .channel('comments')
+      .channel("comments")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'Comment',
-          filter: `postId=in.(${posts.map((p) => p.id).join(',')})`,
+          event: "*",
+          schema: "public",
+          table: "Comment",
+          filter: `postId=in.(${posts.map((p) => p.id).join(",")})`,
         },
         (payload) => {
-          const newComment = payload.new as Comment;
-          setPosts((prevPosts) =>
-            prevPosts.map((post) => {
-              if (post.id === newComment.postId) {
-                return {
-                  ...post,
-                  comments: [...(post.comments || []), newComment],
-                };
-              }
-              return post;
-            })
-          );
+          if (payload.eventType === "INSERT") {
+            const newComment = payload.new as Comment;
+            setPosts((prevPosts) =>
+              prevPosts.map((post) => {
+                if (post.id === newComment.postId) {
+                  return {
+                    ...post,
+                    comments: [...(post.comments || []), newComment],
+                  };
+                }
+                return post;
+              })
+            );
+            toast.success("New comment added");
+          } else if (payload.eventType === "UPDATE") {
+            const updatedComment = payload.new as Comment;
+            setPosts((prevPosts) =>
+              prevPosts.map((post) => {
+                if (post.id === updatedComment.postId) {
+                  return {
+                    ...post,
+                    comments: (post.comments || []).map((comment) =>
+                      comment.id === updatedComment.id
+                        ? updatedComment
+                        : comment
+                    ),
+                  };
+                }
+                return post;
+              })
+            );
+          } else if (payload.eventType === "DELETE") {
+            const deletedCommentId = payload.old.id;
+            setPosts((prevPosts) =>
+              prevPosts.map((post) => ({
+                ...post,
+                comments: (post.comments || []).filter(
+                  (comment) => comment.id !== deletedCommentId
+                ),
+              }))
+            );
+          }
         }
       )
       .subscribe();
@@ -165,7 +255,8 @@ export default function StudentPosts() {
 
       setNewComment("");
       setActivePost(null);
-      // Refresh comments after adding a new one
+      toast.success("Comment added successfully");
+
       if (checkClassID) {
         await fetchPosts(checkClassID);
       }
@@ -221,7 +312,9 @@ export default function StudentPosts() {
                     >
                       <span className="text-lg">
                         {post.teacher
-                          ? `${post.teacher.firstName.charAt(0)}${post.teacher.lastName.charAt(0)}`
+                          ? `${post.teacher.firstName.charAt(
+                              0
+                            )}${post.teacher.lastName.charAt(0)}`
                           : "T"}
                       </span>
                     </div>
@@ -276,23 +369,109 @@ export default function StudentPosts() {
                             >
                               <span className="text-sm">
                                 {comment.student
-                                  ? `${comment.student.firstName.charAt(0)}${comment.student.lastName.charAt(0)}`
+                                  ? `${comment.student.firstName.charAt(
+                                      0
+                                    )}${comment.student.lastName.charAt(0)}`
                                   : "S"}
                               </span>
                             </div>
                           </div>
-                          <div className="ml-3">
-                            <p className="text-sm font-medium text-gray-800 dark:text-white">
-                              {comment.student
-                                ? `${comment.student.firstName} ${comment.student.lastName}`
-                                : comment.user.username}
-                            </p>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">
-                              {comment.content}
-                            </p>
-                            <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
-                              {new Date(comment.createdAt).toLocaleString()}
-                            </p>
+                          <div className="ml-3 flex-1">
+                            <div className="flex justify-between items-start">
+                              <div>
+                                <p className="text-sm font-medium text-gray-800 dark:text-white">
+                                  {comment.student
+                                    ? `${comment.student.firstName} ${comment.student.lastName}`
+                                    : comment.user.username}
+                                </p>
+                                {editingComment.id === comment.id ? (
+                                  <textarea
+                                    value={editingComment.content}
+                                    onChange={(e) =>
+                                      setEditingComment({
+                                        ...editingComment,
+                                        content: e.target.value,
+                                      })
+                                    }
+                                    rows={2}
+                                    className={`w-full p-2 mt-1 rounded-lg border ${
+                                      theme === "dark"
+                                        ? "bg-[#1E293B] border-gray-600 text-white"
+                                        : "bg-white border-gray-300 text-gray-900"
+                                    }`}
+                                  />
+                                ) : (
+                                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                                    {comment.content}
+                                  </p>
+                                )}
+                                <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                                  {new Date(comment.createdAt).toLocaleString()}
+                                </p>
+                              </div>
+                              {(comment.userId === userId ||
+                                (comment.studentId &&
+                                  comment.studentId === studentId)) && (
+                                <div className="flex space-x-2">
+                                  {editingComment.id === comment.id ? (
+                                    <>
+                                      <button
+                                        onClick={() =>
+                                          handleUpdateComment(comment.id)
+                                        }
+                                        className={`px-2 py-1 rounded-lg text-xs ${
+                                          theme === "dark"
+                                            ? "bg-green-600 hover:bg-green-700 text-white"
+                                            : "bg-green-500 hover:bg-green-600 text-white"
+                                        }`}
+                                      >
+                                        Save
+                                      </button>
+                                      <button
+                                        onClick={() =>
+                                          setEditingComment({
+                                            id: null,
+                                            content: "",
+                                          })
+                                        }
+                                        className={`px-2 py-1 rounded-lg text-xs ${
+                                          theme === "dark"
+                                            ? "bg-gray-600 hover:bg-gray-700 text-white"
+                                            : "bg-gray-200 hover:bg-gray-300 text-gray-800"
+                                        }`}
+                                      >
+                                        Cancel
+                                      </button>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <button
+                                        onClick={() => startEditing(comment)}
+                                        className={`px-2 py-1 rounded-lg text-xs ${
+                                          theme === "dark"
+                                            ? "bg-[#6B5AED] hover:bg-[#7D6BEE] text-white"
+                                            : "bg-[#1DA1F2] hover:bg-[#1A91E8] text-white"
+                                        }`}
+                                      >
+                                        Edit
+                                      </button>
+                                      <button
+                                        onClick={() =>
+                                          handleDeleteComment(comment.id)
+                                        }
+                                        className={`px-2 py-1 rounded-lg text-xs ${
+                                          theme === "dark"
+                                            ? "bg-red-600 hover:bg-red-700 text-white"
+                                            : "bg-red-500 hover:bg-red-600 text-white"
+                                        }`}
+                                      >
+                                        Delete
+                                      </button>
+                                    </>
+                                  )}
+                                </div>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
