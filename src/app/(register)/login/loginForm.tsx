@@ -39,7 +39,9 @@ export default function LoginForm() {
         password,
       });
 
-      if (res.data.success) {
+      console.log(res);
+
+      if (res.status == 200) {
         const role = res.data.user.role;
         setRes(res.data.user.teacherId);
 
@@ -47,12 +49,13 @@ export default function LoginForm() {
 
         setTimeout(() => {
           if (role === "teacher") {
-            router.push("/teacher");
             localStorage.setItem("userId", res.data.user.id);
-            localStorage.setItem("teacherId", res.data.user.teacherId);
+            localStorage.setItem("teacherId", res.data.teacher.id);
+            router.push("/teacher");
+
           } else if (role === "student") {
             localStorage.setItem("userId", res.data.user.id);
-            localStorage.setItem("studentId", res.data.user.studentId);
+            localStorage.setItem("studentId", res.data.student.id);
             router.push("/student");
           }
         }, 1200);
