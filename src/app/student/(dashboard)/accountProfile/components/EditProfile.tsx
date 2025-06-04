@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useRef, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -23,7 +22,7 @@ import {
   Instagram,
   Facebook,
 } from "lucide-react"
-import type { Student } from "./student-profile-card"
+
 
 interface EditProfileProps {
   initialData: Student
@@ -31,7 +30,27 @@ interface EditProfileProps {
   onCancel: () => void
 }
 
+
+
+interface Student {
+  firstName: string
+  lastName: string
+  class: string
+  email: string
+  avatarUrl?: string
+  backgroundUrl?: string
+  phoneNumber?: string
+  teacher?: string
+  bio?: string
+  socials?: {
+    instagram?: string
+    facebook?: string
+  }
+}
 export default function EditProfile({ initialData, onSave, onCancel }: EditProfileProps) {
+
+
+
   const [formData, setFormData] = useState<Student>(initialData)
   const [isUploading, setIsUploading] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -48,9 +67,9 @@ export default function EditProfile({ initialData, onSave, onCancel }: EditProfi
 
   const handleSocialChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    setFormData((prev: { socials: any }) => ({
+    setFormData((prev: Student) => ({
       ...prev,
-      socials: { ...prev.socials, [name]: value },
+      socials: { ...(prev.socials || {}), [name]: value },
     }))
   }
 
@@ -74,7 +93,6 @@ export default function EditProfile({ initialData, onSave, onCancel }: EditProfi
     const newErrors: Record<string, string> = {}
     if (!formData.firstName.trim()) newErrors.firstName = "Нэр оруулна уу"
     if (!formData.lastName.trim()) newErrors.lastName = "Овог оруулна уу"
-    if (!formData.grade.trim()) newErrors.grade = "Анги оруулна уу"
     if (!formData.email.trim()) newErrors.email = "Имэйл оруулна уу"
     else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Зөв имэйл оруулна уу"
     setErrors(newErrors)
@@ -88,7 +106,7 @@ export default function EditProfile({ initialData, onSave, onCancel }: EditProfi
   const formFields = [
     { name: "lastName", label: "Овог", icon: User, type: "text", required: true },
     { name: "firstName", label: "Нэр", icon: User, type: "text", required: true },
-    { name: "grade", label: "Анги", icon: GraduationCap, type: "text", required: true },
+    { name: "class", label: "Анги", icon: GraduationCap, type: "text", required: false },
     { name: "teacher", label: "Багшийн нэр", icon: User, type: "text" },
     { name: "phoneNumber", label: "Утасны дугаар", icon: Phone, type: "tel" },
     { name: "email", label: "Имэйл", icon: Mail, type: "email", required: true },

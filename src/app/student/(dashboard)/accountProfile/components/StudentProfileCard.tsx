@@ -10,16 +10,16 @@ import { motion } from "framer-motion"
 import { Edit3, Mail, Phone, GraduationCap, User, Instagram, Facebook, FileText, Sparkles } from 'lucide-react'
 import EditProfile from "./EditProfile"
 
-
 export interface Student {
   firstName: string
   lastName: string
+  class: string
   grade: string
   phoneNumber: string
   email: string
   teacher: string
-  avatarUrl: string
-  bio: string
+  avatarUrl?: string
+  bio?: string
   backgroundUrl?: string
   socials: {
     instagram?: string
@@ -27,10 +27,11 @@ export interface Student {
   }
 }
 
-export default function StudentProfileCard() {
+const StudentProfileCard = () => {
   const [student, setStudent] = useState<Student>({
     firstName: "Уянга",
     lastName: "Бат",
+    class: "11A",
     grade: "11А",
     phoneNumber: "95152233",
     email: "uyangaab@gmail.com",
@@ -80,7 +81,7 @@ export default function StudentProfileCard() {
 
   const tabs = [
     { id: "posts", label: "Нийтлэлүүд", icon: FileText },
-    { id: "stickers", label: "Наалтууд", icon: Sparkles }
+    { id: "stickers", label: "🏅 Миний шагналууд", icon: Sparkles }
   ]
 
   if (isEditing) {
@@ -103,8 +104,7 @@ export default function StudentProfileCard() {
         transition={{ duration: 0.5 }}
         className="w-full max-w-2xl"
       >
-        <Card className="overflow-hidden shadow-2xl border-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm shadow-purple-900  ml:w-200 ">
-          {/* Header with background */}
+        <Card className="overflow-hidden shadow-2xl border-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm shadow-purple-900  ml:w-200 xl:w-230 ">
           <div className="relative h-32 sm:h-40 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-full ">
             {student.backgroundUrl && (
               <img
@@ -115,7 +115,6 @@ export default function StudentProfileCard() {
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
 
-            {/* Edit button */}
             <Button
               onClick={() => setIsEditing(true)}
               size="sm"
@@ -128,7 +127,6 @@ export default function StudentProfileCard() {
           </div>
 
           <CardContent className="p-6 sm:p-8">
-            {/* Profile section */}
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 -mt-16 sm:-mt-12 mb-8 ">
               <Avatar className="h-24 w-24 sm:h-28 sm:w-28 border-4 border-white dark:border-slate-700 shadow-xl">
                 <AvatarImage src={student.avatarUrl || "/placeholder.svg"} alt={`${student.firstName} ${student.lastName}`} />
@@ -147,8 +145,7 @@ export default function StudentProfileCard() {
               </div>
             </div>
 
-            {/* Info grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 mb-8">
               {profileInfo.map((item, index) => (
                 <motion.div
                   key={item.label}
@@ -172,7 +169,6 @@ export default function StudentProfileCard() {
               ))}
             </div>
 
-            {/* Social links */}
             {(student.socials.instagram || student.socials.facebook) && (
               <div className="mb-8">
                 <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
@@ -197,7 +193,6 @@ export default function StudentProfileCard() {
 
             <Separator className="my-6" />
 
-            {/* Tabs */}
             <div className="flex border-b border-slate-200 dark:border-slate-700 mb-6">
               {tabs.map((tab) => (
                 <button
@@ -214,7 +209,6 @@ export default function StudentProfileCard() {
               ))}
             </div>
 
-            {/* Tab content */}
             <div className="min-h-[200px] flex items-center justify-center">
               <div className="text-center">
                 <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
@@ -227,8 +221,7 @@ export default function StudentProfileCard() {
                 <p className="text-slate-500 dark:text-slate-400">
                   {activeTab === "posts"
                     ? "Миний нийтлэлүүд хараахан байхгүй байна."
-                    : "Миний наалтууд хараахан байхгүй байна."
-                  }
+                    : "Миний шагнал хараахан байхгүй байна."}
                 </p>
               </div>
             </div>
@@ -238,3 +231,5 @@ export default function StudentProfileCard() {
     </div>
   )
 }
+
+export default StudentProfileCard;

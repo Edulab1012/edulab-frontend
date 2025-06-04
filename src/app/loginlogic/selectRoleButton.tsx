@@ -25,8 +25,6 @@ export default function SelectRoleButton() {
             <div className="flex gap-20 bg-amber-200 m-30 items-center p-2">
                 <button onClick={() => handleLoginWithRole("teacher")} className="p-2 hover:bg-blue-300 bg-blue-100 rounded-md">Teacher</button>
                 <button onClick={() => handleLoginWithRole("student")} className="p-2 hover:bg-blue-300 bg-blue-100 rounded-md">Student</button>
-                <button onClick={() => handleLoginWithRole("parent")} className="p-2 hover:bg-blue-300 bg-blue-100 rounded-md">Parent</button>
-                <button onClick={() => handleLoginWithRole("school")} className="p-2 hover:bg-blue-300 bg-blue-100 rounded-md">Admin</button>
             </div>
         </>
     )
