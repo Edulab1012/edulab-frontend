@@ -80,7 +80,7 @@ export default function StudentFeatureSelector() {
 
   return (
     <div
-      className="w-full min-h-screen py-9 px-4 sm:px-8 bg-gradient-to-br from-[#F5F6FA] to-[#E0E7FF] dark:from-[#121220] dark:to-[#1E1B4B] flex items-center justify-center relative mt-30"
+      className="w-full min-h-screen py-9 px-4 sm:px-8 bg-gradient-to-br from-[#F5F6FA] to-[#E0E7FF] dark:from-[#121220] dark:to-[#1E1B4B] flex items-center justify-center  relative mt-30"
       ref={ref}
     >
       <motion.div
@@ -181,7 +181,7 @@ export default function StudentFeatureSelector() {
           theme === "dark"
             ? "from-[#6B5AED] to-[#B077E0]"
             : "from-[#1DA1F2] to-[#5bcfd3]"
-        } bg-clip-text text-transparent text-6xl absolute top-[-10%] sm:relative sm:ml-20`}
+        } bg-clip-text text-transparent text-5xl absolute top-[-10%] sm:relative sm:ml-20 w-[400px]`}
       >
         Student features
       </h1>
