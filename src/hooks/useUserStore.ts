@@ -1,53 +1,37 @@
-import { create } from 'zustand'
+import { create } from "zustand"
+import { persist } from "zustand/middleware"
 
-interface TestUser {
+interface User {
     id: string
     email: string
-    fullName?: string
+    username?: string
     avatarUrl?: string
-    provider?: string | null
-    role?: string
-    grade?: string
-    group?: string
-    createdAt?: string
-    updatedAt?: string
+    classId?: string
+    className?: string
 }
 
-interface TestUserState {
-    user: TestUser | null
-    setUser: (user: TestUser) => void
+interface UserStore {
+    user: User | null
+    setUser: (user: User | null) => void
+    updateUser: (updates: Partial<User>) => void
     clearUser: () => void
 }
 
-export const useTestUserStore = create<TestUserState>((set) => ({
-    user: null,
-    setUser: (user) => set({ user }),
-    clearUser: () => set({ user: null }),
-}))
-
-
-
-
-interface UserProfile {
-    name: string;
-    about: string;
-    image?: string;
-    background?: string;
-    socialmediaUrl: string;
-}
-
-interface UserDataStore {
-    profile: UserProfile | null;
-    setProfile: (profile: UserProfile) => void;
-}
-
-export const useUserDataStore = create<UserDataStore>((set) => ({
-    profile: {
-        name: "Уянга",
-        about: "Ном унших, код бичих дуртай.",
-        image: "/student.png",
-        background: "/bg-default.jpg",
-        socialmediaUrl: "https://facebook.com/uyanga.dev",
-    },
-    setProfile: (profile) => set({ profile }),
-}));
+export const useUserStore = create<UserStore>()(
+    persist(
+        (set, get) => ({
+            user: null,
+            setUser: (user) => set({ user }),
+            updateUser: (updates) => {
+                const currentUser = get().user
+                if (currentUser) {
+                    set({ user: { ...currentUser, ...updates } })
+                }
+            },
+            clearUser: () => set({ user: null }),
+        }),
+        {
+            name: "user-storage",
+        },
+    ),
+)

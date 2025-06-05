@@ -19,7 +19,7 @@ import {
   PoundSterling
 
 } from "lucide-react"
-
+import LogoutButton from "@/components/LogoutButton";
 interface MenuItem {
   title: string
   url: string
@@ -117,24 +117,30 @@ export function AppSidebar() {
             {isFolded ? <ChevronRight className="w-3 h-3" /> : <ChevronLeft className="w-3 h-3" />}
           </button>
 
-          <nav className={`flex flex-col space-y-2 w-full px-2 py-6 ${isFolded ? "items-center" : "px-4"}`}>
-            {menuItems.map((item) => (
-              <Link key={item.title} href={item.url}>
-                <div
-                  className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-150 w-full
-                    hover:scale-[1.02] active:scale-[0.98] group relative overflow-hidden
-                    ${pathname === item.url
-                      ? "text-white bg-gradient-to-r from-[#6B5AED] to-purple-600 shadow-md"
-                      : theme === "dark"
-                        ? "text-white hover:bg-[#6B5AED]/20"
-                        : "text-black hover:bg-[#1DA1F2]/10"}
-                    ${isFolded ? "justify-center" : ""}`}
-                >
-                  <item.icon className="w-5 h-5" />
-                  {!isFolded && <span className="text-sm font-medium">{item.title}</span>}
-                </div>
-              </Link>
-            ))}
+          <nav className={`flex flex-col justify-between h-full space-y-2 w-full px-2 py-6 ${isFolded ? "items-center" : "px-4"}`}>
+            <div className="flex flex-col gap-2">
+              {menuItems.map((item) => (
+                <Link key={item.title} href={item.url}>
+                  <div
+                    className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-150 w-full
+            hover:scale-[1.02] active:scale-[0.98] group relative overflow-hidden
+            ${pathname === item.url
+                        ? "text-white bg-gradient-to-r from-[#6B5AED] to-purple-600 shadow-md"
+                        : theme === "dark"
+                          ? "text-white hover:bg-[#6B5AED]/20"
+                          : "text-black hover:bg-[#1DA1F2]/10"}
+            ${isFolded ? "justify-center" : ""}`}
+                  >
+                    <item.icon className="w-5 h-5" />
+                    {!isFolded && <span className="text-sm font-medium">{item.title}</span>}
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            <div className={`mt-6 w-full px-3 ${isFolded ? "flex justify-center" : ""}`}>
+              <LogoutButton folded={isFolded} />
+            </div>
           </nav>
         </div>
       )}

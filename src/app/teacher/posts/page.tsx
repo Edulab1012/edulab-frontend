@@ -310,7 +310,7 @@ export default function TeacherPosts() {
         // Fetch teacher's posts
         await fetchTeacherPosts();
       } catch (err) {
-        console.error("Error fetching data:", err);
+        console.log("Error fetching data:", err);
         toast.error("Failed to fetch data");
       } finally {
         setLoading(false);
@@ -461,7 +461,7 @@ export default function TeacherPosts() {
         toast.error("Failed to create post");
       }
     } catch (err) {
-      console.error("Error creating post:", err);
+      console.log("Error creating post:", err);
       if (axios.isAxiosError(err)) {
         toast.error(err.response?.data?.message || "Failed to create post");
       } else {
@@ -499,21 +499,25 @@ export default function TeacherPosts() {
         <div className="flex border-b border-gray-200 dark:border-gray-700 mb-6">
           <button
             onClick={() => setActiveTab("create")}
+
             className={`py-2 px-4 font-medium text-sm flex items-center ${
               activeTab === "create"
+
                 ? "text-[#6B5AED] dark:text-[#7D6BEE] border-b-2 border-[#6B5AED] dark:border-[#7D6BEE]"
                 : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
-            }`}
+              }`}
           >
             <FiEdit2 className="mr-2" /> Нийтлэл үүсгэх
           </button>
           <button
             onClick={() => setActiveTab("view")}
+
             className={`py-2 px-4 font-medium text-sm flex items-center ${
               activeTab === "view"
+
                 ? "text-[#6B5AED] dark:text-[#7D6BEE] border-b-2 border-[#6B5AED] dark:border-[#7D6BEE]"
                 : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
-            }`}
+              }`}
           >
             <FiMessageSquare className="mr-2" /> Нийтлэлүүд харах
           </button>
@@ -525,16 +529,17 @@ export default function TeacherPosts() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
             onSubmit={handleSubmit}
+
             className={`max-w-3xl mx-auto p-6 rounded-xl shadow-md ${
               theme === "dark" ? "bg-[#3a2bac]" : "bg-white"
             }`}
+
           >
             <div className="mb-4">
               <label
                 htmlFor="class"
-                className={`block mb-2 text-sm font-medium ${
-                  theme === "dark" ? "text-gray-300" : "text-gray-700"
-                }`}
+                className={`block mb-2 text-sm font-medium ${theme === "dark" ? "text-gray-300" : "text-gray-700"
+                  }`}
               >
                 Анги
               </label>
@@ -542,11 +547,10 @@ export default function TeacherPosts() {
                 id="class"
                 value={classId}
                 onChange={(e) => setClassId(e.target.value)}
-                className={`w-full p-2.5 rounded-lg border ${
-                  theme === "dark"
+                className={`w-full p-2.5 rounded-lg border ${theme === "dark"
                     ? "bg-[#1E293B] border-gray-600 text-white"
                     : "bg-white border-gray-300 text-gray-900"
-                }`}
+                  }`}
                 required
               >
                 <option value="">Ангиа сонгох</option>
@@ -561,9 +565,8 @@ export default function TeacherPosts() {
             <div className="mb-4">
               <label
                 htmlFor="title"
-                className={`block mb-2 text-sm font-medium ${
-                  theme === "dark" ? "text-gray-300" : "text-gray-700"
-                }`}
+                className={`block mb-2 text-sm font-medium ${theme === "dark" ? "text-gray-300" : "text-gray-700"
+                  }`}
               >
                 Гарчиг
               </label>
@@ -572,11 +575,10 @@ export default function TeacherPosts() {
                 id="title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className={`w-full p-2.5 rounded-lg border ${
-                  theme === "dark"
+                className={`w-full p-2.5 rounded-lg border ${theme === "dark"
                     ? "bg-[#1E293B] border-gray-600 text-white"
                     : "bg-white border-gray-300 text-gray-900"
-                }`}
+                  }`}
                 placeholder="Post title"
                 required
               />
@@ -585,9 +587,8 @@ export default function TeacherPosts() {
             <div className="mb-4">
               <label
                 htmlFor="content"
-                className={`block mb-2 text-sm font-medium ${
-                  theme === "dark" ? "text-gray-300" : "text-gray-700"
-                }`}
+                className={`block mb-2 text-sm font-medium ${theme === "dark" ? "text-gray-300" : "text-gray-700"
+                  }`}
               >
                 Агуулга
               </label>
@@ -596,11 +597,10 @@ export default function TeacherPosts() {
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 rows={6}
-                className={`w-full p-2.5 rounded-lg border ${
-                  theme === "dark"
+                className={`w-full p-2.5 rounded-lg border ${theme === "dark"
                     ? "bg-[#1E293B] border-gray-600 text-white"
                     : "bg-white border-gray-300 text-gray-900"
-                }`}
+                  }`}
                 placeholder="Write your post content here..."
                 required
               ></textarea>
@@ -609,9 +609,8 @@ export default function TeacherPosts() {
             <div className="mb-6">
               <label
                 htmlFor="imageUrl"
-                className={`block mb-2 text-sm font-medium ${
-                  theme === "dark" ? "text-gray-300" : "text-gray-700"
-                }`}
+                className={`block mb-2 text-sm font-medium ${theme === "dark" ? "text-gray-300" : "text-gray-700"
+                  }`}
               >
                 Зураг оруулах
               </label>
@@ -620,11 +619,10 @@ export default function TeacherPosts() {
                 id="imageUrl"
                 value={imageUrl}
                 onChange={(e) => setImageUrl(e.target.value)}
-                className={`w-full p-2.5 rounded-lg border ${
-                  theme === "dark"
+                className={`w-full p-2.5 rounded-lg border ${theme === "dark"
                     ? "bg-[#1E293B] border-gray-600 text-white"
                     : "bg-white border-gray-300 text-gray-900"
-                }`}
+                  }`}
                 placeholder="https://example.com/image.jpg"
               />
             </div>
@@ -632,11 +630,13 @@ export default function TeacherPosts() {
             <div className="flex justify-end">
               <button
                 type="submit"
+
                 className={`px-6 py-2.5 rounded-lg font-medium text-white ${
                   theme === "dark"
                     ? "bg-purple-600 hover:bg-purple-700"
                     : "bg-purple-500 hover:bg-purple-600"
                 } transition-colors flex items-center`}
+
               >
                 <FiCheckCircle className="mr-2" /> Нийтлэл үүсгэх
               </button>
@@ -651,12 +651,14 @@ export default function TeacherPosts() {
                 ))}
               </div>
             ) : teacherPosts.length === 0 ? (
+
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 className={`p-6 rounded-xl text-center shadow-sm ${
                   theme === "dark" ? "bg-[#3a2bac]" : "bg-white"
                 }`}
+
               >
                 <div className="flex flex-col items-center justify-center py-12">
                   <FiMessageSquare size={48} className="text-gray-400 mb-4" />
@@ -675,6 +677,8 @@ export default function TeacherPosts() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
+
+                 
                   className={`p-6 rounded-xl shadow-md ${
                     theme === "dark" ? "bg-[#3a2bac]" : "bg-white"
                   }`}
@@ -688,6 +692,7 @@ export default function TeacherPosts() {
                       }
                       isTeacher={!!post.teacher}
                     />
+
                     <div className="ml-4">
                       <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
                         {post.title}
@@ -719,6 +724,7 @@ export default function TeacherPosts() {
                       />
                     </div>
                   )}
+
 
                   <div className="mt-6 border-t border-gray-200 dark:border-gray-700 pt-4">
                     <div className="flex items-center justify-between mb-4">
@@ -789,6 +795,7 @@ export default function TeacherPosts() {
                             >
                               <FiSend className="mr-1" /> Илгээх
                             </button>
+
                           </div>
                         </motion.div>
                       )}

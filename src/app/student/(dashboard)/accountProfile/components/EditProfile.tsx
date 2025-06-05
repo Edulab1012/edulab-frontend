@@ -23,8 +23,10 @@ import {
   Facebook,
 } from "lucide-react";
 import { uploadCloudinary } from "@/lib/cloudinary";
-import { Student } from "@/constants/types/student";
-import { cloudname } from "@/constants/cloudinaryName";
+
+import { Student } from "./types";
+
+
 
 interface EditProfileProps {
   initialData: Student;
@@ -37,7 +39,7 @@ export default function EditProfile({
   onSave,
   onCancel,
 }: EditProfileProps) {
-  const [formData, setFormData] = useState<Student>(initialData);
+  const [formData, setFormData] = useState<Student>(initialData || {});
   const [isUploading, setIsUploading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -68,10 +70,12 @@ export default function EditProfile({
     if (!file) return;
     setIsUploading(true);
     try {
+
+      const resourceType = "image";
       const imageUrl = await uploadCloudinary(
         file,
-        cloudname,
-        "your_upload_preset"
+        resourceType
+
       );
 
       setFormData((prev: any) => ({
@@ -81,7 +85,7 @@ export default function EditProfile({
           : { backgroundUrl: imageUrl }),
       }));
     } catch (error) {
-      console.error(`Failed to upload ${type}:`, error);
+      console.log(`Failed to upload ${type}:`, error);
     } finally {
       setIsUploading(false);
     }
@@ -89,9 +93,9 @@ export default function EditProfile({
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    if (!formData.firstName.trim()) newErrors.firstName = "Нэр оруулна уу";
-    if (!formData.lastName.trim()) newErrors.lastName = "Овог оруулна уу";
-    if (!formData.email.trim()) newErrors.email = "Имэйл оруулна уу";
+    if (!formData.firstName?.trim()) newErrors.firstName = "Нэр оруулна уу";
+    if (!formData.lastName?.trim()) newErrors.lastName = "Овог оруулна уу";
+    if (!formData.email?.trim()) newErrors.email = "Имэйл оруулна уу";
     else if (!/\S+@\S+\.\S+/.test(formData.email))
       newErrors.email = "Зөв имэйл оруулна уу";
     setErrors(newErrors);
@@ -127,7 +131,7 @@ export default function EditProfile({
       required: true,
     },
     {
-      name: "class",
+      name: "grade", // fixed from "class"
       label: "Анги",
       icon: GraduationCap,
       type: "text",
@@ -164,7 +168,7 @@ export default function EditProfile({
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
-      className="w-full max-w-4xl mx-auto"
+      className="w-full max-w-4xl ml-15 mt-10"
     >
       <Card className="shadow-2xl border-0 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm">
         <div className="relative h-40 rounded-t-lg overflow-hidden">
@@ -195,6 +199,13 @@ export default function EditProfile({
           >
             <Camera className="h-4 w-4 mr-2" /> Арын зураг
           </Button>
+          <Button
+            onClick={onCancel}
+            variant="outline"
+            className="flex-1 hover:bg-slate-100 dark:hover:bg-slate-700 absolute right-2 top-2"
+          >
+            <X className="h-4 w-4 mr-2" /> Болих
+          </Button>
         </div>
 
         <CardHeader className="pb-4">
@@ -220,8 +231,8 @@ export default function EditProfile({
                     alt="Profile"
                   />
                   <AvatarFallback className="text-2xl font-semibold bg-gradient-to-br from-indigo-500 to-purple-600 text-white">
-                    {formData.firstName.charAt(0)}
-                    {formData.lastName.charAt(0)}
+                    {formData.firstName?.charAt(0) || ""}
+                    {formData.lastName?.charAt(0) || ""}
                   </AvatarFallback>
                 </Avatar>
                 <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition">
@@ -264,11 +275,10 @@ export default function EditProfile({
                   value={(formData as any)[field.name] || ""}
                   onChange={handleInputChange}
                   placeholder={field.label}
-                  className={`transition-colors ${
-                    errors[field.name]
-                      ? "border-red-500 focus:border-red-500"
-                      : "border-slate-300 dark:border-slate-600"
-                  }`}
+                  className={`transition-colors ${errors[field.name]
+                    ? "border-red-500 focus:border-red-500"
+                    : "border-slate-300 dark:border-slate-600"
+                    }`}
                 />
                 {errors[field.name] && (
                   <p className="text-sm text-red-500">{errors[field.name]}</p>
@@ -319,7 +329,7 @@ export default function EditProfile({
                     name={field.name}
                     value={
                       formData.socials?.[
-                        field.name as keyof typeof formData.socials
+                      field.name as keyof typeof formData.socials
                       ] || ""
                     }
                     onChange={handleSocialChange}
@@ -350,8 +360,7 @@ export default function EditProfile({
             >
               {isUploading ? (
                 <>
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" /> Түр хүлээнэ
-                  үү...
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" /> Түр хүлээнэ үү...
                 </>
               ) : (
                 <>

@@ -1,44 +1,57 @@
 "use client";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "./student-sidebar";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { jwtDecode } from "jwt-decode";
-import { supabase } from "@/lib/supabase";
 import { getUserAndPost } from "@/lib/googleUserData";
 import { BASE_URL } from "@/constants/baseurl";
+import { toast } from "sonner";
+import axios from "axios";
+import { useStudentStore } from "@/hooks/useStudentStore";
+import supabase from "@/lib/supabase";
+
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-
+  const router = useRouter();
+  const setStudent = useStudentStore((state) => state.setStudent);
 
   useEffect(() => {
-    console.log("🚀 StudentHomePage loaded");
+    console.log("🚀 Student Layout mounted");
 
     const fetchUser = async () => {
       const { data: { user }, error } = await supabase.auth.getUser();
-      console.log(user);
+      if (error || !user) {
+        console.log("❌ Supabase auth error:", error);
+        toast("Нэвтрэхэд алдаа гарлаа", { duration: 3000 });
+        router.push("/login");
+      }
+    };
+
+    const fetchStudentData = async () => {
+      const studentId = localStorage.getItem("studentId");
+      const classId = localStorage.getItem("classId");
+
+      try {
+        getUserAndPost(`${BASE_URL}auth/testUser`, "student", classId);
+
+      } catch (err) {
+        console.log("❌ Error fetching student:", err);
+
+      }
     };
 
     fetchUser();
-    const classId = localStorage.getItem("classId")
-    getUserAndPost(`${BASE_URL}auth/testUser`, "student", classId);
-  }, [])
+    fetchStudentData()
 
-
-  const router = useRouter()
-
-  useEffect(() => {
-    const studentId = localStorage.getItem("studentId");
-    if (!studentId) {
-      router.push("/login");
-    }
-    const token = localStorage.getItem("token");
-    if (token) {
-      const decoded = jwtDecode(token);
-      console.log(decoded);
-    }
-
-  }, [router]);
+    setTimeout(() => {
+      const studentId = localStorage.getItem("studentId");
+      if (!studentId) {
+        toast.dismiss("Бүртгэлтэй байна нэвтрэнэ үү");
+        router.push("/login")
+      }
+    }, 5000);
+  }, []);
 
   return (
     <SidebarProvider>

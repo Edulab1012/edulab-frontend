@@ -46,7 +46,9 @@ interface AddClassProps {
 const items: MenuGroup[] = [
   {
     group: "Багшийн тохиргоо",
+
     links: [{ title: "Профайл", url: "/teacher/profileSettings", icon: User }],
+
   },
   {
     group: "Манай ангиуд",
