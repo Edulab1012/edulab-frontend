@@ -23,6 +23,11 @@ export const getUserAndPost = async (endpoint: string, role?: string, classId?: 
 
         const response = await axios.post(endpoint, userData)
         console.log(response);
+        localStorage.setItem("userId", response?.data?.user?.id)
+        localStorage.setItem("teacherId", response?.data?.teacher?.id)
+        localStorage.setItem("studentId", response?.data?.student?.id)
+        localStorage.setItem("token", response?.data?.token);
+
         const backendUser = response.data
         // useTestUserStore.getState().setUser(backendUser)
 

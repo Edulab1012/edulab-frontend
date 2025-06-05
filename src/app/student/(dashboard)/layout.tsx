@@ -28,15 +28,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
 
   useEffect(() => {
-    // const studentId = localStorage.getItem("studentId");
-    // if (!studentId) {
-    //   router.push("/login");
-    // }
-    // const token = localStorage.getItem("token");
-    // if (token) {
-    //   const decoded = jwtDecode(token);
-    //   console.log(decoded);
-    // }
+    const studentId = localStorage.getItem("studentId");
+    if (!studentId) {
+      router.push("/login");
+    }
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decoded = jwtDecode(token);
+      console.log(decoded);
+    }
 
   }, [router]);
 
