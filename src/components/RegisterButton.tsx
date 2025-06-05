@@ -1,17 +1,18 @@
-"use client"
+"use client";
 
 import {
-    Dialog,
-    DialogTrigger,
-    DialogContent,
-    DialogTitle,
-    DialogDescription,
-    DialogFooter,
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { useRouter } from "next/navigation"
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export default function RegisterButton() {
+
     const router = useRouter()
 
 
@@ -100,6 +101,8 @@ export default function RegisterButton() {
             </DialogContent>
         </Dialog>
     )
+
 }
 
-const buttonStyle = "relative w-44 h-44 rounded-2xl bg-white/50 dark:bg-[#2C3A4A]/50 shadow-lg group overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-xl border border-white/50 dark:border-white/10"
+const buttonStyle =
+  "relative w-44 h-44 rounded-2xl bg-white/50 dark:bg-[#2C3A4A]/50 shadow-lg group overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-xl border border-white/50 dark:border-white/10";

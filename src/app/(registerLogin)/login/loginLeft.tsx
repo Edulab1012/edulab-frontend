@@ -16,7 +16,7 @@ export default function LoginDecor() {
 
   return (
     <div
-      className={`relative w-full h-auto rounded-3xl ml-5 overflow-hidden border-r-4 ${
+      className={`relative w-full h-auto rounded-3xl overflow-hidden border-r-4 ${
         theme === "dark"
           ? "bg-[#121220] border-r-[#6B5AED]"
           : "bg-[#F5F6FA] border-r-[#1DA1F2]"

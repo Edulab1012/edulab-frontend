@@ -24,16 +24,19 @@ import {
 interface AddClassProps {
   children?: React.ReactNode;
   onSuccess?: () => void;
+  onClose?: () => void;
 }
 
-export default function AddClass({ children, onSuccess }: AddClassProps) {
+export default function AddClass({
+  children,
+  onSuccess,
+  onClose,
+}: AddClassProps) {
   const [className, setClassName] = useState("");
   const [promoCode, setPromoCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [open, setOpen] = useState(false);
-
-
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -96,7 +99,6 @@ export default function AddClass({ children, onSuccess }: AddClassProps) {
       setIsLoading(false);
     }
   };
-
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -169,12 +171,13 @@ export default function AddClass({ children, onSuccess }: AddClassProps) {
 
           <motion.button
             type="submit"
-            className={`w-full py-3 px-4 rounded-lg font-medium flex items-center justify-center gap-2 ${isLoading
-              ? "bg-indigo-400 cursor-not-allowed"
-              : isSuccess
+            className={`w-full py-3 px-4 rounded-lg font-medium flex items-center justify-center gap-2 ${
+              isLoading
+                ? "bg-indigo-400 cursor-not-allowed"
+                : isSuccess
                 ? "bg-green-500"
                 : "bg-indigo-600 hover:bg-indigo-700"
-              } text-white transition-colors`}
+            } text-white transition-colors`}
             disabled={isLoading || isSuccess}
             whileHover={!isLoading && !isSuccess ? { scale: 1.02 } : {}}
             whileTap={!isLoading && !isSuccess ? { scale: 0.98 } : {}}

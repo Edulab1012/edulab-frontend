@@ -23,7 +23,9 @@ import {
   Facebook,
 } from "lucide-react";
 import { uploadCloudinary } from "@/lib/cloudinary";
+
 import { Student } from "./types";
+
 
 
 interface EditProfileProps {
@@ -68,10 +70,12 @@ export default function EditProfile({
     if (!file) return;
     setIsUploading(true);
     try {
+
       const resourceType = "image";
       const imageUrl = await uploadCloudinary(
         file,
         resourceType
+
       );
 
       setFormData((prev: any) => ({
@@ -99,7 +103,16 @@ export default function EditProfile({
   };
 
   const handleSave = () => {
-    if (validateForm()) onSave(formData);
+    if (validateForm()) {
+      // Ensure phoneNumber, teacher, and socials are always defined
+      const safeFormData = {
+        ...formData,
+        phoneNumber: formData.phoneNumber ?? "",
+        teacher: formData.teacher ?? "",
+        socials: formData.socials ?? { instagram: "", facebook: "" },
+      };
+      onSave(safeFormData);
+    }
   };
 
   const formFields = [
@@ -142,7 +155,12 @@ export default function EditProfile({
       icon: Instagram,
       placeholder: "@username",
     },
-    { name: "facebook", label: "Facebook", icon: Facebook, placeholder: "Нэр" },
+    {
+      name: "facebook",
+      label: "Facebook",
+      icon: Facebook,
+      placeholder: "Нэр",
+    },
   ];
 
   return (

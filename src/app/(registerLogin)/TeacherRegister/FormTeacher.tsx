@@ -35,7 +35,7 @@ export default function TeacherRegisterForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
-  const role = "teacher"
+  const role = "teacher";
   const currentField = steps[currentStep];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,16 +101,17 @@ export default function TeacherRegisterForm() {
       console.log("✅ Registration Response:", res);
       localStorage.setItem("teacherId", res.data.teacher.id);
       localStorage.setItem("userId", res.data.user.id);
-      localStorage.setItem("token", res.data.token)
+      localStorage.setItem("token", res.data.token);
       setStatus("success");
 
       if (res.data.user.role === "teacher") {
         router.push("/teacher");
       }
-
     } catch (err: any) {
       if (err.response.status === 403) {
-        setTimeout(() => { router.push("/login") }, 3000)
+        setTimeout(() => {
+          router.push("/login");
+        }, 3000);
       }
       setErrMessage(err.response?.data.message);
       console.log("❌ Registration Error:", err.response?.data || err);
@@ -153,8 +154,9 @@ export default function TeacherRegisterForm() {
                       handleNext();
                     }
                   }}
-                  className={`glass-input ${errors[currentField.name] ? "border-red-500" : ""
-                    }`}
+                  className={`glass-input ${
+                    errors[currentField.name] ? "border-red-500" : ""
+                  }`}
                 />
                 {errors[currentField.name] && (
                   <p className="text-red-500 text-sm font-light mt-0.5">
@@ -188,7 +190,6 @@ export default function TeacherRegisterForm() {
               "Дараах"
             )}
           </Button>
-
         </CardFooter>
 
         <AnimatePresence>

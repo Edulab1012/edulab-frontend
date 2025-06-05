@@ -40,7 +40,7 @@ export const MainPage = () => {
   if (!mounted) return null;
 
   return (
-    <div className="my-5 mt-15">
+    <div className="my-5 mt-15  px-1.5">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -126,7 +126,6 @@ export const MainPage = () => {
               ))}
             </motion.div>
 
-            {/* Content section */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -175,7 +174,6 @@ export const MainPage = () => {
                 боломжтой!
               </p>
 
-              {/* Features Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-4 max-w-2xl mx-auto lg:mx-0 justify-items-center">
                 {features.map((feature, index) => (
                   <motion.div
@@ -212,7 +210,6 @@ export const MainPage = () => {
                 ))}
               </div>
 
-              {/* CTA Buttons */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
