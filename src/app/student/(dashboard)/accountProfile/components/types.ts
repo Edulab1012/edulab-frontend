@@ -1,4 +1,5 @@
 export interface Student {
+    bgImage: string;
   id?: string;
   classId: string | undefined;
   gender: string;

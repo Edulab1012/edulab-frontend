@@ -1,12 +1,12 @@
 'use client'
 import { jwtDecode } from 'jwt-decode';
 import { GoogleUserMetadata } from "@/constants/types/googleUserDataType"
-
 import { useStudentStore } from "@/hooks/useStudentStore"
 import supabase from "@/utils/supabase"
 import axios from "axios"
 import { DecodedTokenType } from '@/app/student/(dashboard)/accountProfile/components/types';
-import { useExistingUserSotre } from '@/hooks/existingUser';
+import { useExistingUserStore } from '@/hooks/existingUser';
+
 
 export const getUserAndPost = async (endpoint: string, role?: string, classId?: string | null) => {
     try {
@@ -36,9 +36,8 @@ export const getUserAndPost = async (endpoint: string, role?: string, classId?: 
             const existingUser = decoded.existingUser;
             if (!decoded.existingUser.student) return;
             const student = decoded.existingUser.student;
-
             // ✅ Save to Zustand
-            useExistingUserSotre.getState().setUser({
+            useExistingUserStore.getState().setUser({
                 id: existingUser.id,
                 username: existingUser.username,
                 phoneNumber: existingUser.phoneNumber ?? "",
@@ -49,7 +48,7 @@ export const getUserAndPost = async (endpoint: string, role?: string, classId?: 
                 classId: existingUser.classId,
                 className: existingUser.className
             });
-
+      
             useStudentStore.getState().setStudent({
                 firstName: student.firstName ?? "",
                 lastName: student.lastName ?? "",
@@ -63,6 +62,7 @@ export const getUserAndPost = async (endpoint: string, role?: string, classId?: 
                 classId: student.classId,
                 className: student.class ?? "",
                 teacher: student.teacher,
+                bgImage: student.bgImage ?? "",
 
             });
 
