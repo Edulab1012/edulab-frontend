@@ -11,7 +11,9 @@ import { Textarea } from "@/components/ui/textarea"
 import { motion } from "framer-motion"
 import { Camera, Upload, Save, X, Loader2, User, Mail, Phone, GraduationCap, Instagram, Facebook } from "lucide-react"
 import { uploadCloudinary, uploadBgCloudinary } from "@/lib/cloudinary"
-import type { Student } from "@/types/student"
+import { Student } from "./types"
+import XpRewardAnimation from "../xp-reward-animation"
+
 
 interface EditProfileProps {
   initialData: Student
@@ -24,6 +26,8 @@ export default function EditProfile({ initialData, onSave, onCancel }: EditProfi
   const [isUploading, setIsUploading] = useState(false)
   const [uploadingType, setUploadingType] = useState<"avatar" | "background" | null>(null)
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [showXp, setShowXp] = useState(true)
+  const [xpKey, setXpKey] = useState(0)
 
   const avatarInputRef = useRef<HTMLInputElement>(null)
   const backgroundInputRef = useRef<HTMLInputElement>(null)
@@ -84,6 +88,7 @@ export default function EditProfile({ initialData, onSave, onCancel }: EditProfi
   }
 
   const handleSave = () => {
+    setShowXp(true)
     if (validateForm()) {
       const safeFormData = {
         ...formData,
@@ -91,7 +96,16 @@ export default function EditProfile({ initialData, onSave, onCancel }: EditProfi
         teacher: formData.teacher ?? "",
         socials: formData.socials ?? { instagram: "", facebook: "" },
       }
-      onSave(safeFormData)
+
+
+
+      setXpKey(prev => prev + 1)
+      setShowXp(true)
+
+      setTimeout(() => {
+        onSave(safeFormData)
+      }, 1500)
+
     }
   }
 
@@ -148,10 +162,30 @@ export default function EditProfile({ initialData, onSave, onCancel }: EditProfi
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
-      className="w-full max-w-4xl mx-auto p-4"
+      className="w-full max-w-4xl mx-auto p-4 mt-120 sm:mt-70"
     >
       <Card className="shadow-2xl border-0 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm">
-        <div className="relative h-40 rounded-t-lg overflow-hidden">
+
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          className="absolute top-0 left-0 right-0 z-50 flex justify-center"
+        >
+          <div className="flex flex-col items-center justify-center h-screen gap-6 ">
+
+            {showXp && (
+              <XpRewardAnimation
+                xpAmount={50}
+                message="Good job!"
+                onComplete={() => setShowXp(false)}
+              />
+            )}
+
+          </div>
+        </motion.div>
+
+        <div className="relative h-40 sm:h-60 rounded-t-lg overflow-hidden">
           {formData.backgroundUrl ? (
             <img
               src={formData.backgroundUrl || "/placeholder.svg"}
@@ -248,8 +282,8 @@ export default function EditProfile({ initialData, onSave, onCancel }: EditProfi
                   onChange={handleInputChange}
                   placeholder={field.label}
                   className={`transition-colors ${errors[field.name]
-                      ? "border-red-500 focus:border-red-500"
-                      : "border-slate-300 dark:border-slate-600"
+                    ? "border-red-500 focus:border-red-500"
+                    : "border-slate-300 dark:border-slate-600"
                     }`}
                 />
                 {errors[field.name] && <p className="text-sm text-red-500">{errors[field.name]}</p>}

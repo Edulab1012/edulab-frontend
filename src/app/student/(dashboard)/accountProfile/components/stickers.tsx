@@ -37,10 +37,8 @@ export default function Stickers() {
   ];
 
   return (
-    <div className="w-full max-w-3xl mx-auto font-sans">
-      <h2 className="text-center text-lg font-light text-[#6B5AED] dark:text-white mb-4">
-        🏅 Миний шагналууд
-      </h2>
+    <div className=" w-full max-w-3xl mx-auto font-sans  ">
+
 
       <motion.div
         initial={{ opacity: 0, y: 10 }}

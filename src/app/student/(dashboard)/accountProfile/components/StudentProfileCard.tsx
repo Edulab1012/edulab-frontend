@@ -13,6 +13,10 @@ import { useStudentStore } from "@/hooks/useStudentStore"
 import { BASE_URL } from "@/constants/baseurl"
 import axios from "axios"
 
+import EditProfile from "./EditProfile"
+import Stickers from "./stickers"
+
+
 const StudentProfileCard = () => {
   const student = useStudentStore()
   const [initialData, setInitialData] = useState<any>(null)
@@ -20,7 +24,11 @@ const StudentProfileCard = () => {
   const [activeTab, setActiveTab] = useState<"posts" | "stickers">("posts")
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [showXp, setShowXp] = useState(false)
 
+  const handleAction = () => {
+    setShowXp(true)
+  }
   useEffect(() => {
     const getStudentData = async () => {
       try {
@@ -52,7 +60,7 @@ const StudentProfileCard = () => {
         firstName: s.firstName ?? "",
         lastName: s.lastName ?? "",
         avatarUrl: s.avatarUrl ?? "/turtle.png",
-        backgroundUrl: s.bgImage ?? "/bg.jpg",
+        backgroundUrl: s.bgImage ?? "/point.png",
         bio: s.bio ?? "",
         socials: s.socials ?? { instagram: "", facebook: "" },
         grade: s.grade ?? "",
@@ -120,14 +128,14 @@ const StudentProfileCard = () => {
 
   if (isEditing) {
     return (
-      <div className="w-full min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4">
+      <div className="w-full min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4 ">
         <EditProfile initialData={initialData} onSave={handleSave} onCancel={() => setIsEditing(false)} />
       </div>
     )
   }
 
   return (
-    <div className="w-full flex items-center justify-center mt-20 sm:mt-5 p-4 ml-25">
+    <div className="w-full flex items-center justify-center mt-45 sm:mt-10 p-4 ml-25">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -135,7 +143,7 @@ const StudentProfileCard = () => {
         className="w-full max-w-4xl"
       >
         <Card className="w-full overflow-hidden shadow-2xl border-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">
-          <div className="w-full relative h-32 sm:h-40 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+          <div className="w-full relative h-42 sm:h-60 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
             {initialData.backgroundUrl && initialData.backgroundUrl !== "/bg.jpg" && (
               <img
                 src={initialData.backgroundUrl || "/placeholder.svg"}
@@ -153,6 +161,8 @@ const StudentProfileCard = () => {
               <Edit3 className="h-4 w-4 mr-2" />
               Засах
             </Button>
+
+
           </div>
 
           <CardContent className="p-6 sm:p-8">
@@ -241,20 +251,21 @@ const StudentProfileCard = () => {
 
             <div className="min-h-[200px] flex items-center justify-center">
               <div className="text-center">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
+                <div className="w-auto h-16 mx-auto mb-4 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
                   {activeTab === "posts" ? (
                     <FileText className="h-8 w-8 text-slate-400" />
                   ) : (
-                    <Sparkles className="h-8 w-8 text-slate-400" />
+                    <Sparkles />
                   )}
                 </div>
                 <p className="text-slate-500 dark:text-slate-400">
                   {activeTab === "posts"
                     ? "Миний нийтлэлүүд хараахан байхгүй байна."
-                    : "Миний шагнал хараахан байхгүй байна."}
+                    : <Stickers />}
                 </p>
               </div>
             </div>
+
           </CardContent>
         </Card>
       </motion.div>

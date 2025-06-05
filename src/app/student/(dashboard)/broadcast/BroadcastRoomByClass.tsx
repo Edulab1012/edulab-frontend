@@ -1,10 +1,16 @@
-
 "use client"
+
+import type React from "react"
 
 import { useEffect, useRef, useState } from "react"
 import axios from "axios"
-import supabase from "@/utils/supabase"
+import { createClient } from "@supabase/supabase-js"
 import { BASE_URL } from "@/constants/baseurl"
+
+import { useStudentStore } from "@/hooks/useStudentStore"
+import { useAuthStore } from "@/hooks/useAuthStore"
+import supabase from "@/utils/supabase"
+
 
 interface ChatMessage {
   message: string
@@ -14,6 +20,8 @@ interface ChatMessage {
 }
 
 export default function BroadcastRoomByClass() {
+  const { user: authUser } = useAuthStore()
+  const { student } = useStudentStore()
   const [user, setUser] = useState<any>(null)
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [newMessage, setNewMessage] = useState("")
@@ -26,24 +34,60 @@ export default function BroadcastRoomByClass() {
 
   const fetchStudent = async () => {
     try {
+
+      if (student) {
+        const userData = {
+          id: student.id,
+          email: student.email,
+          avatarUrl: student.avatarUrl || "/turtle.png",
+          className: student.class?.name || student.grade || "Ангийн нэр",
+          fullName: `${student.firstName || student.firstName} ${student.lastName}`,
+          class: {
+            id: student.class?.id || "15d8356f-96a4-416b-9d9e-68b7374b30bb",
+          },
+        }
+        setUser(userData)
+        setClassId(userData.class.id)
+        return
+      }
+
+
       const studentId = localStorage.getItem("studentId")
       if (!studentId) throw new Error("Missing studentId in localStorage")
 
       const res = await axios.get(`${BASE_URL}student/${studentId}`)
       if (!res.data?.id) throw new Error("Student data incomplete")
 
-      setUser(res.data)
-      setClassId(res.data.class.id)
+      const userData = {
+        ...res.data,
+        className: res.data.class?.name || res.data.grade || "Ангийн нэр",
+        fullName: `${res.data.firstName} ${res.data.lastName}`,
+        avatarUrl: res.data.avatarUrl || "/student.png",
+      }
+
+      setUser(userData)
+      setClassId(res.data.class?.id || "15d8356f-96a4-416b-9d9e-68b7374b30bb")
     } catch (err: any) {
       console.error("Failed to fetch student:", err.message)
+      // Set fallback data if everything fails
+      if (authUser) {
+        const fallbackData = {
+          id: authUser.id,
+          email: authUser.email,
+          avatarUrl: "/student.png",
+          className: "Ангийн нэр",
+          fullName: `${authUser.firstName} ${authUser.lastName}`,
+          class: { id: "15d8356f-96a4-416b-9d9e-68b7374b30bb" },
+        }
+        setUser(fallbackData)
+        setClassId("15d8356f-96a4-416b-9d9e-68b7374b30bb")
+      }
     }
   }
 
   useEffect(() => {
     fetchStudent()
-  }, [])
-
-
+  }, [authUser, student])
 
   const groupChannelId = classId ? `room-${classId}` : null
 
@@ -64,6 +108,7 @@ export default function BroadcastRoomByClass() {
       if (status === "SUBSCRIBED") {
         await room.track({ id: user.id })
         setIsLoading(false)
+        setSubscribed(true)
       }
     })
 
@@ -74,26 +119,33 @@ export default function BroadcastRoomByClass() {
 
     return () => {
       room.unsubscribe()
+      setSubscribed(false)
     }
   }, [user, groupChannelId])
 
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!groupChannelId || !newMessage.trim()) return
+    if (!groupChannelId || !newMessage.trim() || !subscribed) return
 
     setIsSending(true)
     try {
+      const payload = {
+        message: newMessage,
+        user_name: user?.email,
+        avatar: user?.avatarUrl,
+        timestamp: new Date().toISOString(),
+      }
+
       await supabase.channel(groupChannelId).send({
         type: "broadcast",
         event: "message",
-        payload: {
-          message: newMessage,
-          user_name: user?.email,
-          avatar: user?.avatarUrl,
-          timestamp: new Date().toISOString(),
-        },
+        payload,
       })
+
+      setMessages((prev) => [...prev, payload])
       setNewMessage("")
+    } catch (error) {
+      console.error("Failed to send message:", error)
     } finally {
       setIsSending(false)
     }
@@ -112,7 +164,7 @@ export default function BroadcastRoomByClass() {
       if (chatContainerRef.current) {
         chatContainerRef.current.scrollTo({
           top: chatContainerRef.current.scrollHeight,
-          behavior: "smooth"
+          behavior: "smooth",
         })
       }
     }
@@ -134,7 +186,11 @@ export default function BroadcastRoomByClass() {
               viewBox="0 0 24 24"
             >
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
             </svg>
           </div>
         </div>
@@ -156,14 +212,12 @@ export default function BroadcastRoomByClass() {
   }
 
   return (
-    <div className="w-full h-160 flex flex-col duration-500 bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 text-black px-20 pl-30">
+    <div className="w-full h-[calc(100vh-4rem)] flex flex-col duration-500 bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 text-black px-6 pl-25">
       {/* Header */}
       <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-4 sm:px-6 py-3 sm:py-4 rounded-t-2xl shadow-md">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div className="flex-1 min-w-0">
-            <h1 className="text-lg sm:text-xl font-bold truncate">
-              {user.className}
-            </h1>
+            <h1 className="text-lg sm:text-xl font-bold truncate">{user.className}</h1>
             <p className="text-xs sm:text-sm opacity-90 mt-1 flex items-center">
               <span className="w-2 h-2 bg-green-300 rounded-full mr-2 animate-pulse"></span>
               <span className="truncate">{user.fullName}</span>
@@ -179,10 +233,7 @@ export default function BroadcastRoomByClass() {
       </div>
 
       {/* Messages */}
-      <div
-        ref={chatContainerRef}
-        className="flex-1 overflow-y-auto p-3 sm:p-4 bg-white/50 backdrop-blur-sm"
-      >
+      <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-3 sm:p-4 bg-white/50 backdrop-blur-sm">
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-gray-500 p-4">
             <div className="bg-gradient-to-r from-purple-200 to-indigo-200 p-4 sm:p-6 rounded-full mb-3 sm:mb-4">
@@ -201,8 +252,12 @@ export default function BroadcastRoomByClass() {
                 />
               </svg>
             </div>
-            <p className="text-base sm:text-lg font-medium text-gray-600 text-center">✨ Ангийн найзуудтайгаа шууд чатлаарай!</p>
-            <p className="text-xs sm:text-sm text-gray-400 mt-1 text-center">🧠 Энэхүү чат нь ангийн сурагчдад зориулсан шууд дамжуулалтын орчин юм. Мессежүүд хадгалагдахгүй.</p>
+            <p className="text-base sm:text-lg font-medium text-gray-600 text-center">
+              ✨ Ангийн найзуудтайгаа шууд чатлаарай!
+            </p>
+            <p className="text-xs sm:text-sm text-gray-400 mt-1 text-center">
+              🧠 Энэхүү чат нь ангийн сурагчдад зориулсан шууд дамжуулалтын орчин юм. Мессежүүд хадгалагдахгүй.
+            </p>
           </div>
         ) : (
           <div className="space-y-3 sm:space-y-4">
@@ -211,10 +266,12 @@ export default function BroadcastRoomByClass() {
                 key={idx}
                 className={`flex ${msg?.user_name === user.email ? "justify-end" : "justify-start"} transition-all duration-200 ease-out`}
               >
-                <div className={`flex max-w-[80%] sm:max-w-[70%] md:max-w-[60%] ${msg?.user_name === user.email ? "flex-row-reverse" : ""}`}>
+                <div
+                  className={`flex max-w-[80%] sm:max-w-[70%] md:max-w-[60%] ${msg?.user_name === user.email ? "flex-row-reverse" : ""}`}
+                >
                   {msg?.user_name !== user.email && (
                     <img
-                      src={msg.avatar}
+                      src={msg.avatar || "/placeholder.svg?height=40&width=40"}
                       alt="avatar"
                       className="w-8 h-8 sm:w-10 sm:h-10 rounded-full mr-2 sm:mr-3 mt-1 flex-shrink-0 object-cover border-2 border-white shadow-sm"
                     />
@@ -228,13 +285,15 @@ export default function BroadcastRoomByClass() {
                     >
                       {msg.message}
                     </div>
-                    <div className={`text-[10px] sm:text-xs mt-1 ${msg?.user_name === user.email ? "text-indigo-100" : "text-gray-500"}`}>
+                    <div
+                      className={`text-[10px] sm:text-xs mt-1 ${msg?.user_name === user.email ? "text-indigo-100" : "text-gray-500"}`}
+                    >
                       {formatTime(msg.timestamp)}
                     </div>
                   </div>
                   {msg?.user_name === user.email && (
                     <img
-                      src={msg.avatar}
+                      src={msg.avatar || "/placeholder.svg?height=40&width=40"}
                       alt="avatar"
                       className="w-8 h-8 sm:w-10 sm:h-10 rounded-full ml-2 sm:ml-3 mt-1 flex-shrink-0 object-cover border-2 border-white shadow-sm"
                     />
@@ -258,20 +317,34 @@ export default function BroadcastRoomByClass() {
             onChange={(e) => setNewMessage(e.target.value)}
             placeholder="Мессеж бичих..."
             className="flex-grow p-2 sm:p-3 border border-gray-200 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all text-sm sm:text-base"
-            disabled={isSending}
+            disabled={isSending || !subscribed}
           />
           <button
             type="submit"
-            disabled={!newMessage.trim() || isSending}
+            disabled={!newMessage.trim() || isSending || !subscribed}
             className="px-3 py-2 sm:px-4 sm:py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-lg sm:rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center shadow-md min-w-[40px] sm:min-w-[50px]"
           >
             {isSending ? (
-              <svg className="animate-spin h-4 w-4 sm:h-5 sm:w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <svg
+                className="animate-spin h-4 w-4 sm:h-5 sm:w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
               </svg>
             ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20" fill="currentColor">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4 sm:h-5 sm:w-5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
                 <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
               </svg>
             )}
