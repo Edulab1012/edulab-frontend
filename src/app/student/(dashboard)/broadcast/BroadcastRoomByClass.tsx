@@ -3,15 +3,14 @@
 import type React from "react"
 
 import { useEffect, useRef, useState } from "react"
-import supabase from "@/utils/supabase"
-import hasValidCredentials from "@/utils/supabase"
+import supabase, { hasValidCredentials, testSupabaseConnection } from "@/utils/supabase"
 import { useUserStore } from "@/hooks/useUserStore"
 
 interface ChatMessage {
-    id?: string
+    id: string
     message: string
     user_name: string
-    avatar_url: string
+    avatar_url: string | null
     created_at: string
     user_id: string
     chat_room_id: string
@@ -25,87 +24,76 @@ export default function BroadcastRoomByClass() {
     const [isSending, setIsSending] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
-    const [connectionStatus, setConnectionStatus] = useState<string>("connecting")
-    const [demoMode, setDemoMode] = useState(false)
+    const [connectionStatus, setConnectionStatus] = useState<"connecting" | "connected" | "failed" | "demo">("connecting")
     const chatContainerRef = useRef<HTMLDivElement | null>(null)
 
-    const groupChannelId = user?.classId ?? null
+    const groupChannelId = user?.classId ?? "default-class"
 
-    // Add mock user if not available
+    // Initialize user if not available
     useEffect(() => {
         if (!user) {
             setUser({
-                id: "4cbc37cb-fc42-47e4-b6f0-30b0ee75e613",
-                email: "test@example.com",
-                username: "Test User",
+                id: "user-" + Math.random().toString(36).substr(2, 9),
+                email: "student@edulab.com",
+                username: "Student User",
                 avatarUrl: "/placeholder.svg?height=40&width=40",
-                classId: "36a9db2b-f03d-4614-b241-259b3d1f2d6e",
-                className: "Test Class",
+                classId: "class-" + Math.random().toString(36).substr(2, 9),
+                className: "Demo Class",
                 phoneNumber: "000-000-0000",
                 role: "student",
             })
         }
     }, [user, setUser])
 
-    // Check Supabase configuration
+    // Test Supabase connection
     useEffect(() => {
-        if (!hasValidCredentials) {
-            console.log("⚠️ Running in demo mode - Supabase not configured")
-            setDemoMode(true)
-            setConnectionStatus("demo")
-            setError("Demo mode: Please configure your Supabase credentials")
-            setIsLoading(false)
+        const checkConnection = async () => {
+            if (!hasValidCredentials) {
+                console.log("⚠️ Running in demo mode - Supabase not configured")
+                setConnectionStatus("demo")
+                setError("Demo mode: Please configure your Supabase credentials")
 
-            // Add some demo messages
-            const demoMessages: ChatMessage[] = [
-                {
-                    id: "1",
-                    message: "Welcome to the class chat! 👋",
-                    user_name: "Demo User",
-                    avatar_url: "/placeholder.svg?height=40&width=40",
-                    created_at: new Date(Date.now() - 300000).toISOString(),
-                    user_id: "demo-1",
-                    chat_room_id: groupChannelId || "demo-room",
-                },
-                {
-                    id: "2",
-                    message: "This is a demo message. Configure Supabase to enable real chat functionality.",
-                    user_name: "System",
-                    avatar_url: "/placeholder.svg?height=40&width=40",
-                    created_at: new Date(Date.now() - 120000).toISOString(),
-                    user_id: "demo-2",
-                    chat_room_id: groupChannelId || "demo-room",
-                },
-            ]
-            setMessages(demoMessages)
-            return
-        }
+                // Add some demo messages
+                setMessages([
+                    {
+                        id: "demo-1",
+                        message: "Welcome to the class chat! 👋",
+                        user_name: "Demo User",
+                        avatar_url: "/placeholder.svg?height=40&width=40",
+                        created_at: new Date(Date.now() - 300000).toISOString(),
+                        user_id: "demo-1",
+                        chat_room_id: groupChannelId,
+                    },
+                    {
+                        id: "demo-2",
+                        message: "This is a demo message. Configure Supabase to enable real chat functionality.",
+                        user_name: "System",
+                        avatar_url: "/placeholder.svg?height=40&width=40",
+                        created_at: new Date(Date.now() - 120000).toISOString(),
+                        user_id: "demo-2",
+                        chat_room_id: groupChannelId,
+                    },
+                ])
+                setIsLoading(false)
+                return
+            }
 
-        // Test real Supabase connection
-        const testConnection = async () => {
-            try {
-                const { data, error } = await supabase.from("messages").select("count").limit(1)
-                if (error) {
-                    console.log("Connection test failed:", error)
-                    setConnectionStatus("failed")
-                    setError(`Connection failed: ${error.message}`)
-                } else {
-                    console.log("✅ Supabase connection successful")
-                    setConnectionStatus("connected")
-                }
-            } catch (err) {
-                console.log("Network error:", err)
+            const result = await testSupabaseConnection()
+            if (result.success) {
+                setConnectionStatus("connected")
+                setError(null)
+            } else {
                 setConnectionStatus("failed")
-                setError("Network error: Cannot reach Supabase")
+                setError(result.error || "Connection failed")
             }
         }
 
-        testConnection()
+        checkConnection()
     }, [groupChannelId])
 
-    // Fetch existing messages and subscribe to new ones (only if not in demo mode)
+    // Fetch messages and set up real-time subscription
     useEffect(() => {
-        if (!user || !groupChannelId || connectionStatus !== "connected" || demoMode) {
+        if (!user || !groupChannelId || connectionStatus !== "connected") {
             setIsLoading(false)
             return
         }
@@ -122,14 +110,14 @@ export default function BroadcastRoomByClass() {
                     .order("created_at", { ascending: true })
 
                 if (error) {
-                    console.log("❌ Error fetching messages:", error)
+                    console.error("❌ Error fetching messages:", error)
                     setError(`Failed to load messages: ${error.message}`)
                 } else {
                     console.log("✅ Messages fetched successfully:", data?.length || 0)
-                    setMessages(data as ChatMessage[])
+                    setMessages(data || [])
                 }
             } catch (err) {
-                console.log("🌐 Network error:", err)
+                console.error("🌐 Network error:", err)
                 setError("Network error: Please check your connection")
             } finally {
                 setIsLoading(false)
@@ -140,7 +128,7 @@ export default function BroadcastRoomByClass() {
 
         // Set up real-time subscription
         console.log("🔔 Setting up real-time subscription for room:", groupChannelId)
-        const subscription = supabase
+        const channel = supabase
             .channel(`room-messages-${groupChannelId}`)
             .on(
                 "postgres_changes",
@@ -161,9 +149,9 @@ export default function BroadcastRoomByClass() {
 
         return () => {
             console.log("🔌 Cleaning up subscription")
-            supabase.removeChannel(subscription)
+            supabase.removeChannel(channel)
         }
-    }, [user, groupChannelId, connectionStatus, demoMode])
+    }, [user, groupChannelId, connectionStatus])
 
     const sendMessage = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -173,21 +161,26 @@ export default function BroadcastRoomByClass() {
         setError(null)
 
         const messageData = {
-            id: `demo-${Date.now()}`,
             chat_room_id: groupChannelId,
             user_id: user.id,
             user_name: user.username || user.email,
-            avatar_url: user.avatarUrl || "/placeholder.svg?height=40&width=40",
+            avatar_url: user.avatarUrl || null,
             message: newMessage.trim(),
-            created_at: new Date().toISOString(),
         }
 
         console.log("📤 Sending message:", messageData)
 
-        if (demoMode) {
+        if (connectionStatus === "demo") {
             // Demo mode - just add message locally
             setTimeout(() => {
-                setMessages((prev) => [...prev, messageData as ChatMessage])
+                setMessages((prev) => [
+                    ...prev,
+                    {
+                        id: `demo-${Date.now()}`,
+                        ...messageData,
+                        created_at: new Date().toISOString(),
+                    } as ChatMessage,
+                ])
                 setNewMessage("")
                 setIsSending(false)
             }, 500)
@@ -198,38 +191,32 @@ export default function BroadcastRoomByClass() {
             const { data, error } = await supabase.from("messages").insert(messageData).select()
 
             if (error) {
-                console.log("❌ Error sending message:", error)
+                console.error("❌ Error sending message:", error)
                 setError(`Failed to send message: ${error.message}`)
             } else {
                 console.log("✅ Message sent successfully:", data)
                 setNewMessage("")
             }
         } catch (err) {
-            console.log("🌐 Network error:", err)
+            console.error("🌐 Network error:", err)
             setError("Network error while sending")
         } finally {
             setIsSending(false)
         }
     }
 
-    const formatTime = (iso: string | number | Date) =>
+    const formatTime = (iso: string) =>
         new Date(iso).toLocaleTimeString("en-us", {
             hour: "numeric",
             minute: "2-digit",
             hour12: true,
         })
 
+    // Auto-scroll to bottom when new messages arrive
     useEffect(() => {
-        const scrollToBottom = () => {
-            if (chatContainerRef.current) {
-                chatContainerRef.current.scrollTo({
-                    top: chatContainerRef.current.scrollHeight,
-                    behavior: "smooth",
-                })
-            }
+        if (chatContainerRef.current) {
+            chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight
         }
-        const timer = setTimeout(scrollToBottom, 100)
-        return () => clearTimeout(timer)
     }, [messages])
 
     if (isLoading) {
@@ -257,26 +244,6 @@ export default function BroadcastRoomByClass() {
                     Таньд зориулсан чат бэлдэж байна...
                 </h2>
                 <p className="mt-1 sm:mt-2 text-sm sm:text-base text-gray-500">Түр хүлээнэ үү</p>
-                <div className="mt-4 sm:mt-6 flex space-x-2">
-                    {[...Array(3)].map((_, i) => (
-                        <div
-                            key={i}
-                            className="w-2 h-2 sm:w-3 sm:h-3 bg-purple-400 rounded-full animate-bounce"
-                            style={{ animationDelay: `${i * 0.2}s` }}
-                        ></div>
-                    ))}
-                </div>
-            </div>
-        )
-    }
-
-    if (!user) {
-        return (
-            <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-br from-red-50 to-orange-50 p-4">
-                <div className="text-center">
-                    <h2 className="text-xl font-medium text-gray-700 mb-2">Authentication Required</h2>
-                    <p className="text-gray-500">Please log in to access the chat room.</p>
-                </div>
             </div>
         )
     }
@@ -287,17 +254,17 @@ export default function BroadcastRoomByClass() {
             <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-4 sm:px-6 py-3 sm:py-4 rounded-t-2xl shadow-md">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                     <div className="flex-1 min-w-0">
-                        <h1 className="text-lg sm:text-xl font-light truncate">{user.className || "Class Chat"}</h1>
+                        <h1 className="text-lg sm:text-xl font-light truncate">{user?.className || "Class Chat"}</h1>
                         <p className="text-xs sm:text-sm opacity-90 mt-1 flex items-center">
                             <span
                                 className={`w-2 h-2 rounded-full mr-2 animate-pulse ${connectionStatus === "connected"
-                                    ? "bg-green-300"
-                                    : connectionStatus === "demo"
-                                        ? "bg-yellow-300"
-                                        : "bg-red-300"
+                                        ? "bg-green-300"
+                                        : connectionStatus === "demo"
+                                            ? "bg-yellow-300"
+                                            : "bg-red-300"
                                     }`}
                             ></span>
-                            <span className="truncate">{user.username || user.email}</span>
+                            <span className="truncate">{user?.username || user?.email}</span>
                             <span className="ml-2 text-xs">({connectionStatus === "demo" ? "Demo Mode" : connectionStatus})</span>
                         </p>
                     </div>
@@ -311,13 +278,13 @@ export default function BroadcastRoomByClass() {
             </div>
 
             {/* Demo Mode Notice */}
-            {demoMode && (
+            {connectionStatus === "demo" && (
                 <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mx-4 my-2">
                     <div className="flex items-center">
                         <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                             <path
                                 fillRule="evenodd"
-                                d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                                d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v4a1 1 0 002 0V6a1 1 0 00-1-1z"
                                 clipRule="evenodd"
                             />
                         </svg>
@@ -332,7 +299,7 @@ export default function BroadcastRoomByClass() {
             )}
 
             {/* Error Display */}
-            {error && !demoMode && (
+            {error && connectionStatus !== "demo" && (
                 <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mx-4 my-2">
                     <div className="flex items-center">
                         <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -371,22 +338,22 @@ export default function BroadcastRoomByClass() {
                             ✨ Ангийн найзуудтайгаа шууд чатлаарай!
                         </p>
                         <p className="text-xs sm:text-sm text-gray-400 mt-1 text-center">
-                            🧠 Энэхүү чат нь ангийн сурагчдад зориулсан шууд дамжуулалтын орчин юм. Мессежүүд хадгалагдахгүй.
+                            🧠 Энэхүү чат нь ангийн сурагчдад зориулсан шууд дамжуулалтын орчин юм.
                         </p>
                     </div>
                 ) : (
                     <div className="space-y-3 sm:space-y-4">
-                        {messages.map((msg, idx) => (
+                        {messages.map((msg) => (
                             <div
-                                key={msg.id || idx}
-                                className={`flex ${msg?.user_name === user.username || msg?.user_name === user.email ? "justify-end" : "justify-start"
+                                key={msg.id}
+                                className={`flex ${msg.user_name === user?.username || msg.user_name === user?.email ? "justify-end" : "justify-start"
                                     } transition-all duration-200 ease-out`}
                             >
                                 <div
-                                    className={`flex max-w-[80%] sm:max-w-[70%] md:max-w-[60%] ${msg?.user_name === user.username || msg?.user_name === user.email ? "flex-row-reverse" : ""
+                                    className={`flex max-w-[80%] sm:max-w-[70%] md:max-w-[60%] ${msg.user_name === user?.username || msg.user_name === user?.email ? "flex-row-reverse" : ""
                                         }`}
                                 >
-                                    {msg?.user_name !== user.username && msg?.user_name !== user.email && (
+                                    {msg.user_name !== user?.username && msg.user_name !== user?.email && (
                                         <img
                                             src={msg.avatar_url || "/placeholder.svg?height=40&width=40"}
                                             alt="avatar"
@@ -397,27 +364,27 @@ export default function BroadcastRoomByClass() {
                                         />
                                     )}
                                     <div
-                                        className={`flex flex-col ${msg?.user_name === user.username || msg?.user_name === user.email ? "items-end" : "items-start"
+                                        className={`flex flex-col ${msg.user_name === user?.username || msg.user_name === user?.email ? "items-end" : "items-start"
                                             }`}
                                     >
                                         <div
-                                            className={`px-3 py-2 sm:px-4 sm:py-3 rounded-2xl text-sm shadow-sm transition-all duration-200 ${msg?.user_name === user.username || msg?.user_name === user.email
-                                                ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-tr-none"
-                                                : "bg-white text-gray-800 rounded-tl-none border border-gray-100"
+                                            className={`px-3 py-2 sm:px-4 sm:py-3 rounded-2xl text-sm shadow-sm transition-all duration-200 ${msg.user_name === user?.username || msg.user_name === user?.email
+                                                    ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-tr-none"
+                                                    : "bg-white text-gray-800 rounded-tl-none border border-gray-100"
                                                 }`}
                                         >
                                             {msg.message}
                                         </div>
                                         <div
-                                            className={`text-[10px] sm:text-xs mt-1 ${msg?.user_name === user.username || msg?.user_name === user.email
-                                                ? "text-indigo-100"
-                                                : "text-gray-500"
+                                            className={`text-[10px] sm:text-xs mt-1 ${msg.user_name === user?.username || msg.user_name === user?.email
+                                                    ? "text-indigo-100"
+                                                    : "text-gray-500"
                                                 }`}
                                         >
                                             {formatTime(msg.created_at)}
                                         </div>
                                     </div>
-                                    {(msg?.user_name === user.username || msg?.user_name === user.email) && (
+                                    {(msg.user_name === user?.username || msg.user_name === user?.email) && (
                                         <img
                                             src={msg.avatar_url || "/placeholder.svg?height=40&width=40"}
                                             alt="avatar"
@@ -444,7 +411,7 @@ export default function BroadcastRoomByClass() {
                         type="text"
                         value={newMessage}
                         onChange={(e) => setNewMessage(e.target.value)}
-                        placeholder={demoMode ? "Type a demo message..." : "Мессеж бичих..."}
+                        placeholder={connectionStatus === "demo" ? "Type a demo message..." : "Мессеж бичих..."}
                         className="flex-grow p-2 sm:p-3 border border-gray-200 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all text-sm sm:text-base text-gray-800"
                         disabled={isSending}
                     />
