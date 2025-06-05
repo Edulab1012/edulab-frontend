@@ -333,10 +333,7 @@ export default function ClassStudentsPage({
             </h2>
             {!attendanceMode ? (
               <motion.button
-                onClick={() => {
-                  setAttendanceMode(true);
-                  setAttendanceStatus("idle");
-                }}
+                onClick={() => setAttendanceMode(true)}
                 className="px-4 py-2 bg-gradient-to-r from-[#6B5AED] to-[#8A7CFF] text-white rounded-lg hover:shadow-lg transition-all flex items-center gap-2"
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
