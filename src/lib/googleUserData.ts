@@ -1,40 +1,75 @@
+'use client'
+import { jwtDecode } from 'jwt-decode';
 import { GoogleUserMetadata } from "@/constants/types/googleUserDataType"
-import { useTestUserStore } from "@/hooks/useUserStore"
+
+import { useStudentStore } from "@/hooks/useStudentStore"
 import supabase from "@/utils/supabase"
 import axios from "axios"
+import { DecodedTokenType } from '@/app/student/(dashboard)/accountProfile/components/types';
+import { useExistingUserSotre } from '@/hooks/existingUser';
 
 export const getUserAndPost = async (endpoint: string, role?: string, classId?: string | null) => {
-
     try {
-        const { data: { user }, error } = await supabase.auth.getUser()
-        if (error || !user) throw error || new Error("No user found")
+        const { data: { user }, error } = await supabase.auth.getUser();
+        if (error || !user) throw error || new Error("No user found");
 
-        const metadata = user.user_metadata as GoogleUserMetadata
+        const metadata = user.user_metadata as GoogleUserMetadata;
 
         const userData = {
             id: user.id,
             email: user.email ?? "",
-            fullName: user.user_metadata.full_name,
-            avatarUrl: user.user_metadata.avatar_url,
-            provider: user.user_metadata.provider,
+            fullName: metadata.full_name,
+            avatarUrl: metadata.avatar_url,
             role: role,
-            classId: classId
-        }
+            classId: classId,
+        };
 
-        const response = await axios.post(endpoint, userData)
-        console.log(response);
-        localStorage.setItem("userId", response?.data?.user?.id)
-        localStorage.setItem("teacherId", response?.data?.teacher?.id)
-        localStorage.setItem("studentId", response?.data?.student?.id)
+        const response = await axios.post(endpoint, userData);
+
+        localStorage.setItem("userId", response?.data?.user?.id);
+        localStorage.setItem("teacherId", response?.data?.teacher?.id);
+        localStorage.setItem("studentId", response?.data?.student?.id);
         localStorage.setItem("token", response?.data?.token);
 
-        const backendUser = response.data
-        // useTestUserStore.getState().setUser(backendUser)
+        if (response.data.token) {
+            const decoded = jwtDecode<DecodedTokenType>(response.data.token);
+            const existingUser = decoded.existingUser;
+            if (!decoded.existingUser.student) return;
+            const student = decoded.existingUser.student;
 
-        console.log("✅ Saved backend user to store:", backendUser)
-        return backendUser
-    } catch (err) {
-        console.log("Error in getUserAndPost:", err)
-        return null
+            // ✅ Save to Zustand
+            useExistingUserSotre.getState().setUser({
+                id: existingUser.id,
+                username: existingUser.username,
+                phoneNumber: existingUser.phoneNumber ?? "",
+                email: existingUser.email,
+                role: existingUser.role,
+                avatarUrl: existingUser.avatarUrl,
+                password: existingUser.password ?? "",
+                classId: existingUser.classId,
+                className: existingUser.className
+            });
+
+            useStudentStore.getState().setStudent({
+                firstName: student.firstName ?? "",
+                lastName: student.lastName ?? "",
+                fullName: `${student.firstName} ${student.lastName}`,
+                email: student.email,
+                avatarUrl: student.avatarUrl ?? "",
+                bio: student.bio ?? "",
+                backgroundUrl: student.backgroundUrl ?? "",
+                phoneNumber: student.phoneNumber ?? "",
+                gender: student.gender ?? "",
+                classId: student.classId,
+                className: student.class ?? "",
+                teacher: student.teacher,
+
+            });
+
+            return decoded;
+        }
+    } catch (error) {
+        console.log("Error in getUserAndPost:", error);
+
     }
-}
+};

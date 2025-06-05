@@ -80,7 +80,7 @@ export default function StudentPosts() {
         await fetchPosts(checkClassID);
       }
     } catch (err) {
-      console.error("Error updating comment:", err);
+      console.log("Error updating comment:", err);
       toast.error("Failed to update comment");
     }
   };
@@ -99,7 +99,7 @@ export default function StudentPosts() {
         await fetchPosts(checkClassID);
       }
     } catch (err) {
-      console.error("Error deleting comment:", err);
+      console.log("Error deleting comment:", err);
       toast.error("Failed to delete comment");
     }
   };
@@ -114,11 +114,6 @@ export default function StudentPosts() {
     setStudentId(studentId);
     setUserId(userId);
 
-    if (!studentId) {
-      router.push("/login");
-      return;
-    }
-
     const fetchStudentClass = async () => {
       try {
         const response = await axios.get(`${BASE_URL}student/${studentId}`);
@@ -128,7 +123,7 @@ export default function StudentPosts() {
           await fetchPosts(classId);
         }
       } catch (err) {
-        console.error("Error fetching student data:", err);
+        console.log("Error fetching student data:", err);
         toast.error("Failed to fetch student data");
         setLoading(false);
       }
@@ -162,7 +157,7 @@ export default function StudentPosts() {
       }));
       setPosts(postsWithComments);
     } catch (err) {
-      console.error("Error fetching posts:", err);
+      console.log("Error fetching posts:", err);
       toast.error("Failed to fetch posts");
     } finally {
       setLoading(false);
@@ -261,7 +256,7 @@ export default function StudentPosts() {
         await fetchPosts(checkClassID);
       }
     } catch (err) {
-      console.error("Error adding comment:", err);
+      console.log("Error adding comment:", err);
       toast.error("Failed to add comment");
     }
   };
@@ -283,9 +278,8 @@ export default function StudentPosts() {
 
         {posts.length === 0 ? (
           <div
-            className={`p-6 rounded-xl text-center ${
-              theme === "dark" ? "bg-[#2C3A4A]" : "bg-white"
-            }`}
+            className={`p-6 rounded-xl text-center ${theme === "dark" ? "bg-[#2C3A4A]" : "bg-white"
+              }`}
           >
             <p className="text-gray-500 dark:text-gray-400">
               No posts available yet.
@@ -299,22 +293,20 @@ export default function StudentPosts() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
-                className={`p-6 rounded-xl shadow-md ${
-                  theme === "dark" ? "bg-[#2C3A4A]" : "bg-white"
-                }`}
+                className={`p-6 rounded-xl shadow-md ${theme === "dark" ? "bg-[#2C3A4A]" : "bg-white"
+                  }`}
               >
                 <div className="flex items-start mb-4">
                   <div className="flex-shrink-0">
                     <div
-                      className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                        theme === "dark" ? "bg-[#6B5AED]/20" : "bg-[#1DA1F2]/10"
-                      }`}
+                      className={`w-10 h-10 rounded-full flex items-center justify-center ${theme === "dark" ? "bg-[#6B5AED]/20" : "bg-[#1DA1F2]/10"
+                        }`}
                     >
                       <span className="text-lg">
                         {post.teacher
                           ? `${post.teacher.firstName.charAt(
-                              0
-                            )}${post.teacher.lastName.charAt(0)}`
+                            0
+                          )}${post.teacher.lastName.charAt(0)}`
                           : "T"}
                       </span>
                     </div>
@@ -354,24 +346,22 @@ export default function StudentPosts() {
                     {(post.comments || []).map((comment) => (
                       <div
                         key={comment.id}
-                        className={`p-3 rounded-lg ${
-                          theme === "dark" ? "bg-[#1E293B]" : "bg-gray-50"
-                        }`}
+                        className={`p-3 rounded-lg ${theme === "dark" ? "bg-[#1E293B]" : "bg-gray-50"
+                          }`}
                       >
                         <div className="flex items-start">
                           <div className="flex-shrink-0">
                             <div
-                              className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                                theme === "dark"
-                                  ? "bg-[#6B5AED]/20"
-                                  : "bg-[#1DA1F2]/10"
-                              }`}
+                              className={`w-8 h-8 rounded-full flex items-center justify-center ${theme === "dark"
+                                ? "bg-[#6B5AED]/20"
+                                : "bg-[#1DA1F2]/10"
+                                }`}
                             >
                               <span className="text-sm">
                                 {comment.student
                                   ? `${comment.student.firstName.charAt(
-                                      0
-                                    )}${comment.student.lastName.charAt(0)}`
+                                    0
+                                  )}${comment.student.lastName.charAt(0)}`
                                   : "S"}
                               </span>
                             </div>
@@ -394,11 +384,10 @@ export default function StudentPosts() {
                                       })
                                     }
                                     rows={2}
-                                    className={`w-full p-2 mt-1 rounded-lg border ${
-                                      theme === "dark"
-                                        ? "bg-[#1E293B] border-gray-600 text-white"
-                                        : "bg-white border-gray-300 text-gray-900"
-                                    }`}
+                                    className={`w-full p-2 mt-1 rounded-lg border ${theme === "dark"
+                                      ? "bg-[#1E293B] border-gray-600 text-white"
+                                      : "bg-white border-gray-300 text-gray-900"
+                                      }`}
                                   />
                                 ) : (
                                   <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -412,65 +401,61 @@ export default function StudentPosts() {
                               {(comment.userId === userId ||
                                 (comment.studentId &&
                                   comment.studentId === studentId)) && (
-                                <div className="flex space-x-2">
-                                  {editingComment.id === comment.id ? (
-                                    <>
-                                      <button
-                                        onClick={() =>
-                                          handleUpdateComment(comment.id)
-                                        }
-                                        className={`px-2 py-1 rounded-lg text-xs ${
-                                          theme === "dark"
+                                  <div className="flex space-x-2">
+                                    {editingComment.id === comment.id ? (
+                                      <>
+                                        <button
+                                          onClick={() =>
+                                            handleUpdateComment(comment.id)
+                                          }
+                                          className={`px-2 py-1 rounded-lg text-xs ${theme === "dark"
                                             ? "bg-green-600 hover:bg-green-700 text-white"
                                             : "bg-green-500 hover:bg-green-600 text-white"
-                                        }`}
-                                      >
-                                        Save
-                                      </button>
-                                      <button
-                                        onClick={() =>
-                                          setEditingComment({
-                                            id: null,
-                                            content: "",
-                                          })
-                                        }
-                                        className={`px-2 py-1 rounded-lg text-xs ${
-                                          theme === "dark"
+                                            }`}
+                                        >
+                                          Save
+                                        </button>
+                                        <button
+                                          onClick={() =>
+                                            setEditingComment({
+                                              id: null,
+                                              content: "",
+                                            })
+                                          }
+                                          className={`px-2 py-1 rounded-lg text-xs ${theme === "dark"
                                             ? "bg-gray-600 hover:bg-gray-700 text-white"
                                             : "bg-gray-200 hover:bg-gray-300 text-gray-800"
-                                        }`}
-                                      >
-                                        Cancel
-                                      </button>
-                                    </>
-                                  ) : (
-                                    <>
-                                      <button
-                                        onClick={() => startEditing(comment)}
-                                        className={`px-2 py-1 rounded-lg text-xs ${
-                                          theme === "dark"
+                                            }`}
+                                        >
+                                          Cancel
+                                        </button>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <button
+                                          onClick={() => startEditing(comment)}
+                                          className={`px-2 py-1 rounded-lg text-xs ${theme === "dark"
                                             ? "bg-[#6B5AED] hover:bg-[#7D6BEE] text-white"
                                             : "bg-[#1DA1F2] hover:bg-[#1A91E8] text-white"
-                                        }`}
-                                      >
-                                        Edit
-                                      </button>
-                                      <button
-                                        onClick={() =>
-                                          handleDeleteComment(comment.id)
-                                        }
-                                        className={`px-2 py-1 rounded-lg text-xs ${
-                                          theme === "dark"
+                                            }`}
+                                        >
+                                          Edit
+                                        </button>
+                                        <button
+                                          onClick={() =>
+                                            handleDeleteComment(comment.id)
+                                          }
+                                          className={`px-2 py-1 rounded-lg text-xs ${theme === "dark"
                                             ? "bg-red-600 hover:bg-red-700 text-white"
                                             : "bg-red-500 hover:bg-red-600 text-white"
-                                        }`}
-                                      >
-                                        Delete
-                                      </button>
-                                    </>
-                                  )}
-                                </div>
-                              )}
+                                            }`}
+                                        >
+                                          Delete
+                                        </button>
+                                      </>
+                                    )}
+                                  </div>
+                                )}
                             </div>
                           </div>
                         </div>
@@ -484,30 +469,27 @@ export default function StudentPosts() {
                         onChange={(e) => setNewComment(e.target.value)}
                         placeholder="Write your comment..."
                         rows={3}
-                        className={`w-full p-2.5 rounded-lg border ${
-                          theme === "dark"
-                            ? "bg-[#1E293B] border-gray-600 text-white"
-                            : "bg-white border-gray-300 text-gray-900"
-                        }`}
+                        className={`w-full p-2.5 rounded-lg border ${theme === "dark"
+                          ? "bg-[#1E293B] border-gray-600 text-white"
+                          : "bg-white border-gray-300 text-gray-900"
+                          }`}
                       />
                       <div className="flex justify-end space-x-2 mt-2">
                         <button
                           onClick={() => setActivePost(null)}
-                          className={`px-3 py-1.5 rounded-lg text-sm ${
-                            theme === "dark"
-                              ? "bg-gray-700 hover:bg-gray-600 text-white"
-                              : "bg-gray-200 hover:bg-gray-300 text-gray-800"
-                          }`}
+                          className={`px-3 py-1.5 rounded-lg text-sm ${theme === "dark"
+                            ? "bg-gray-700 hover:bg-gray-600 text-white"
+                            : "bg-gray-200 hover:bg-gray-300 text-gray-800"
+                            }`}
                         >
                           Cancel
                         </button>
                         <button
                           onClick={() => handleAddComment(post.id)}
-                          className={`px-3 py-1.5 rounded-lg text-sm ${
-                            theme === "dark"
-                              ? "bg-[#6B5AED] hover:bg-[#7D6BEE] text-white"
-                              : "bg-[#1DA1F2] hover:bg-[#1A91E8] text-white"
-                          }`}
+                          className={`px-3 py-1.5 rounded-lg text-sm ${theme === "dark"
+                            ? "bg-[#6B5AED] hover:bg-[#7D6BEE] text-white"
+                            : "bg-[#1DA1F2] hover:bg-[#1A91E8] text-white"
+                            }`}
                         >
                           Post Comment
                         </button>
@@ -516,11 +498,10 @@ export default function StudentPosts() {
                   ) : (
                     <button
                       onClick={() => setActivePost(post.id)}
-                      className={`text-sm ${
-                        theme === "dark"
-                          ? "text-[#6B5AED] hover:text-[#7D6BEE]"
-                          : "text-[#1DA1F2] hover:text-[#1A91E8]"
-                      }`}
+                      className={`text-sm ${theme === "dark"
+                        ? "text-[#6B5AED] hover:text-[#7D6BEE]"
+                        : "text-[#1DA1F2] hover:text-[#1A91E8]"
+                        }`}
                     >
                       Add a comment...
                     </button>

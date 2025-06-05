@@ -33,8 +33,7 @@ export default function RootLayout({
             className={`${geistSans.variable} ${geistMono.variable} font-sans`}
           >
             <Header />
-            <Toaster richColors />
-            <Toaster position="top-right" />
+            <Toaster richColors position="top-right" />
             {children}
           </div>
         </ThemeProvider>

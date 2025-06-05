@@ -16,14 +16,10 @@ export default function RegisterButton() {
 
 
     const ClickTeacher = () => {
-
         router.push("/TeacherRegister")
-
-
     }
 
     const ClickStudent = () => {
-
         router.push("/StudentRegister")
     }
 
@@ -38,7 +34,7 @@ export default function RegisterButton() {
                 >
                     <span className="absolute inset-0 bg-gradient-to-r from-[#FF9C42] to-[#FF6B42] opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 rounded-full"></span>
                     <span className="absolute inset-0 rounded-full shadow-[0_0_15px_rgba(255,156,66,0)] group-hover:shadow-[0_0_15px_rgba(255,156,66,0.7)] transition-shadow duration-500"></span>
-                    <span className="relative z-10 flex items-center">
+                    <span className="relative z-10 flex items-center text-blue-400 hover:text-white">
                         Бүртгүүлэх
                         <svg
                             xmlns="http://www.w3.org/2000/svg"

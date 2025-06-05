@@ -39,11 +39,11 @@ interface Class {
 }
 
 const items: MenuGroup[] = [
-    {
+  {
     group: "Багшийн тохиргоо",
     links: [
       { title: "Профайл", url: "/teacher/profileSettings", icon: User },
-     
+
     ],
   },
   {
@@ -62,7 +62,7 @@ const items: MenuGroup[] = [
         url: "/teacher/myStudents",
         icon: Backpack,
       },
-       {
+      {
         title: "Пост оруулах",
         url: "/teacher/posts",
         icon: Backpack,

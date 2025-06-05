@@ -94,7 +94,7 @@ export default function TeacherPosts() {
         );
         setTeacherPosts(postsResponse.data);
       } catch (err) {
-        console.error("Error fetching data:", err);
+        console.log("Error fetching data:", err);
         toast.error("Failed to fetch data");
       } finally {
         setLoading(false);
@@ -150,7 +150,7 @@ export default function TeacherPosts() {
         toast.error("Failed to create post");
       }
     } catch (err) {
-      console.error("Error creating post:", err);
+      console.log("Error creating post:", err);
       if (axios.isAxiosError(err)) {
         toast.error(err.response?.data?.message || "Failed to create post");
       } else {
@@ -178,21 +178,19 @@ export default function TeacherPosts() {
         <div className="flex border-b border-gray-200 dark:border-gray-700 mb-6">
           <button
             onClick={() => setActiveTab("create")}
-            className={`py-2 px-4 font-medium text-sm ${
-              activeTab === "create"
+            className={`py-2 px-4 font-medium text-sm ${activeTab === "create"
                 ? "text-[#6B5AED] dark:text-[#7D6BEE] border-b-2 border-[#6B5AED] dark:border-[#7D6BEE]"
                 : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
-            }`}
+              }`}
           >
             Create Post
           </button>
           <button
             onClick={() => setActiveTab("view")}
-            className={`py-2 px-4 font-medium text-sm ${
-              activeTab === "view"
+            className={`py-2 px-4 font-medium text-sm ${activeTab === "view"
                 ? "text-[#6B5AED] dark:text-[#7D6BEE] border-b-2 border-[#6B5AED] dark:border-[#7D6BEE]"
                 : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
-            }`}
+              }`}
           >
             View Posts
           </button>
@@ -204,16 +202,14 @@ export default function TeacherPosts() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
             onSubmit={handleSubmit}
-            className={`max-w-3xl mx-auto p-6 rounded-xl shadow-md ${
-              theme === "dark" ? "bg-[#2C3A4A]" : "bg-white"
-            }`}
+            className={`max-w-3xl mx-auto p-6 rounded-xl shadow-md ${theme === "dark" ? "bg-[#2C3A4A]" : "bg-white"
+              }`}
           >
             <div className="mb-4">
               <label
                 htmlFor="class"
-                className={`block mb-2 text-sm font-medium ${
-                  theme === "dark" ? "text-gray-300" : "text-gray-700"
-                }`}
+                className={`block mb-2 text-sm font-medium ${theme === "dark" ? "text-gray-300" : "text-gray-700"
+                  }`}
               >
                 Class
               </label>
@@ -221,11 +217,10 @@ export default function TeacherPosts() {
                 id="class"
                 value={classId}
                 onChange={(e) => setClassId(e.target.value)}
-                className={`w-full p-2.5 rounded-lg border ${
-                  theme === "dark"
+                className={`w-full p-2.5 rounded-lg border ${theme === "dark"
                     ? "bg-[#1E293B] border-gray-600 text-white"
                     : "bg-white border-gray-300 text-gray-900"
-                }`}
+                  }`}
                 required
               >
                 <option value="">Select a class</option>
@@ -240,9 +235,8 @@ export default function TeacherPosts() {
             <div className="mb-4">
               <label
                 htmlFor="title"
-                className={`block mb-2 text-sm font-medium ${
-                  theme === "dark" ? "text-gray-300" : "text-gray-700"
-                }`}
+                className={`block mb-2 text-sm font-medium ${theme === "dark" ? "text-gray-300" : "text-gray-700"
+                  }`}
               >
                 Title
               </label>
@@ -251,11 +245,10 @@ export default function TeacherPosts() {
                 id="title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className={`w-full p-2.5 rounded-lg border ${
-                  theme === "dark"
+                className={`w-full p-2.5 rounded-lg border ${theme === "dark"
                     ? "bg-[#1E293B] border-gray-600 text-white"
                     : "bg-white border-gray-300 text-gray-900"
-                }`}
+                  }`}
                 placeholder="Post title"
                 required
               />
@@ -264,9 +257,8 @@ export default function TeacherPosts() {
             <div className="mb-4">
               <label
                 htmlFor="content"
-                className={`block mb-2 text-sm font-medium ${
-                  theme === "dark" ? "text-gray-300" : "text-gray-700"
-                }`}
+                className={`block mb-2 text-sm font-medium ${theme === "dark" ? "text-gray-300" : "text-gray-700"
+                  }`}
               >
                 Content
               </label>
@@ -275,11 +267,10 @@ export default function TeacherPosts() {
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 rows={6}
-                className={`w-full p-2.5 rounded-lg border ${
-                  theme === "dark"
+                className={`w-full p-2.5 rounded-lg border ${theme === "dark"
                     ? "bg-[#1E293B] border-gray-600 text-white"
                     : "bg-white border-gray-300 text-gray-900"
-                }`}
+                  }`}
                 placeholder="Write your post content here..."
                 required
               ></textarea>
@@ -288,9 +279,8 @@ export default function TeacherPosts() {
             <div className="mb-6">
               <label
                 htmlFor="imageUrl"
-                className={`block mb-2 text-sm font-medium ${
-                  theme === "dark" ? "text-gray-300" : "text-gray-700"
-                }`}
+                className={`block mb-2 text-sm font-medium ${theme === "dark" ? "text-gray-300" : "text-gray-700"
+                  }`}
               >
                 Image URL (optional)
               </label>
@@ -299,11 +289,10 @@ export default function TeacherPosts() {
                 id="imageUrl"
                 value={imageUrl}
                 onChange={(e) => setImageUrl(e.target.value)}
-                className={`w-full p-2.5 rounded-lg border ${
-                  theme === "dark"
+                className={`w-full p-2.5 rounded-lg border ${theme === "dark"
                     ? "bg-[#1E293B] border-gray-600 text-white"
                     : "bg-white border-gray-300 text-gray-900"
-                }`}
+                  }`}
                 placeholder="https://example.com/image.jpg"
               />
             </div>
@@ -311,11 +300,10 @@ export default function TeacherPosts() {
             <div className="flex justify-end">
               <button
                 type="submit"
-                className={`px-6 py-2.5 rounded-lg font-medium ${
-                  theme === "dark"
+                className={`px-6 py-2.5 rounded-lg font-medium ${theme === "dark"
                     ? "bg-[#6B5AED] hover:bg-[#7D6BEE] text-white"
                     : "bg-[#1DA1F2] hover:bg-[#1A91E8] text-white"
-                } transition-colors duration-200`}
+                  } transition-colors duration-200`}
               >
                 Create Post
               </button>
@@ -329,9 +317,8 @@ export default function TeacherPosts() {
               </div>
             ) : teacherPosts.length === 0 ? (
               <div
-                className={`p-6 rounded-xl text-center ${
-                  theme === "dark" ? "bg-[#2C3A4A]" : "bg-white"
-                }`}
+                className={`p-6 rounded-xl text-center ${theme === "dark" ? "bg-[#2C3A4A]" : "bg-white"
+                  }`}
               >
                 <p className="text-gray-500 dark:text-gray-400">
                   You haven't created any posts yet.
@@ -344,24 +331,22 @@ export default function TeacherPosts() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
-                  className={`p-6 rounded-xl shadow-md ${
-                    theme === "dark" ? "bg-[#2C3A4A]" : "bg-white"
-                  }`}
+                  className={`p-6 rounded-xl shadow-md ${theme === "dark" ? "bg-[#2C3A4A]" : "bg-white"
+                    }`}
                 >
                   <div className="flex items-start mb-4">
                     <div className="flex-shrink-0">
                       <div
-                        className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                          theme === "dark"
+                        className={`w-10 h-10 rounded-full flex items-center justify-center ${theme === "dark"
                             ? "bg-[#6B5AED]/20"
                             : "bg-[#1DA1F2]/10"
-                        }`}
+                          }`}
                       >
                         <span className="text-lg">
                           {post.teacher
                             ? `${post.teacher.firstName.charAt(
-                                0
-                              )}${post.teacher.lastName.charAt(0)}`
+                              0
+                            )}${post.teacher.lastName.charAt(0)}`
                             : "T"}
                         </span>
                       </div>
@@ -398,24 +383,22 @@ export default function TeacherPosts() {
                       {(post.comments || []).map((comment) => (
                         <div
                           key={comment.id}
-                          className={`p-3 rounded-lg ${
-                            theme === "dark" ? "bg-[#1E293B]" : "bg-gray-50"
-                          }`}
+                          className={`p-3 rounded-lg ${theme === "dark" ? "bg-[#1E293B]" : "bg-gray-50"
+                            }`}
                         >
                           <div className="flex items-start">
                             <div className="flex-shrink-0">
                               <div
-                                className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                                  theme === "dark"
+                                className={`w-8 h-8 rounded-full flex items-center justify-center ${theme === "dark"
                                     ? "bg-[#6B5AED]/20"
                                     : "bg-[#1DA1F2]/10"
-                                }`}
+                                  }`}
                               >
                                 <span className="text-sm">
                                   {comment.student
                                     ? `${comment.student.firstName.charAt(
-                                        0
-                                      )}${comment.student.lastName.charAt(0)}`
+                                      0
+                                    )}${comment.student.lastName.charAt(0)}`
                                     : "S"}
                                 </span>
                               </div>
