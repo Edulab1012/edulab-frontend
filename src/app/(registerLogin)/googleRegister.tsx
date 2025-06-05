@@ -9,21 +9,26 @@ export default function RegisterLoginwithGoogle({ role }: { role?: string }) {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
     const [loading, setLoading] = useState(false)
 
-    // if (!role) {
-
-    // }
-
     const handleRegisterLoginwithGoogle = async () => {
         setLoading(true)
 
-        await supabase.auth.signInWithOAuth({
-            provider: 'google',
-            options: {
-                redirectTo: `${baseUrl}/${role}`,
-            },
-        })
+        try {
+            const { error } = await supabase.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    redirectTo: `${baseUrl}/${role}`,
+                },
+            })
 
-        setLoading(false)
+            if (error) {
+                console.log("OAuth error:", error.message)
+
+            }
+        } catch (err: any) {
+            console.log("Unexpected error:", err.message || err)
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
@@ -36,6 +41,6 @@ export default function RegisterLoginwithGoogle({ role }: { role?: string }) {
                 <FcGoogle size={20} />
                 {loading ? "Signing in..." : "Register with Google"}
             </Button>
-        </div >
+        </div>
     )
 }

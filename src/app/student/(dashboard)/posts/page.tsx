@@ -253,7 +253,7 @@ export default function StudentPosts() {
         await fetchPosts(checkClassID);
       }
     } catch (err) {
-      console.error("Error updating comment:", err);
+      console.log("Error updating comment:", err);
       toast.error("Failed to update comment");
     }
   };
@@ -272,7 +272,7 @@ export default function StudentPosts() {
         await fetchPosts(checkClassID);
       }
     } catch (err) {
-      console.error("Error deleting comment:", err);
+      console.log("Error deleting comment:", err);
       toast.error("Failed to delete comment");
     }
   };
@@ -287,11 +287,6 @@ export default function StudentPosts() {
     setStudentId(studentId);
     setUserId(userId);
 
-    if (!studentId) {
-      router.push("/login");
-      return;
-    }
-
     const fetchStudentClass = async () => {
       try {
         const response = await axios.get(`${BASE_URL}student/${studentId}`);
@@ -301,7 +296,7 @@ export default function StudentPosts() {
           await fetchPosts(classId);
         }
       } catch (err) {
-        console.error("Error fetching student data:", err);
+        console.log("Error fetching student data:", err);
         toast.error("Failed to fetch student data");
         setLoading(false);
       }
@@ -335,7 +330,7 @@ export default function StudentPosts() {
       }));
       setPosts(postsWithComments);
     } catch (err) {
-      console.error("Error fetching posts:", err);
+      console.log("Error fetching posts:", err);
       toast.error("Failed to fetch posts");
     } finally {
       setLoading(false);
@@ -434,7 +429,7 @@ export default function StudentPosts() {
         await fetchPosts(checkClassID);
       }
     } catch (err) {
-      console.error("Error adding comment:", err);
+      console.log("Error adding comment:", err);
       toast.error("Failed to add comment");
     }
   };
@@ -465,12 +460,14 @@ export default function StudentPosts() {
         </motion.h1>
 
         {posts.length === 0 ? (
+
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className={`p-6 rounded-xl text-center shadow-sm ${
               theme === "dark" ? "bg-[#3a2bac]" : "bg-white"
             }`}
+
           >
             <div className="flex flex-col items-center justify-center py-12">
               <FiMessageSquare size={48} className="text-gray-400 mb-4" />
@@ -504,6 +501,7 @@ export default function StudentPosts() {
                     isTeacher={!!post.teacher}
                     avatarUrl={post.teacher?.avatarUrl || post.user.avatarUrl}
                   />
+
                   <div className="ml-4">
                     <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
                       {post.title}
@@ -736,6 +734,7 @@ export default function StudentPosts() {
                                   )}
                                 </div>
                               </div>
+
                             </div>
                           </motion.div>
                         ))
@@ -743,6 +742,8 @@ export default function StudentPosts() {
                     </AnimatePresence>
                     <div ref={commentEndRef} />
                   </div>
+
+
                 </div>
               </motion.div>
             ))}

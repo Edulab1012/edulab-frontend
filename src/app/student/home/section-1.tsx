@@ -5,7 +5,18 @@ import { Trophy, User, CalendarCheck, Sparkles } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 
+import { useStudentStore } from "@/hooks/useStudentStore";
+import { useExistingUserSotre } from "@/hooks/existingUser";
+
 export default function StudentHomePage() {
+    const user = useExistingUserSotre((state) => state.user);
+    const student = useStudentStore((state) => state.student);
+
+    const displayName = user?.username || (student ? `${student.firstName ?? ""} ${student.lastName ?? ""}` : "");
+    const grade = student?.grade || "";
+    const className = student?.class || "";
+    const avatarUrl = student?.avatarUrl || "/student-avatar.png";
+
     return (
         <main className="pl-26 px-5 min-h-screen bg-gradient-to-br from-[#F5F6FA] to-[#E0E7FF] dark:from-[#121220] dark:to-[#1E1B4B] py-10 flex flex-col gap-8">
             {/* Header */}
@@ -30,15 +41,15 @@ export default function StudentHomePage() {
                 >
                     <div className="flex items-center gap-4">
                         <Image
-                            src="/student-avatar.png"
+                            src={avatarUrl}
                             alt="Student"
                             width={60}
                             height={60}
                             className="rounded-full"
                         />
                         <div>
-                            <h2 className="text-lg font-light text-[#6B5AED] dark:text-white">Nomin Erdene</h2>
-                            <p className="text-gray-500 dark:text-gray-300">Level 7 • Class A</p>
+                            <h2 className="text-lg font-light text-[#6B5AED] dark:text-white">{displayName}</h2>
+                            <p className="text-gray-500 dark:text-gray-300">Level 7 • Class {grade}</p>
                         </div>
                     </div>
                 </motion.div>

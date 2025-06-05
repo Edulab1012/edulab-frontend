@@ -386,7 +386,7 @@ export default function TeacherPosts() {
         // Fetch teacher's posts
         await fetchTeacherPosts();
       } catch (err) {
-        console.error("Error fetching data:", err);
+        console.log("Error fetching data:", err);
         toast.error("Failed to fetch data");
       } finally {
         setLoading(false);
@@ -544,7 +544,7 @@ export default function TeacherPosts() {
         toast.error("Failed to create post");
       }
     } catch (err) {
-      console.error("Error creating post:", err);
+      console.log("Error creating post:", err);
       if (axios.isAxiosError(err)) {
         toast.error(err.response?.data?.message || "Failed to create post");
       } else {
@@ -802,6 +802,7 @@ export default function TeacherPosts() {
                       isTeacher={!!post.teacher}
                       avatarUrl={post.teacher?.avatarUrl || post.user.avatarUrl}
                     />
+
                     <div className="ml-4">
                       <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
                         {post.title}

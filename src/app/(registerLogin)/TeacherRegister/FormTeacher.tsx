@@ -218,6 +218,7 @@ export default function TeacherRegisterForm() {
             </motion.div>
           )}
         </AnimatePresence>
+
       </Card>
       <p className="absolute bottom-20 left-1/2 transform -translate-x-1/2 font-extralight">
         Хэрэв та аль хэдийн бүртгүүлсэн бол{" "}
