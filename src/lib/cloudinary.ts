@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const uploadImageToCloudinary = async (
+export const uploadCloudinary = async (
     file: File,
     cloudName: string,
     uploadPreset: string,
