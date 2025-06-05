@@ -19,6 +19,7 @@ import {
   FiChevronUp,
   FiSend,
   FiClock,
+  FiCheckCircle,
 } from "react-icons/fi";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -32,11 +33,13 @@ interface Post {
   user: {
     username: string;
     id: string;
+    avatarUrl?: string;
   };
   teacher?: {
     firstName: string;
     lastName: string;
     id: string;
+    avatarUrl?: string;
   };
   comments?: Comment[];
 }
@@ -48,11 +51,13 @@ interface Comment {
   user: {
     username: string;
     id: string;
+    avatarUrl?: string;
   };
   student?: {
     firstName: string;
     lastName: string;
     id: string;
+    avatarUrl?: string;
   };
   postId: string;
   userId: string;
@@ -109,39 +114,54 @@ export default function StudentPosts() {
   const Avatar = ({
     name,
     isTeacher = false,
+    avatarUrl,
   }: {
     name: string;
     isTeacher?: boolean;
-  }) => (
-    <div
-      className={`w-10 h-10 rounded-full flex items-center justify-center ${
-        theme === "dark"
-          ? isTeacher
-            ? "bg-purple-600/20"
-            : "bg-blue-600/20"
-          : isTeacher
-          ? "bg-purple-100"
-          : "bg-blue-100"
-      }`}
-    >
-      <span
-        className={`font-medium ${
+    avatarUrl?: string;
+  }) => {
+    if (avatarUrl) {
+      return (
+        <div className="w-10 h-10 rounded-full overflow-hidden">
+          <img
+            src={avatarUrl}
+            alt={name}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      );
+    }
+    return (
+      <div
+        className={`w-10 h-10 rounded-full flex items-center justify-center ${
           theme === "dark"
             ? isTeacher
-              ? "text-purple-300"
-              : "text-blue-300"
+              ? "bg-purple-600/20"
+              : "bg-blue-600/20"
             : isTeacher
-            ? "text-purple-600"
-            : "text-blue-600"
+            ? "bg-purple-100"
+            : "bg-blue-100"
         }`}
       >
-        {name
-          .split(" ")
-          .map((n) => n.charAt(0))
-          .join("")}
-      </span>
-    </div>
-  );
+        <span
+          className={`font-medium ${
+            theme === "dark"
+              ? isTeacher
+                ? "text-purple-300"
+                : "text-blue-300"
+              : isTeacher
+              ? "text-purple-600"
+              : "text-blue-600"
+          }`}
+        >
+          {name
+            .split(" ")
+            .map((n) => n.charAt(0))
+            .join("")}
+        </span>
+      </div>
+    );
+  };
 
   const CommentActions = ({ comment }: { comment: Comment }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -482,6 +502,7 @@ export default function StudentPosts() {
                         : post.user.username
                     }
                     isTeacher={!!post.teacher}
+                    avatarUrl={post.teacher?.avatarUrl || post.user.avatarUrl}
                   />
                   <div className="ml-4">
                     <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
@@ -628,6 +649,10 @@ export default function StudentPosts() {
                                   comment.student
                                     ? `${comment.student.firstName} ${comment.student.lastName}`
                                     : comment.user.username
+                                }
+                                avatarUrl={
+                                  comment.student?.avatarUrl ||
+                                  comment.user.avatarUrl
                                 }
                               />
                               <div className="ml-3 flex-1 min-w-0">

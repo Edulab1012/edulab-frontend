@@ -65,11 +65,6 @@ const items: MenuGroup[] = [
     links: [
       { title: "Сонихролтой түүлүүд", url: "/teacher/myClass", icon: PanelTop },
       {
-        title: "Сурагчдын мэдээлэл",
-        url: "/teacher/myStudents",
-        icon: Backpack,
-      },
-      {
         title: "Пост оруулах",
         url: "/teacher/posts",
         icon: Backpack,

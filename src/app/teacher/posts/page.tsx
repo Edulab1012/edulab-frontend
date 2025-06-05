@@ -20,6 +20,8 @@ import {
   FiSend,
   FiClock,
   FiCheckCircle,
+  FiUpload,
+  FiImage,
 } from "react-icons/fi";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -38,11 +40,13 @@ interface Post {
   user: {
     username: string;
     id: string;
+    avatarUrl?: string;
   };
   teacher?: {
     firstName: string;
     lastName: string;
     id: string;
+    avatarUrl?: string;
   };
   class: {
     id: string;
@@ -58,11 +62,13 @@ interface Comment {
   user: {
     username: string;
     id: string;
+    avatarUrl?: string;
   };
   student?: {
     firstName: string;
     lastName: string;
     id: string;
+    avatarUrl?: string;
   };
   postId: string;
   userId: string;
@@ -72,7 +78,8 @@ interface Comment {
 export default function TeacherPosts() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [classId, setClassId] = useState("");
   const [classes, setClasses] = useState<Class[]>([]);
   const [teacherPosts, setTeacherPosts] = useState<Post[]>([]);
@@ -92,6 +99,7 @@ export default function TeacherPosts() {
   const supabase = createClientComponentClient();
   const channelRef = useRef<any>(null);
   const commentEndRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Scroll to bottom when comments are added
   useEffect(() => {
@@ -126,39 +134,107 @@ export default function TeacherPosts() {
   const Avatar = ({
     name,
     isTeacher = false,
+    avatarUrl,
   }: {
     name: string;
     isTeacher?: boolean;
-  }) => (
-    <div
-      className={`w-10 h-10 rounded-full flex items-center justify-center ${
-        theme === "dark"
-          ? isTeacher
-            ? "bg-purple-600/20"
-            : "bg-blue-600/20"
-          : isTeacher
-          ? "bg-purple-100"
-          : "bg-blue-100"
-      }`}
-    >
-      <span
-        className={`font-medium ${
+    avatarUrl?: string;
+  }) => {
+    if (avatarUrl) {
+      return (
+        <div className="w-10 h-10 rounded-full overflow-hidden">
+          <img
+            src={avatarUrl}
+            alt={name}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      );
+    }
+    return (
+      <div
+        className={`w-10 h-10 rounded-full flex items-center justify-center ${
           theme === "dark"
             ? isTeacher
-              ? "text-purple-300"
-              : "text-blue-300"
+              ? "bg-purple-600/20"
+              : "bg-blue-600/20"
             : isTeacher
-            ? "text-purple-600"
-            : "text-blue-600"
+            ? "bg-purple-100"
+            : "bg-blue-100"
         }`}
       >
-        {name
-          .split(" ")
-          .map((n) => n.charAt(0))
-          .join("")}
-      </span>
-    </div>
-  );
+        <span
+          className={`font-medium ${
+            theme === "dark"
+              ? isTeacher
+                ? "text-purple-300"
+                : "text-blue-300"
+              : isTeacher
+              ? "text-purple-600"
+              : "text-blue-600"
+          }`}
+        >
+          {name
+            .split(" ")
+            .map((n) => n.charAt(0))
+            .join("")}
+        </span>
+      </div>
+    );
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
+
+  const uploadImage = async () => {
+    if (!imageFile) return null;
+
+    try {
+      // Ensure the bucket exists
+      const { data: buckets, error: bucketError } =
+        await supabase.storage.listBuckets();
+      if (bucketError) throw bucketError;
+
+      const bucketExists = buckets.some(
+        (bucket) => bucket.name === "post-images"
+      );
+      if (!bucketExists) {
+        const { error: createError } = await supabase.storage.createBucket(
+          "post-images",
+          {
+            public: true,
+            allowedMimeTypes: ["image/*"],
+          }
+        );
+        if (createError) throw createError;
+      }
+
+      const fileExt = imageFile.name.split(".").pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { data, error } = await supabase.storage
+        .from("post-images")
+        .upload(filePath, imageFile);
+
+      if (error) throw error;
+
+      const {
+        data: { publicUrl },
+      } = await supabase.storage.from("post-images").getPublicUrl(data.path);
+
+      return publicUrl;
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      toast.error("Failed to upload image");
+      return null;
+    }
+  };
 
   const CommentActions = ({ comment }: { comment: Comment }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -428,12 +504,18 @@ export default function TeacherPosts() {
     }
 
     try {
+      let imageUrl = null;
+      if (imageFile) {
+        imageUrl = await uploadImage();
+      }
+
       const response = await axios.post(`${BASE_URL}posts`, {
         title,
         content,
-        imageUrl: imageUrl || null,
+        imageUrl,
         classId,
         userId,
+        teacherId,
       });
 
       if (response.status >= 200 && response.status < 300) {
@@ -452,7 +534,8 @@ export default function TeacherPosts() {
         // Reset form
         setTitle("");
         setContent("");
-        setImageUrl("");
+        setImageFile(null);
+        setImagePreview(null);
         setClassId("");
 
         // Switch to view tab
@@ -608,7 +691,6 @@ export default function TeacherPosts() {
 
             <div className="mb-6">
               <label
-                htmlFor="imageUrl"
                 className={`block mb-2 text-sm font-medium ${
                   theme === "dark" ? "text-gray-300" : "text-gray-700"
                 }`}
@@ -616,17 +698,48 @@ export default function TeacherPosts() {
                 Зураг оруулах
               </label>
               <input
-                type="url"
-                id="imageUrl"
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-                className={`w-full p-2.5 rounded-lg border ${
-                  theme === "dark"
-                    ? "bg-[#1E293B] border-gray-600 text-white"
-                    : "bg-white border-gray-300 text-gray-900"
-                }`}
-                placeholder="https://example.com/image.jpg"
+                type="file"
+                ref={fileInputRef}
+                onChange={handleImageChange}
+                accept="image/*"
+                className="hidden"
               />
+              <div
+                onClick={() => fileInputRef.current?.click()}
+                className={`w-full p-4 border-2 border-dashed rounded-lg cursor-pointer ${
+                  theme === "dark"
+                    ? "border-gray-600 hover:border-gray-500"
+                    : "border-gray-300 hover:border-gray-400"
+                } transition-colors`}
+              >
+                {imagePreview ? (
+                  <div className="relative">
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="w-full h-48 object-cover rounded-md mb-2"
+                    />
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setImagePreview(null);
+                        setImageFile(null);
+                      }}
+                      className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600"
+                    >
+                      <FiX size={16} />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-6">
+                    <FiUpload className="text-gray-400 mb-2" size={24} />
+                    <p className="text-gray-500 dark:text-gray-400 text-sm">
+                      Зураг оруулахыг хүсвэл энд дарна уу
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="flex justify-end">
@@ -687,6 +800,7 @@ export default function TeacherPosts() {
                           : post.user.username
                       }
                       isTeacher={!!post.teacher}
+                      avatarUrl={post.teacher?.avatarUrl || post.user.avatarUrl}
                     />
                     <div className="ml-4">
                       <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
@@ -826,6 +940,10 @@ export default function TeacherPosts() {
                                     comment.student
                                       ? `${comment.student.firstName} ${comment.student.lastName}`
                                       : comment.user.username
+                                  }
+                                  avatarUrl={
+                                    comment.student?.avatarUrl ||
+                                    comment.user.avatarUrl
                                   }
                                 />
                                 <div className="ml-3 flex-1 min-w-0">
