@@ -1,7 +1,7 @@
-'use client'
+"use client";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "./student-sidebar";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 import { supabase } from "@/lib/supabase";
@@ -9,6 +9,7 @@ import { getUserAndPost } from "@/lib/googleUserData";
 import { BASE_URL } from "@/constants/baseurl";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+
 
   useEffect(() => {
     console.log("🚀 StudentHomePage loaded");
@@ -36,6 +37,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     //   const decoded = jwtDecode(token);
     //   console.log(decoded);
     // }
+
   }, [router]);
 
   return (
