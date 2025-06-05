@@ -28,11 +28,16 @@ export interface Student {
 interface StudentStoreState {
     student: Student | null;
     setStudent: (student: Student) => void;
+    updateStudent: (data: Partial<Student>) => void
     clearStudent: () => void;
 }
 
 export const useStudentStore = create<StudentStoreState>((set) => ({
     student: null,
     setStudent: (student) => set({ student }),
+    updateStudent: (data) =>
+        set((state) => ({
+            student: state.student ? { ...state.student, ...data } : null,
+        })),
     clearStudent: () => set({ student: null }),
 }));
