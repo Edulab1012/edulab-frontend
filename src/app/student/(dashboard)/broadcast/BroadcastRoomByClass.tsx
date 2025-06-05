@@ -258,10 +258,10 @@ export default function BroadcastRoomByClass() {
                         <p className="text-xs sm:text-sm opacity-90 mt-1 flex items-center">
                             <span
                                 className={`w-2 h-2 rounded-full mr-2 animate-pulse ${connectionStatus === "connected"
-                                        ? "bg-green-300"
-                                        : connectionStatus === "demo"
-                                            ? "bg-yellow-300"
-                                            : "bg-red-300"
+                                    ? "bg-green-300"
+                                    : connectionStatus === "demo"
+                                        ? "bg-yellow-300"
+                                        : "bg-red-300"
                                     }`}
                             ></span>
                             <span className="truncate">{user?.username || user?.email}</span>
@@ -369,16 +369,16 @@ export default function BroadcastRoomByClass() {
                                     >
                                         <div
                                             className={`px-3 py-2 sm:px-4 sm:py-3 rounded-2xl text-sm shadow-sm transition-all duration-200 ${msg.user_name === user?.username || msg.user_name === user?.email
-                                                    ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-tr-none"
-                                                    : "bg-white text-gray-800 rounded-tl-none border border-gray-100"
+                                                ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-tr-none"
+                                                : "bg-white text-gray-800 rounded-tl-none border border-gray-100"
                                                 }`}
                                         >
                                             {msg.message}
                                         </div>
                                         <div
                                             className={`text-[10px] sm:text-xs mt-1 ${msg.user_name === user?.username || msg.user_name === user?.email
-                                                    ? "text-indigo-100"
-                                                    : "text-gray-500"
+                                                ? "text-indigo-100"
+                                                : "text-gray-500"
                                                 }`}
                                         >
                                             {formatTime(msg.created_at)}
