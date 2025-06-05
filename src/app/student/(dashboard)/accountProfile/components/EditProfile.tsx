@@ -21,9 +21,10 @@ import {
   GraduationCap,
   Instagram,
   Facebook,
-} from "lucide-react"
-import { uploadCloudinary } from "@/lib/cloudinary"
-
+} from "lucide-react";
+import { uploadCloudinary } from "@/lib/cloudinary";
+import { Student } from "@/constants/types/student";
+import { cloudname } from "@/constants/cloudinaryName";
 
 interface EditProfileProps {
   initialData: Student;
@@ -43,39 +44,14 @@ export default function EditProfile({
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const backgroundInputRef = useRef<HTMLInputElement>(null);
 
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev: any) => ({ ...prev, [name]: value }));
 
-interface Student {
-  firstName: string
-  lastName: string
-  class: string
-  email: string
-  avatarUrl?: string
-  backgroundUrl?: string
-  phoneNumber?: string
-  teacher?: string
-  bio?: string
-  socials?: {
-    instagram?: string
-    facebook?: string
-  }
-}
-export default function EditProfile({ initialData, onSave, onCancel }: EditProfileProps) {
-
-
-  const [formData, setFormData] = useState<Student>(initialData)
-  const [isUploading, setIsUploading] = useState(false)
-  const [errors, setErrors] = useState<Record<string, string>>({})
-
-  const avatarInputRef = useRef<HTMLInputElement>(null)
-  const backgroundInputRef = useRef<HTMLInputElement>(null)
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData((prev: any) => ({ ...prev, [name]: value }))
-
-    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }))
-  }
-
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
+  };
 
   const handleSocialChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -92,8 +68,11 @@ export default function EditProfile({ initialData, onSave, onCancel }: EditProfi
     if (!file) return;
     setIsUploading(true);
     try {
-
-      const imageUrl = await uploadCloudinary(file,cloudname,uplaod)
+      const imageUrl = await uploadCloudinary(
+        file,
+        cloudname,
+        "your_upload_preset"
+      );
 
       setFormData((prev: any) => ({
         ...prev,
@@ -120,7 +99,16 @@ export default function EditProfile({ initialData, onSave, onCancel }: EditProfi
   };
 
   const handleSave = () => {
-    if (validateForm()) onSave(formData);
+    if (validateForm()) {
+      // Ensure phoneNumber, teacher, and socials are always defined
+      const safeFormData = {
+        ...formData,
+        phoneNumber: formData.phoneNumber ?? "",
+        teacher: formData.teacher ?? "",
+        socials: formData.socials ?? { instagram: "", facebook: "" },
+      };
+      onSave(safeFormData);
+    }
   };
 
   const formFields = [
@@ -163,7 +151,12 @@ export default function EditProfile({ initialData, onSave, onCancel }: EditProfi
       icon: Instagram,
       placeholder: "@username",
     },
-    { name: "facebook", label: "Facebook", icon: Facebook, placeholder: "Нэр" },
+    {
+      name: "facebook",
+      label: "Facebook",
+      icon: Facebook,
+      placeholder: "Нэр",
+    },
   ];
 
   return (

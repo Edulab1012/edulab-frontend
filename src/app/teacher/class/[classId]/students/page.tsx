@@ -5,6 +5,7 @@ import axios from "axios";
 import { BASE_URL } from "@/constants/baseurl";
 import { motion } from "framer-motion";
 import Image from "next/image";
+
 import {
   ChevronLeft,
   Plus,
@@ -35,11 +36,7 @@ interface AttendanceRecord {
   name: string;
 }
 
-export default function ClassStudentsPage({
-  params,
-}: {
-  params: { classId: string };
-}) {
+export default function ClassStudentsPage({ params }: any) {
   const { classId } = params;
   const router = useRouter();
   const { theme } = useTheme();
