@@ -1,77 +1,103 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { motion } from "framer-motion";
-import {
-  Edit3,
-  Mail,
-  Phone,
-  GraduationCap,
-  User,
-  Instagram,
-  Facebook,
-  FileText,
-  Sparkles,
-} from "lucide-react";
-import EditProfile from "./EditProfile";
-import Loading from "./loading";
-
-import { useStudentStore } from "@/hooks/useStudentStore";
-import { useExistingUserSotre } from "@/hooks/existingUser";
+import { useEffect, useState } from "react"
+import { Card, CardContent } from "@/components/ui/card"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Separator } from "@/components/ui/separator"
+import { motion } from "framer-motion"
+import { Edit3, Mail, Phone, GraduationCap, Instagram, Facebook, FileText, Sparkles } from "lucide-react"
+import Loading from "./loading"
+import { useStudentStore } from "@/hooks/useStudentStore"
+import { BASE_URL } from "@/constants/baseurl"
+import axios from "axios"
 
 const StudentProfileCard = () => {
-  const user = useExistingUserSotre((state) => state.user);
-  const student = useStudentStore((state) => state.student);
-  const [initialData, setInitialData] = useState<any>(null);
-  const [isEditing, setIsEditing] = useState(false);
-  const [activeTab, setActiveTab] = useState<"posts" | "stickers">("posts");
+  const student = useStudentStore()
+  const [initialData, setInitialData] = useState<any>(null)
+  const [isEditing, setIsEditing] = useState(false)
+  const [activeTab, setActiveTab] = useState<"posts" | "stickers">("posts")
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (user) {
-      const combined = {
-        id: student?.id ?? "",
-        email: user.email,
-        firstName: user.username?.split(" ")[0] ?? "",
-        lastName: user.username?.split(" ")[1] ?? "",
-        avatarUrl: user?.avatarUrl ?? student?.avatarUrl ?? "",
-        backgroundUrl: student?.backgroundUrl ?? "",
-        bio: student?.bio ?? "",
-        socials: student?.socials ?? { instagram: "", facebook: "" },
-        grade: student?.grade ?? "",
-        class: student?.class ?? "",
-        phoneNumber: student?.phoneNumber ?? "",
-        teacher: student?.teacher ?? "",
-      };
-      setInitialData(combined);
+    const getStudentData = async () => {
+      try {
+        setLoading(true)
+        const studentId = localStorage.getItem("studentId")
+        if (studentId) {
+          const res = await axios.get(`${BASE_URL}student/${studentId}`)
+          console.log("Student data from API:", res.data)
+          // Update store if needed
+          // student.setStudent(res.data)
+        }
+      } catch (error) {
+        console.error("Failed to fetch student data:", error)
+        setError("Failed to load student data")
+      } finally {
+        setLoading(false)
+      }
     }
-  }, [user, student]);
+    getStudentData()
+  }, [])
+
+  useEffect(() => {
+    if (student?.student) {
+      const s = student.student
+
+      const combined = {
+        id: s.id ?? "",
+        email: s.email ?? "",
+        firstName: s.firstName ?? "",
+        lastName: s.lastName ?? "",
+        avatarUrl: s.avatarUrl ?? "/turtle.png",
+        backgroundUrl: s.bgImage ?? "/bg.jpg",
+        bio: s.bio ?? "",
+        socials: s.socials ?? { instagram: "", facebook: "" },
+        grade: s.grade ?? "",
+        class: s.class?.name ?? "",
+        phoneNumber: s.phoneNumber ?? "",
+        teacher: s.teacher ?? "",
+      }
+
+      setInitialData(combined)
+      setLoading(false)
+    }
+  }, [student])
 
   const handleSave = (updatedStudent: any) => {
-    setInitialData(updatedStudent);
-    setIsEditing(false);
-  };
+    setInitialData(updatedStudent)
+    setIsEditing(false)
+    // Update the store with new data
+    // student.updateStudent(updatedStudent)
+  }
+
+  if (loading) {
+    return <Loading />
+  }
+
+  if (error) {
+    return (
+      <div className="w-full flex items-center justify-center mt-20 p-4">
+        <Card className="p-8 text-center">
+          <p className="text-red-500 mb-4">{error}</p>
+          <Button onClick={() => window.location.reload()}>Try Again</Button>
+        </Card>
+      </div>
+    )
+  }
 
   if (!initialData) {
-    return <Loading />;
+    return <Loading />
   }
 
   const profileInfo = [
     {
       icon: GraduationCap,
       label: "Анги",
-      value: initialData.grade || "",
+      value: initialData.class || initialData.grade || "",
       color: "text-blue-600 dark:text-blue-400",
-    },
-    {
-      icon: User,
-      label: "Багш",
-      value: initialData.teacher || "",
-      color: "text-green-600 dark:text-green-400",
     },
     {
       icon: Phone,
@@ -85,23 +111,19 @@ const StudentProfileCard = () => {
       value: initialData.email || "",
       color: "text-orange-600 dark:text-orange-400",
     },
-  ];
+  ]
 
   const tabs = [
     { id: "posts", label: "Нийтлэлүүд", icon: FileText },
     { id: "stickers", label: "🏅 Миний шагналууд", icon: Sparkles },
-  ];
+  ]
 
   if (isEditing) {
     return (
       <div className="w-full min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4">
-        <EditProfile
-          initialData={initialData}
-          onSave={handleSave}
-          onCancel={() => setIsEditing(false)}
-        />
+        <EditProfile initialData={initialData} onSave={handleSave} onCancel={() => setIsEditing(false)} />
       </div>
-    );
+    )
   }
 
   return (
@@ -110,13 +132,13 @@ const StudentProfileCard = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full"
+        className="w-full max-w-4xl"
       >
         <Card className="w-full overflow-hidden shadow-2xl border-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">
           <div className="w-full relative h-32 sm:h-40 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
-            {initialData.backgroundUrl && (
+            {initialData.backgroundUrl && initialData.backgroundUrl !== "/bg.jpg" && (
               <img
-                src={initialData.backgroundUrl}
+                src={initialData.backgroundUrl || "/placeholder.svg"}
                 alt="Background"
                 className="absolute inset-0 w-full h-full object-cover"
               />
@@ -137,7 +159,7 @@ const StudentProfileCard = () => {
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 -mt-16 sm:-mt-12 mb-8">
               <Avatar className="h-24 w-24 sm:h-28 sm:w-28 border-4 border-white dark:border-slate-700 shadow-xl">
                 <AvatarImage
-                  src={initialData.avatarUrl || "/turtle.png"}
+                  src={initialData.avatarUrl || "/placeholder.svg?height=112&width=112"}
                   alt={`${initialData.firstName} ${initialData.lastName}`}
                 />
                 <AvatarFallback className="text-2xl font-semibold bg-gradient-to-br from-indigo-500 to-purple-600 text-white">
@@ -155,7 +177,7 @@ const StudentProfileCard = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
               {profileInfo.map((item, index) => (
                 <motion.div
                   key={item.label}
@@ -172,7 +194,7 @@ const StudentProfileCard = () => {
                       {item.label}
                     </p>
                     <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">
-                      {item.value}
+                      {item.value || "Мэдээлэл байхгүй"}
                     </p>
                   </div>
                 </motion.div>
@@ -181,9 +203,7 @@ const StudentProfileCard = () => {
 
             {(initialData.socials?.instagram || initialData.socials?.facebook) && (
               <div className="mb-8">
-                <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
-                  Сошиал сүлжээ
-                </h3>
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Сошиал сүлжээ</h3>
                 <div className="flex flex-wrap gap-3">
                   {initialData.socials.instagram && (
                     <Badge className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-pink-500 to-orange-500 text-white hover:from-pink-600 hover:to-orange-600">
@@ -239,7 +259,7 @@ const StudentProfileCard = () => {
         </Card>
       </motion.div>
     </div>
-  );
-};
+  )
+}
 
-export default StudentProfileCard;
+export default StudentProfileCard

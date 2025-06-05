@@ -1,6 +1,7 @@
 import { create } from "zustand";
 
 export interface Student {
+    bgImage: string;
     id?: string;
     fullName?: string;
     firstName?: string;
@@ -12,14 +13,16 @@ export interface Student {
     backgroundUrl?: string;
     gender?: string
     bio?: string;
+    emergencyNumber?: string;
     socials?: {
         instagram?: string;
         facebook?: string;
     };
     grade?: string;
-    class?: string;
+    class?: { id?: string, name?: string, promoCode?: string };
     phoneNumber?: string;
     teacher?: string;
+    user?: { username?: string }
 }
 
 interface StudentStoreState {

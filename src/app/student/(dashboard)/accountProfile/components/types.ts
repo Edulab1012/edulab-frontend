@@ -1,4 +1,5 @@
 export interface Student {
+  id?: string;
   classId: string | undefined;
   gender: string;
   firstName?: string;
