@@ -11,28 +11,28 @@ const characters = [
   {
     id: "knight",
     name: "Knight Hero",
-    image: "/placeholder.svg?height=120&width=120",
+    image: "/level1.png",
     description: "Brave and strong, protects classmates",
     unlocked: true,
   },
   {
     id: "wizard",
     name: "Wizard Scholar",
-    image: "/placeholder.svg?height=120&width=120",
+    image: "/level2.png",
     description: "Wise and intelligent, loves learning",
     unlocked: true,
   },
   {
     id: "archer",
     name: "Archer Explorer",
-    image: "/placeholder.svg?height=120&width=120",
+    image: "/level3.png",
     description: "Quick and precise, always on target",
     unlocked: true,
   },
   {
     id: "ninja",
     name: "Ninja Stealth",
-    image: "/placeholder.svg?height=120&width=120",
+    image: "/level4.png",
     description: "Silent and focused, masters any skill",
     unlocked: false,
     requiredLevel: 5,
@@ -97,11 +97,10 @@ export default function CharacterSelector({ onClose }: CharacterSelectorProps) {
                 key={character.id}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className={`relative p-4 rounded-2xl border-2 cursor-pointer transition-all ${
-                  selectedCharacter === character.id
-                    ? "border-[#6B5AED] bg-[#6B5AED]/10"
-                    : "border-gray-200 dark:border-gray-700 hover:border-[#6B5AED]/50"
-                } ${!character.unlocked ? "opacity-60" : ""}`}
+                className={`relative p-4 rounded-2xl border-2 cursor-pointer transition-all ${selectedCharacter === character.id
+                  ? "border-[#6B5AED] bg-[#6B5AED]/10"
+                  : "border-gray-200 dark:border-gray-700 hover:border-[#6B5AED]/50"
+                  } ${!character.unlocked ? "opacity-60" : ""}`}
                 onClick={() => character.unlocked && setSelectedCharacter(character.id)}
               >
                 {selectedCharacter === character.id && (
