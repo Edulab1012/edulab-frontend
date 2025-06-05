@@ -1,4 +1,5 @@
-import supabase from "../lib/supabase";
+
+import supabase from "@/utils/supabase";
 import { Post, Comment } from "../constants/types/post";
 
 export const createPost = async (postData: {
