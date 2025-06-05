@@ -282,7 +282,6 @@ export default function LoginForm() {
               Бүртгэл байхгүй юу?{" "}
               <span className="inline-block">
                 <RegisterButton />
-                <RegisterLoginwithGoogle></RegisterLoginwithGoogle>
               </span>
             </p>
           </div>
