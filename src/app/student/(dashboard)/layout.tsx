@@ -20,10 +20,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         if (!studentId) return;
 
         const res = await axios.get(`${BASE_URL}student/${studentId}`);
-        setStudent(res.data); // ✅ Zustand-д хадгалж байна
+        setStudent(res.data);
         console.log("🎉 Student stored in Zustand:", res.data);
       } catch (err) {
-        console.error("❌ Failed to fetch student:", err);
+        console.log("❌ Failed to fetch student:", err);
       }
     };
 

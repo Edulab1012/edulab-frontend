@@ -38,7 +38,7 @@ const StudentProfileCard = () => {
           const res = await axios.get(`${BASE_URL}student/${studentId}`)
           console.log("Student data from API:", res.data)
           // Update store if needed
-          // student.setStudent(res.data)
+          student.setStudent(res.data)
         }
       } catch (error) {
         console.error("Failed to fetch student data:", error)
@@ -77,8 +77,8 @@ const StudentProfileCard = () => {
   const handleSave = (updatedStudent: any) => {
     setInitialData(updatedStudent)
     setIsEditing(false)
-    // Update the store with new data
-    // student.updateStudent(updatedStudent)
+
+    student.updateStudent(updatedStudent)
   }
 
   if (loading) {
