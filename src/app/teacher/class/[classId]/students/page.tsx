@@ -51,6 +51,7 @@ export default function ClassStudentsPage({ params }: any) {
   const [todayAttendance, setTodayAttendance] = useState<AttendanceRecord[]>(
     []
   );
+  console.log(students, "Students");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [attendanceStatus, setAttendanceStatus] = useState<
@@ -387,23 +388,29 @@ export default function ClassStudentsPage({ params }: any) {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead>
-                <tr className="bg-gradient-to-r from-[#6B5AED]/5 to-[#8A7CFF]/5 dark:from-[#6B5AED]/10 dark:to-[#8A7CFF]/10 text-left">
-                  <th className="p-4 text-[#2C3A4A] dark:text-white font-medium rounded-tl-lg flex items-center gap-2">
-                    <User className="w-4 h-4" />
-                    Сурагч
+              <thead className="bg-[#f9f9f9] dark:bg-[#1A1A2E]">
+                <tr>
+                  <th className="p-4 text-[#2C3A4A] dark:text-white font-medium rounded-tl-lg text-left">
+                    <div className="flex items-center gap-2">
+                      <User className="w-4 h-4" />
+                      Сурагч
+                    </div>
                   </th>
-                  <th className="p-4 text-[#2C3A4A] dark:text-white font-medium flex items-center gap-2">
-                    <Mail className="w-4 h-4" />
-                    Имэйл
+                  <th className="p-4 text-[#2C3A4A] dark:text-white font-medium text-left">
+                    <div className="flex items-center gap-2">
+                      <Mail className="w-4 h-4" />
+                      Имэйл
+                    </div>
                   </th>
-                  <th className="p-4 text-[#2C3A4A] dark:text-white font-medium flex items-center gap-2">
-                    <Phone className="w-4 h-4" />
-                    Утас
+                  <th className="p-4 text-[#2C3A4A] dark:text-white font-medium text-left">
+                    <div className="flex items-center gap-2">
+                      <Phone className="w-4 h-4" />
+                      Утас
+                    </div>
                   </th>
                   {attendanceMode && (
-                    <th className="p-4 text-[#2C3A4A] dark:text-white font-medium rounded-tr-lg">
-                      Ирц
+                    <th className="p-4 text-[#2C3A4A] dark:text-white font-medium rounded-tr-lg text-left">
+                      Үйлдэл
                     </th>
                   )}
                 </tr>
@@ -418,20 +425,22 @@ export default function ClassStudentsPage({ params }: any) {
                         : "bg-[#f9f9f9] dark:bg-[#1A1A2E]"
                     }`}
                   >
-                    <td className="p-4 text-[#2C3A4A] dark:text-white font-medium flex items-center gap-3">
-                      <div className="relative">
-                        <Image
-                          src="/myclass/panda.png"
-                          width={40}
-                          height={40}
-                          alt="Student"
-                          className="rounded-full border-2 border-[#6B5AED]/30"
-                        />
-                        <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-[#121220]"></span>
+                    <td className="p-4 text-[#2C3A4A] dark:text-white font-medium">
+                      <div className="flex items-center gap-3">
+                        <div className="relative">
+                          <Image
+                            src="/myclass/panda.png"
+                            width={40}
+                            height={40}
+                            alt="Student"
+                            className="rounded-full border-2 border-[#6B5AED]/30"
+                          />
+                          <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-[#121220]"></span>
+                        </div>
+                        <span>
+                          {student.firstName} {student.lastName}
+                        </span>
                       </div>
-                      <span>
-                        {student.firstName} {student.lastName}
-                      </span>
                     </td>
                     <td className="p-4 text-[#2C3A4A] dark:text-gray-300">
                       {student.email ? (
@@ -509,7 +518,6 @@ export default function ClassStudentsPage({ params }: any) {
         )}
       </motion.div>
 
-      {/* Attendance Footer */}
       {attendanceMode && (
         <div className="fixed bottom-0 right-0 left-0 bg-[#2C3A4A] h-[100px] dark:bg-black border-t-2 border-t-white flex justify-center items-center">
           <div className="flex justify-center items-center gap-4 h-full w-full px-4">

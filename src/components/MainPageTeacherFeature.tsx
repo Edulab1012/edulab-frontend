@@ -91,7 +91,7 @@ export default function TeacherFeatureSelector() {
           theme === "dark"
             ? "from-[#6B5AED] to-[#B077E0]"
             : "from-[#1DA1F2] to-[#5bcfd3]"
-        } bg-clip-text text-transparent text-5xl absolute top-[-10%] sm:relative sm:ml-10  w-[400px] `}
+        } bg-clip-text text-transparent text-4xl lg:text-7xl absolute top-[-10%] sm:relative sm:ml-10  w-[400px] `}
       >
         Teacher features
       </h1>
