@@ -9,7 +9,8 @@ export interface Student {
   phoneNumber?: string;
   email?: string;
   teacher?: string;
-  backgroundUrl?: string
+  backgroundUrl?: string;
+    character?: string; 
   avatarUrl?: string,
   bio?: string,
   socials?: {

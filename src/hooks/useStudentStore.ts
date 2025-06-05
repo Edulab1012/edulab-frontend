@@ -9,6 +9,7 @@ export interface Student {
     email?: string;
     avatarUrl: string;
     classId?: string;
+    character?: string;
     className?: string;
     backgroundUrl?: string;
     gender?: string
