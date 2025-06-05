@@ -7,7 +7,7 @@ import StudentForm from "./FormStudent";
 export default function StudentRegisterPage() {
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen">
+        <div className="flex flex-col items-center justify-center min-h-screen pt-20">
             <StudentForm></StudentForm>
         </div>
     );

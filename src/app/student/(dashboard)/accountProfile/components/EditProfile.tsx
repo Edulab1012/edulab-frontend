@@ -21,8 +21,10 @@ import {
   GraduationCap,
   Instagram,
   Facebook,
-} from "lucide-react";
-import { Student } from "@/constants/types/student";
+} from "lucide-react"
+import { uploadCloudinary } from "@/lib/cloudinary"
+
+
 interface EditProfileProps {
   initialData: Student;
   onSave: (data: Student) => void;
@@ -41,14 +43,39 @@ export default function EditProfile({
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const backgroundInputRef = useRef<HTMLInputElement>(null);
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev: any) => ({ ...prev, [name]: value }));
 
-    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
-  };
+interface Student {
+  firstName: string
+  lastName: string
+  class: string
+  email: string
+  avatarUrl?: string
+  backgroundUrl?: string
+  phoneNumber?: string
+  teacher?: string
+  bio?: string
+  socials?: {
+    instagram?: string
+    facebook?: string
+  }
+}
+export default function EditProfile({ initialData, onSave, onCancel }: EditProfileProps) {
+
+
+  const [formData, setFormData] = useState<Student>(initialData)
+  const [isUploading, setIsUploading] = useState(false)
+  const [errors, setErrors] = useState<Record<string, string>>({})
+
+  const avatarInputRef = useRef<HTMLInputElement>(null)
+  const backgroundInputRef = useRef<HTMLInputElement>(null)
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormData((prev: any) => ({ ...prev, [name]: value }))
+
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }))
+  }
+
 
   const handleSocialChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -65,7 +92,9 @@ export default function EditProfile({
     if (!file) return;
     setIsUploading(true);
     try {
-      const imageUrl = URL.createObjectURL(file);
+
+      const imageUrl = await uploadCloudinary(file,cloudname,uplaod)
+
       setFormData((prev: any) => ({
         ...prev,
         ...(type === "avatar"

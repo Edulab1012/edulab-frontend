@@ -39,12 +39,9 @@ interface Class {
 }
 
 const items: MenuGroup[] = [
-    {
+  {
     group: "Багшийн тохиргоо",
-    links: [
-      { title: "Профайл", url: "/teacher/profileSettings", icon: User },
-     
-    ],
+    links: [{ title: "Профайл", url: "/teacher/profileSettings", icon: User }],
   },
   {
     group: "Манай ангиуд",
@@ -62,7 +59,7 @@ const items: MenuGroup[] = [
         url: "/teacher/myStudents",
         icon: Backpack,
       },
-       {
+      {
         title: "Пост оруулах",
         url: "/teacher/posts",
         icon: Backpack,
@@ -175,11 +172,12 @@ export function AppSidebar() {
             transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
             transition: isDragging ? "none" : "transform 0.2s ease-in-out",
           }}
-          className={`fixed z-40 rounded-3xl border-r-4 flex flex-col mt-[10%]
-              ${theme === "dark"
-              ? "bg-[#121220] border-r-[#6B5AED]"
-              : "bg-[#F5F6FA] border-r-[#1DA1F2]"
-            }
+          className={`fixed z-40 rounded-3xl border-r-4 flex flex-col mt-[5%]
+              ${
+                theme === "dark"
+                  ? "bg-[#121220] border-r-[#6B5AED]"
+                  : "bg-[#F5F6FA] border-r-[#1DA1F2]"
+              }
               ${isFolded ? "w-20" : "w-64"}
               shadow-xl transition-all duration-200`}
         >
@@ -197,8 +195,9 @@ export function AppSidebar() {
           </button>
 
           <nav
-            className={`flex flex-col space-y-2 w-full px-2 py-6 ${isFolded ? "items-center" : "px-4"
-              }`}
+            className={`flex flex-col space-y-2 w-full px-2 py-6 ${
+              isFolded ? "items-center" : "px-4"
+            }`}
           >
             {items.map((group) => (
               <div key={group.group} className="mb-4">
@@ -219,10 +218,11 @@ export function AppSidebar() {
                           <div
                             className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-150 w-full
                                 hover:scale-[1.02] active:scale-[0.98] group relative overflow-hidden
-                                ${theme === "dark"
-                                ? "text-white hover:bg-[#6B5AED]/20"
-                                : "text-black hover:bg-[#1DA1F2]/10"
-                              }
+                                ${
+                                  theme === "dark"
+                                    ? "text-white hover:bg-[#6B5AED]/20"
+                                    : "text-black hover:bg-[#1DA1F2]/10"
+                                }
                                 ${isFolded ? "justify-center" : ""}`}
                           >
                             <link.icon className="w-5 h-5" />
@@ -236,36 +236,41 @@ export function AppSidebar() {
 
                         {loading ? (
                           <div
-                            className={`pl-4 py-2 text-sm ${isFolded ? "text-center" : ""
-                              } ${theme === "dark"
+                            className={`pl-4 py-2 text-sm ${
+                              isFolded ? "text-center" : ""
+                            } ${
+                              theme === "dark"
                                 ? "text-gray-400"
                                 : "text-gray-500"
-                              }`}
+                            }`}
                           >
                             Түр хүлээнэ үү..
                           </div>
                         ) : (
-                          classes.map((cls) => (
-                            <div
-                              key={cls.id}
-                              onClick={() => handleClassClick(cls.id)}
-                              className={`flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-150 w-full
+                          <div className="h-[80px] overflow-x-hidden">
+                            {classes.map((cls) => (
+                              <div
+                                key={cls.id}
+                                onClick={() => handleClassClick(cls.id)}
+                                className={`flex items-center gap-3 px-2   py-2 rounded-xl transition-all duration-150 w-full
                                   hover:scale-[1.02] active:scale-[0.98] cursor-pointer
-                                  ${pathname ===
-                                  `/teacher/class/${cls.id}/students`
-                                  ? "text-white bg-gradient-to-r from-[#6B5AED] to-purple-600 shadow-md"
-                                  : theme === "dark"
-                                    ? "text-white hover:bg-[#6B5AED]/20"
-                                    : "text-black hover:bg-[#1DA1F2]/10"
-                                }
+                                  ${
+                                    pathname ===
+                                    `/teacher/class/${cls.id}/students`
+                                      ? "text-white bg-gradient-to-r from-[#6B5AED] to-purple-600 shadow-md"
+                                      : theme === "dark"
+                                      ? "text-white hover:bg-[#6B5AED]/20"
+                                      : "text-black hover:bg-[#1DA1F2]/10"
+                                  }
                                   ${isFolded ? "justify-center" : "ml-4"}`}
-                            >
-                              <PanelTop className="w-5 h-5" />
-                              {!isFolded && (
-                                <span className="text-sm">{cls.name}</span>
-                              )}
-                            </div>
-                          ))
+                              >
+                                <PanelTop className="w-5 h-5" />
+                                {!isFolded && (
+                                  <span className="text-sm">{cls.name}</span>
+                                )}
+                              </div>
+                            ))}
+                          </div>
                         )}
                       </>
                     ) : (
@@ -273,12 +278,13 @@ export function AppSidebar() {
                         <div
                           className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-150 w-full
                               hover:scale-[1.02] active:scale-[0.98] group relative overflow-hidden
-                              ${pathname === link.url
-                              ? "text-white bg-gradient-to-r from-[#6B5AED] to-purple-600 shadow-md"
-                              : theme === "dark"
-                                ? "text-white hover:bg-[#6B5AED]/20"
-                                : "text-black hover:bg-[#1DA1F2]/10"
-                            }
+                              ${
+                                pathname === link.url
+                                  ? "text-white bg-gradient-to-r from-[#6B5AED] to-purple-600 shadow-md"
+                                  : theme === "dark"
+                                  ? "text-white hover:bg-[#6B5AED]/20"
+                                  : "text-black hover:bg-[#1DA1F2]/10"
+                              }
                               ${isFolded ? "justify-center" : ""}`}
                         >
                           <link.icon className="w-5 h-5" />

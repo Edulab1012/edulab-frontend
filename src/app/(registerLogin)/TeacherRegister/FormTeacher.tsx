@@ -11,6 +11,7 @@ import { BASE_URL } from "@/constants/baseurl";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import RegisterWithGoogle from "../googleRegister";
 
 const steps = [
   { name: "username", label: "Нэр", type: "text" },
@@ -34,7 +35,7 @@ export default function TeacherRegisterForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
-
+  const role = "teacher"
   const currentField = steps[currentStep];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,7 +101,7 @@ export default function TeacherRegisterForm() {
       console.log("✅ Registration Response:", res);
       localStorage.setItem("teacherId", res.data.teacher.id);
       localStorage.setItem("userId", res.data.user.id);
-            localStorage.setItem("token", res.data.token)
+      localStorage.setItem("token", res.data.token)
       setStatus("success");
 
       if (res.data.user.role === "teacher") {
@@ -187,6 +188,7 @@ export default function TeacherRegisterForm() {
               "Дараах"
             )}
           </Button>
+
         </CardFooter>
 
         <AnimatePresence>
@@ -215,6 +217,7 @@ export default function TeacherRegisterForm() {
             </motion.div>
           )}
         </AnimatePresence>
+        <RegisterWithGoogle role={role}></RegisterWithGoogle>
       </Card>
       <p className="absolute bottom-20 left-1/2 transform -translate-x-1/2 font-extralight">
         Хэрэв та аль хэдийн бүртгүүлсэн бол{" "}

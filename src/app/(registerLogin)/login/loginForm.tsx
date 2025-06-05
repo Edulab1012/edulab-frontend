@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import { FiUser, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
 import { BookCheck, PanelTop, Backpack } from "lucide-react";
+import RegisterLoginwithGoogle from "../googleRegister";
 
 export default function LoginForm() {
   const router = useRouter();

@@ -10,6 +10,7 @@ import { Loader2, CheckCircle, XCircle } from "lucide-react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { BASE_URL } from "@/constants/baseurl";
+import RegisterWithGoogle from "@/app/(registerLogin)/googleRegister";
 
 export default function StudentForm() {
     const router = useRouter();
@@ -24,7 +25,7 @@ export default function StudentForm() {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [formStatus, setFormStatus] = useState<"idle" | "success" | "error">("idle");
     const [classId, setClassId] = useState<string | null>(null);
-
+    const role = "student"
     const [formData, setFormData] = useState({
         username: "",
         email: "",
@@ -46,6 +47,7 @@ export default function StudentForm() {
             await new Promise((resolve) => setTimeout(resolve, 1500));
             setClassName(res.data.class.name);
             setClassId(res.data.class.id);
+            localStorage.setItem("classId", res.data.class.id)
 
             if (res.data.success) {
                 setStatus("success");
@@ -222,7 +224,9 @@ export default function StudentForm() {
                                     />
 
                                     {fieldError && <p className="text-sm text-red-500">{fieldError}</p>}
+                                    <RegisterWithGoogle role={role}></RegisterWithGoogle>
                                 </motion.div>
+
                             )}
                         </AnimatePresence>
                     </form>
