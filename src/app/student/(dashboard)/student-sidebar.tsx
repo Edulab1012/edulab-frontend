@@ -16,7 +16,7 @@ import {
   ChevronLeft,
   ChevronRight,
   MessagesSquare,
-  PoundSterling
+  Book
 
 } from "lucide-react"
 import LogoutButton from "@/components/LogoutButton";
@@ -33,7 +33,7 @@ const menuItems: MenuItem[] = [
   { title: "broadcast room", url: "/student/broadcast", icon: MessagesSquare },
   { title: "leaderboard", url: "/student/leaderboard", icon: Trophy },
   { title: "planner", url: "/student/planner", icon: NotebookPen },
-  { title: "post", url: "/student/posts", icon: PoundSterling, },
+  { title: "post", url: "/student/posts", icon: Book, },
 
 ]
 

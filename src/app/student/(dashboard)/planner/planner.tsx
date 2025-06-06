@@ -111,7 +111,7 @@ export default function PlannerComponent() {
     const getTasksForDay = (day: string) => tasks.filter((task) => task.day === day)
 
     return (
-        <main className="p-4 md:p-6 min-h-screen bg-gradient-to-br from-[#E0F7FA] to-[#9a91ff] dark:from-[#1A1A40] dark:to-[#311B92] font-sans">
+        <main className="p-4 md:p-6 min-h-screen bg-gradient-to-br from-[#E0F7FA] to-[#9a91ff] dark:from-[#1A1A40] dark:to-[#311B92] font-sans pl-18">
             <motion.h1
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}

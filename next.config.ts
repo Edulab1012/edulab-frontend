@@ -1,16 +1,22 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-};
-// next.config.js
-module.exports = {
   images: {
-    domains: [
-      "lh3.googleusercontent.com",
-      "res.cloudinary.com",
-      "https://iuuliuoqgudrqrjfdsuo.supabase.co"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+      },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
+      {
+        protocol: "https",
+        hostname: "iuuliuoqgudrqrjfdsuo.supabase.co",
+      },
+    ],
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;

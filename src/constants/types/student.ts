@@ -5,6 +5,7 @@ export interface Student {
   grade?: string;
   phoneNumber: string;
   email: string;
+    character?: string; 
   teacher: string;
   avatarUrl?: string;
   bio?: string;
