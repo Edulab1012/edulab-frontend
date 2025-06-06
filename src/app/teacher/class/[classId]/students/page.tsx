@@ -376,14 +376,6 @@ export default function ClassStudentsPage({ params }: any) {
               />
             </div>
             <p className="text-lg">Сурагч бүртгэгдээгүй байна</p>
-            <motion.button
-              className="mt-4 px-4 py-2 bg-gradient-to-r from-[#6B5AED] to-[#8A7CFF] text-white rounded-lg hover:shadow-lg transition-all flex items-center gap-2 mx-auto"
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-            >
-              <Plus className="w-4 h-4" />
-              Сурагч нэмэх
-            </motion.button>
           </div>
         ) : (
           <div className="overflow-x-auto">
