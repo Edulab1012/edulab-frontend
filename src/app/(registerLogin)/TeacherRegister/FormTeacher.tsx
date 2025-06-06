@@ -107,18 +107,7 @@ export default function TeacherRegisterForm() {
       if (res.data.user.role === "teacher") {
         router.push("/teacher");
       }
-    } catch (err: any) {
-      if (err.response.status === 403) {
-        setTimeout(() => {
-          router.push("/login");
-        }, 3000);
-      }
-      setErrMessage(err.response?.data.message);
-      console.log("❌ Registration Error:", err.response?.data || err);
-      setStatus("error");
-    } finally {
-      setLoading(false);
-    }
+    } catch (err: any) {}
   };
 
   return (
@@ -218,7 +207,6 @@ export default function TeacherRegisterForm() {
             </motion.div>
           )}
         </AnimatePresence>
-
       </Card>
       <p className="absolute bottom-20 left-1/2 transform -translate-x-1/2 font-extralight">
         Хэрэв та аль хэдийн бүртгүүлсэн бол{" "}
