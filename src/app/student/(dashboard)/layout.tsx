@@ -1,16 +1,13 @@
-'use client'
+"use client";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "./student-sidebar";
-
 
 import { BASE_URL } from "@/constants/baseurl";
 import axios from "axios";
 import { useEffect } from "react";
 import { useStudentStore } from "@/hooks/useStudentStore";
 
-
 export default function Layout({ children }: { children: React.ReactNode }) {
-
   const setStudent = useStudentStore((state) => state.setStudent);
 
   useEffect(() => {

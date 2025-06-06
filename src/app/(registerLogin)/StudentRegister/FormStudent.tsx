@@ -106,7 +106,6 @@ export default function StudentForm() {
       const res = await axios.post(`${BASE_URL}auth/register`, {
         username: formData.username,
         firstName: formData.firstName,
-
         phoneNumber: formData.phoneNumber,
         email: formData.email,
         password: formData.password,
